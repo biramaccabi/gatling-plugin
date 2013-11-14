@@ -28,11 +28,14 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileReader;
+
 
 public class GatlingPublisher extends Recorder {
 
@@ -49,7 +52,7 @@ public class GatlingPublisher extends Recorder {
 
 	@Override
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
-        this.build = build;
+		this.build = build;
 		logger = listener.getLogger();
 		if (enabled == null) {
 			logger.println("Cannot check Gatling simulation tracking status, reports won't be archived.");
@@ -72,6 +75,9 @@ public class GatlingPublisher extends Recorder {
 
         build.addAction(action);
 
+		logger.println("Setting Build Description...");
+		build.setDescription(this.generateBuildDescriptionFromAssertionData(build.getWorkspace()));
+
         return true;
 	}
 
@@ -87,6 +93,31 @@ public class GatlingPublisher extends Recorder {
 	public Action getProjectAction(AbstractProject<?, ?> project) {
 		this.project = project;
 		return new GatlingProjectAction(project);
+	}
+
+	private String generateBuildDescriptionFromAssertionData(FilePath workspace) throws IOException, InterruptedException {
+		FilePath[] files = workspace.list("**/assertion.tsv");
+		String description = "";
+
+		if (files.length == 0) {
+			throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
+		}
+
+		for (FilePath filepath : files) {
+			File file = new File(filepath.getRemote());
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split("\\t");
+				String msg = values[2];
+				String actualValue = values[4];
+				String status = values[6];
+				if (status.contains("false")){
+					description = description + msg + " : " + status + " - Expected : "  + actualValue + "<br>";
+				}
+			}
+		}
+		return description;
 	}
 
     private List<BuildSimulation> saveFullReports(FilePath workspace, File rootDir) throws IOException, InterruptedException {
