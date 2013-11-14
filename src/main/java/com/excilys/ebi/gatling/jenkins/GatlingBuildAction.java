@@ -48,7 +48,7 @@ public class GatlingBuildAction implements Action {
 
 	public GatlingBuildAction(AbstractBuild<?, ?> build, List<BuildSimulation> sims) {
 		this.build = build;
-        this.simulations = sims;
+		this.simulations = sims;
 	}
 
 	public AbstractBuild<?, ?> getBuild() {
@@ -59,7 +59,7 @@ public class GatlingBuildAction implements Action {
 		if (isV1_0_1_Data()){
 			return buildSimulationListFromV1_0_1Data();
 		}
-        return this.simulations;
+		return this.simulations;
 	}
 
 	private List<BuildSimulation> buildSimulationListFromV1_0_1Data() {
