@@ -55,12 +55,12 @@ public class GatlingBuildAction implements Action {
 		return build;
 	}
 
-    public List<BuildSimulation> getSimulations() {
+	public List<BuildSimulation> getSimulations() {
 		if (isV1_0_1_Data()){
 			return buildSimulationListFromV1_0_1Data();
 		}
         return this.simulations;
-    }
+	}
 
 	private List<BuildSimulation> buildSimulationListFromV1_0_1Data() {
 		List<BuildSimulation> simulations101 = new ArrayList<BuildSimulation>();
