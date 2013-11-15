@@ -113,7 +113,7 @@ public class GatlingPublisher extends Recorder {
 				String actualValue = values[4];
 				String status = values[6];
 				if (status.contains("false")){
-					description = description + msg + " : " + status + " - Expected : "  + actualValue + "<br>";
+					description = description + msg + " : " + status + " - Actual Number : "  + actualValue + "<br>";
 				}
 			}
 		}
