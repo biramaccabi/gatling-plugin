@@ -76,7 +76,7 @@ public class GatlingPublisher extends Recorder {
         build.addAction(action);
 
 		logger.println("Setting Build Description...");
-		build.setDescription(this.generateBuildDescriptionFromAssertionData(build.getWorkspace()));
+		build.setDescription(this.generateBuildDescriptionFromAssertionData(sims));
 
         return true;
 	}
@@ -95,28 +95,34 @@ public class GatlingPublisher extends Recorder {
 		return new GatlingProjectAction(project);
 	}
 
-	private String generateBuildDescriptionFromAssertionData(FilePath workspace) throws IOException, InterruptedException {
-		FilePath[] files = workspace.list("**/assertion.tsv");
+	private String generateBuildDescriptionFromAssertionData(List<BuildSimulation> sims) throws IOException, InterruptedException {
 		String description = "";
 
-		if (files.length == 0) {
-			throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
-		}
+		for (BuildSimulation sim : sims){
+			FilePath workspace = sim.getSimulationDirectory();
+			FilePath[] files = workspace.list("**/assertion.tsv");
 
-		for (FilePath filepath : files) {
-			File file = new File(filepath.getRemote());
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				String[] values = line.split("\\t");
-				String msg = values[2];
-				String actualValue = values[4];
-				String status = values[6];
-				if (status.contains("false")){
-					description = description + msg + " : " + status + " - Actual Number : "  + actualValue + "<br>";
+			if (files.length == 0) {
+				throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
+			}
+
+			for (FilePath filepath : files) {
+				File file = new File(filepath.getRemote());
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				String line = "";
+				while ((line = br.readLine()) != null) {
+					String[] values = line.split("\\t");
+					String msg = values[2];
+					String actualValue = values[4];
+					String status = values[6];
+					if (status.contains("false")){
+						description = description + msg + " : " + status + " - Actual Value : "  + actualValue + "<br>";
+					}
 				}
 			}
+
 		}
+
 		return description;
 	}
 
