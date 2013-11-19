@@ -28,13 +28,10 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import javax.annotation.RegEx;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.FileReader;
 
 
 public class GatlingPublisher extends Recorder {
@@ -71,12 +68,13 @@ public class GatlingPublisher extends Recorder {
 			return true;
 		}
 
-        GatlingBuildAction action = new GatlingBuildAction(build, sims);
+        List<AssertionData> assertionDataList = readAssertionData(sims);
+        GatlingBuildAction action = new GatlingBuildAction(build, sims, assertionDataList);
 
         build.addAction(action);
 
 		logger.println("Setting Build Description...");
-		build.setDescription(this.generateBuildDescriptionFromAssertionData(sims));
+		build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
 
         return true;
 	}
@@ -95,37 +93,56 @@ public class GatlingPublisher extends Recorder {
 		return new GatlingProjectAction(project);
 	}
 
-	private String generateBuildDescriptionFromAssertionData(List<BuildSimulation> sims) throws IOException, InterruptedException {
-		String description = "";
-
-		for (BuildSimulation sim : sims){
-			FilePath workspace = sim.getSimulationDirectory();
-			FilePath[] files = workspace.list("**/assertion.tsv");
-
-			if (files.length == 0) {
-				throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
-			}
-
-			for (FilePath filepath : files) {
-				File file = new File(filepath.getRemote());
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				String line = "";
-				while ((line = br.readLine()) != null) {
-					String[] values = line.split("\\t");
-					String msg = values[2];
-					String actualValue = values[4];
-					String status = values[6];
-					if (status.contains("false")){
-						description = description + msg + " : " + status + " - Actual Value : "  + actualValue + "<br>";
-					}
-				}
-			}
-
+	private String generateBuildDescriptionFromAssertionData(List<AssertionData> assertionDataList){
+		StringBuffer description = new StringBuffer();
+        for( AssertionData assertionData : assertionDataList){
+            description.append(
+                assertionData.message + " : " +
+                    assertionData.status +
+                    " - Actual Value : "  + assertionData.actualValue + "<br>");
 		}
 
-		return description;
+		return description.toString();
 	}
 
+    private List<AssertionData> readAssertionData(List<BuildSimulation> sims) throws IOException, InterruptedException {
+
+        List<AssertionData> assertionList = new ArrayList<AssertionData>();
+
+        for (BuildSimulation sim : sims){
+            FilePath workspace = sim.getSimulationDirectory();
+            FilePath[] files = workspace.list("**/assertion.tsv");
+
+            if (files.length == 0) {
+                throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
+            }
+
+            for (FilePath filepath : files) {
+                File file = new File(filepath.getRemote());
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split("\\t");
+                    AssertionData assertionData = new AssertionData();
+
+                    assertionData.projectName = project.getName();
+                    assertionData.simulationName = file.getParentFile().getName().split("-")[0];
+                    assertionData.scenerioName = values[0];
+                    assertionData.requestName = values[1];
+                    assertionData.message = values[2];
+                    assertionData.assertionType = values[3];
+                    assertionData.actualValue = values[4];
+                    assertionData.expectedValue = values[5];
+                    assertionData.status = values[6];
+                    if (assertionData.status.contains("false")){
+                        assertionList.add(assertionData);
+                    }
+                }
+            }
+        }
+
+        return assertionList;
+    }
     private List<BuildSimulation> saveFullReports(FilePath workspace, File rootDir) throws IOException, InterruptedException {
 		FilePath[] files = workspace.list("**/global_stats.json");
 		List<FilePath> reportFolders = new ArrayList<FilePath>();

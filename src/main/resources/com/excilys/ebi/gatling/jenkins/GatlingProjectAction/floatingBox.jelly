@@ -2,9 +2,9 @@
 	<j:if test="${action.isVisible()}">
 		<g:import/>
 		<div class="test-trend-caption">
-			${%PerformanceTrend}
-			<g:graph id="dashboardGatling" seriesNames="${action.dashboardGraph.seriesNamesJSON}"
-			         data="${action.dashboardGraph.seriesJSON}" yAxisUnit="ms" height="400px" width="500px"/>
+            <j:forEach items="${action.getGraphiteGraphUrls()}" var="graphiteUrl">
+    		    <img src="${graphiteUrl}"/>
+            </j:forEach>
 		</div>
 
         <script>
