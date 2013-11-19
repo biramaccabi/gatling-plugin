@@ -38,7 +38,7 @@ public class LastBuildColumn extends ListViewColumn {
 	}
 
 	private Integer getLineCount(String description){
-		String[] lines = description.split("\r\n|\r|\n");
+		String[] lines = description.split("<br>");
 		return  lines.length;
 	}
 
