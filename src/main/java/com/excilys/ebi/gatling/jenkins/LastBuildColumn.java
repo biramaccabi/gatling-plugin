@@ -105,7 +105,7 @@ public class LastBuildColumn extends ListViewColumn {
 
 		@Override
 		public String getDisplayName() {
-			return "Last Build";
+			return "Last Build - Gatling";
 		}
 
 
