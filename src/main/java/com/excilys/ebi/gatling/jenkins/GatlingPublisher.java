@@ -93,16 +93,31 @@ public class GatlingPublisher extends Recorder {
 		return new GatlingProjectAction(project);
 	}
 
-	private String generateBuildDescriptionFromAssertionData(List<AssertionData> assertionDataList){
+	public String generateBuildDescriptionFromAssertionData(List<AssertionData> assertionDataList){
 		StringBuffer description = new StringBuffer();
+		String conclusion = "";
+		Integer kocount = 0;
+		Integer linecount = assertionDataList.size();
+
         for( AssertionData assertionData : assertionDataList){
+			if (assertionData.assertionType.contains("KO")) {
+				kocount = kocount + 1;
+			}
             description.append(
                 assertionData.message + " : " +
                     assertionData.status +
                     " - Actual Value : "  + assertionData.actualValue + "<br>");
 		}
 
-		return description.toString();
+		if (kocount == linecount){
+			conclusion = "KO";
+		}else if (kocount == 0){
+			conclusion = "PERFORMANCE";
+		}else{
+			conclusion = "KO AND PERFORMANCE";
+		}
+
+		return conclusion + "<br>" + description.toString();
 	}
 
     private List<AssertionData> readAssertionData(List<BuildSimulation> sims) throws IOException, InterruptedException {
@@ -143,6 +158,7 @@ public class GatlingPublisher extends Recorder {
 
         return assertionList;
     }
+
     private List<BuildSimulation> saveFullReports(FilePath workspace, File rootDir) throws IOException, InterruptedException {
 		FilePath[] files = workspace.list("**/global_stats.json");
 		List<FilePath> reportFolders = new ArrayList<FilePath>();
