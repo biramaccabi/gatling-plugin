@@ -175,7 +175,7 @@ public class GatlingProjectAction implements Action {
             Map<String,String> values = new HashMap<String,String>();
             String env = getEnvFromProjectName(assertionData.projectName);
             if(env != null){
-                String graphiteAssertionType = getGraphitePerformanceAssertionTypeFromGatlingAssertionType(
+                String graphiteAssertionType = convertAssertionTypeFromGatlingToGraphite(
                     assertionData.assertionType);
                 if(graphiteAssertionType != null){
                     values.put("env", URLEncoder.encode(env, "UTF-8"));
@@ -206,7 +206,7 @@ public class GatlingProjectAction implements Action {
         return data.replaceAll("[^\\w\\.\\-_]", "_");
     }
 
-    private String getGraphitePerformanceAssertionTypeFromGatlingAssertionType(String assertionType) {
+    private String convertAssertionTypeFromGatlingToGraphite(String assertionType) {
         if(assertionType.contains("95th")){
             return "percentiles95";
         } else if(assertionType.contains("mean")){
