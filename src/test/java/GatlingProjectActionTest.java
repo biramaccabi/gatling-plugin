@@ -21,7 +21,7 @@ import com.excilys.ebi.gatling.jenkins.GatlingProjectAction;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.util.RunList;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
 public class GatlingProjectActionTest{
-    AbstractProject<?, ?> project;
-    GatlingProjectAction projectAction;
+    private AbstractProject<?, ?> project;
+    private GatlingProjectAction projectAction;
 
     @Before
     public void setup(){
@@ -84,6 +84,7 @@ public class GatlingProjectActionTest{
         RunList runList = mock(RunList.class);
         projectAction = new GatlingProjectAction(project);
         stub(runList.iterator()).toReturn(builds.iterator());
+        //noinspection unchecked
         stub(project.getBuilds()).toReturn(runList);
         if(builds.size() > 0){
             AbstractBuild build = builds.get(0);
@@ -91,91 +92,5 @@ public class GatlingProjectActionTest{
             stub(build.getAction(GatlingBuildAction.class)).toReturn(buildAction);
         }
     }
-
-    @org.junit.Test
-    public void test_build_with_action_and_one_performance_assert(){
-        AssertionData data = new AssertionData();
-        data.actualValue = "actualValue";
-        data.assertionType = "95th percentile response time";
-        data.expectedValue = "expectedValue";
-        data.message = "authorize 95th percentile response time is less than 1000";
-        data.projectName = "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
-        data.requestName = "authorize";
-        data.simulationName = "oauth2forapi2simulation";
-        data.scenerioName = "scenerioName";
-        data.status = "false";
-        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
-        assertionDataList.add(data);
-
-        prepareWithOneBuild(assertionDataList);
-        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
-        Assert.assertEquals(1, graphiteGraphUrls.size());
-        String graphiteUrl = graphiteGraphUrls.get(0);
-        String expectedGraphiteUrl =
-            "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&" +
-                "target=alias(color(secondYAxis(load.summary.foxtrot.oauth2forapi2simulation.authorize.ko.percent)%2C" +
-                "%22red%22)%2C%22percent%20KOs%22)" +
-                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.percentiles95%2C" +
-                "%2295th+percentile+response+time%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
-                "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
-                "&from=-1months" +
-                "&title=%22authorize%20Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation%22";
-        Assert.assertEquals(expectedGraphiteUrl, graphiteUrl);
-
-    }
-
-    @org.junit.Test
-    public void test_build_with_action_and_one_performance_assert_2(){
-        AssertionData data = new AssertionData();
-        data.actualValue = "actualValue";
-        data.assertionType = "95th percentile response time";
-        data.expectedValue = "expectedValue";
-        data.message = "authorize 95th percentile response time is less than 1000";
-        data.projectName = "VPAINE_Web_Performance_Tests-foxtrot-apiserver.OAuth2Simulation";
-        data.requestName = "authorize";
-        data.simulationName = "oauth2simulation";
-        data.scenerioName = "scenerioName";
-        data.status = "false";
-        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
-        assertionDataList.add(data);
-
-        prepareWithOneBuild(assertionDataList);
-        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
-        Assert.assertEquals(1, graphiteGraphUrls.size());
-        String graphiteUrl = graphiteGraphUrls.get(0);
-        String expectedGraphiteUrl =
-            "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&" +
-                "target=alias(color(secondYAxis(load.summary.foxtrot.oauth2simulation.authorize.ko.percent)%2C" +
-                "%22red%22)%2C%22percent%20KOs%22)" +
-                "&target=alias(load.summary.foxtrot.oauth2simulation.authorize.all.percentiles95%2C" +
-                "%2295th+percentile+response+time%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
-                "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
-                "&from=-1months" +
-                "&title=%22authorize%20VPAINE_Web_Performance_Tests-foxtrot-apiserver.OAuth2Simulation%22";
-        Assert.assertEquals(expectedGraphiteUrl, graphiteUrl);
-
-    }
-
-
-    @org.junit.Test
-    public void test_build_with_action_and_one_performance_assert_not_foxtrot(){
-        AssertionData data = new AssertionData();
-        data.actualValue = "actualValue";
-        data.assertionType = "95th percentile response time";
-        data.expectedValue = "expectedValue";
-        data.message = "message";
-        data.projectName = "Web_Performance_Tests-beta-apiserver_OAuth2ForApi2Simulation";
-        data.requestName = "authorize";
-        data.scenerioName = "scenerioName";
-        data.status = "false";
-        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
-        assertionDataList.add(data);
-
-        prepareWithOneBuild(assertionDataList);
-        Assert.assertEquals(0, projectAction.getGraphiteGraphUrls().size());
-    }
-
 
 }
