@@ -120,7 +120,7 @@ public class GatlingPublisher extends Recorder {
             for (FilePath filepath : files) {
                 File file = new File(filepath.getRemote());
                 BufferedReader br = new BufferedReader(new FileReader(file));
-                String line = "";
+                String line;
                 while ((line = br.readLine()) != null) {
                     String[] values = line.split("\\t");
                     AssertionData assertionData = new AssertionData();
@@ -134,9 +134,7 @@ public class GatlingPublisher extends Recorder {
                     assertionData.actualValue = values[4];
                     assertionData.expectedValue = values[5];
                     assertionData.status = values[6];
-                    if (assertionData.status.contains("false")){
-                        assertionList.add(assertionData);
-                    }
+                    assertionList.add(assertionData);
                 }
             }
         }
