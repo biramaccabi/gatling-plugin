@@ -28,38 +28,14 @@ import hudson.views.ListViewColumnDescriptor;
 
 public class LastBuildColumn extends ListViewColumn {
 
-	private final String KOASSERTION = "percentage of requests KO";
-
-	private Integer getKOCount(String description){
-		Integer descriptionLength = description.length();
-		Integer descriptionWithoutKOLength = description.replace(KOASSERTION, "").length();
-		Integer countKO = (descriptionLength - descriptionWithoutKOLength)/KOASSERTION.length();
-		return countKO;
-	}
-
-	private Integer getLineCount(String description){
-		String[] lines = description.split("<br>");
-		return  lines.length;
-	}
-
 	public String getLastBuildDescription(String description,Result result) {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (result.equals(Result.UNSTABLE)){
-			int countKO = getKOCount(description);
-			int countLine = getLineCount(description);
-			if (countKO == countLine){
-				stringBuilder.append("KO");
-			}else if(countKO == 0){
-				stringBuilder.append("PERFORMANCE");
-			}else{
-				stringBuilder.append("KO AND PERFORMANCE");
-			}
-			stringBuilder.append("<br>");
 			stringBuilder.append(description);
 		}else if (result.equals(Result.FAILURE)){
 			stringBuilder.append("FAILURE");
 		}else if (result.equals(Result.SUCCESS)){
-			stringBuilder.append("PASS");
+			// Do nothing for successful case
 		}else if (result.equals(Result.ABORTED)){
 			stringBuilder.append("ABORTED");
 		}else{

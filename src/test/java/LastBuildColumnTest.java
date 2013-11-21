@@ -32,7 +32,7 @@ public class LastBuildColumnTest {
 	@Test
 	public void testPassCase(){
 		String generate = lastbuildcol.getLastBuildDescription("",Result.SUCCESS);
-		String expect = "PASS";
+		String expect = "";
 		assertEquals(generate, expect);
 	}
 
@@ -47,40 +47,6 @@ public class LastBuildColumnTest {
 	public void testAbortedCase(){
 		String generate = lastbuildcol.getLastBuildDescription("",Result.ABORTED);
 		String expect = "ABORTED";
-		assertEquals(generate, expect);
-	}
-
-	@Test
-	public void testUnstableKOCase(){
-		String description = "Global percentage of requests KO is less than 1 : false - Actual Value : 100.00<br>" +
-			"api user resetPassword requests percentage of requests KO is less than 1 : false - Actual Value : 80.00<br>";
-		String generate = lastbuildcol.getLastBuildDescription(description,Result.UNSTABLE);
-		String expect = "KO<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100.00<br>" +
-			"api user resetPassword requests percentage of requests KO is less than 1 : false - Actual Value : 80.00<br>";
-		assertEquals(generate, expect);
-	}
-
-	@Test
-	public void testPerformanceCase(){
-		String description = "Get Catalog Pricing requests per second is greater than 2000 : false - Expected : 0<br>" +
-			"Get Catalog Pricing 95th percentile response time is less than 150 : false - Expected : 4070<br>";
-		String generate = lastbuildcol.getLastBuildDescription(description,Result.UNSTABLE);
-		String expect = "PERFORMANCE<br>Get Catalog Pricing requests per second is greater than 2000 : false - Expected : 0<br>" +
-			"Get Catalog Pricing 95th percentile response time is less than 150 : false - Expected : 4070<br>";
-		assertEquals(generate, expect);
-	}
-
-	@Test
-	public void testKOandPerformanceCase(){
-		String description = "Global percentage of requests KO is less than 1 : false - Actual Value : 100.00<br>" +
-			"api user resetPassword requests percentage of requests KO is less than 1 : false - Actual Value : 80.00<br>" +
-			"Get Catalog Pricing requests per second is greater than 2000 : false - Expected : 0<br>" +
-			"Get Catalog Pricing 95th percentile response time is less than 150 : false - Expected : 4070<br>";
-		String generate = lastbuildcol.getLastBuildDescription(description,Result.UNSTABLE);
-		String expect = "KO AND PERFORMANCE<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100.00<br>" +
-			"api user resetPassword requests percentage of requests KO is less than 1 : false - Actual Value : 80.00<br>"+
-			"Get Catalog Pricing requests per second is greater than 2000 : false - Expected : 0<br>" +
-			"Get Catalog Pricing 95th percentile response time is less than 150 : false - Expected : 4070<br>";
 		assertEquals(generate, expect);
 	}
 
