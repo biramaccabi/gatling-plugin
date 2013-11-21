@@ -135,6 +135,7 @@ public class GatlingPublisher extends Recorder {
             for (FilePath filepath : files) {
                 File file = new File(filepath.getRemote());
                 BufferedReader br = new BufferedReader(new FileReader(file));
+                br.readLine();
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] values = line.split("\\t");
