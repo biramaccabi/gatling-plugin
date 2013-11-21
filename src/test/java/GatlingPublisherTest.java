@@ -30,6 +30,8 @@ public class GatlingPublisherTest {
 	private GatlingPublisher gatlingpublisher;
 	private AssertionData koassertiondata;
 	private AssertionData performanceassertiondata;
+	private AssertionData unrecognizeassertiondata;
+	private AssertionData trueassertiondata;
 
 
 	@Before
@@ -39,7 +41,7 @@ public class GatlingPublisherTest {
 		koassertiondata.projectName = "unittest mock project KO";
 		koassertiondata.simulationName = "unittest mock simulation KO";
 		koassertiondata.scenerioName = "unittest mock scenario KO";
-		koassertiondata.requestName = "unittest mock request KO";
+		koassertiondata.requestName = "Global";
 		koassertiondata.message = "Global percentage of requests KO is less than 1";
 		koassertiondata.assertionType = "percentage of requests KO";
 		koassertiondata.actualValue = "100";
@@ -49,12 +51,32 @@ public class GatlingPublisherTest {
 		performanceassertiondata.projectName = "unittest mock project performance";
 		performanceassertiondata.simulationName = "unittest mock simulation performance";
 		performanceassertiondata.scenerioName = "unittest mock scenario performance";
-		performanceassertiondata.requestName = "unittest mock request performance";
+		performanceassertiondata.requestName = "Get Catalog Pricing";
 		performanceassertiondata.message = "Get Catalog Pricing requests per second is greater than 2000";
 		performanceassertiondata.assertionType = "requests per second";
 		performanceassertiondata.actualValue = "200";
 		performanceassertiondata.expectedValue = "2000";
 		performanceassertiondata.status = "false";
+		unrecognizeassertiondata = new AssertionData();
+		unrecognizeassertiondata.projectName = "unittest mock project unrecognize";
+		unrecognizeassertiondata.simulationName = "unittest mock simulation unrecognize";
+		unrecognizeassertiondata.scenerioName = "unittest mock scenario unrecognize";
+		unrecognizeassertiondata.requestName = "Get Catalog Pricing unrecognize";
+		unrecognizeassertiondata.message = "Get Catalog Pricing requests unrecognize per second is equal to 2000";
+		unrecognizeassertiondata.assertionType = "requests per second";
+		unrecognizeassertiondata.actualValue = "200";
+		unrecognizeassertiondata.expectedValue = "2000";
+		unrecognizeassertiondata.status = "false";
+		trueassertiondata = new AssertionData();
+		trueassertiondata.projectName = "unittest mock project true";
+		trueassertiondata.simulationName = "unittest mock simulation true";
+		trueassertiondata.scenerioName = "unittest mock scenario true";
+		trueassertiondata.requestName = "Get Catalog Pricing";
+		trueassertiondata.message = "Get Catalog Pricing requests per second is greater than 200";
+		trueassertiondata.assertionType = "requests per second";
+		trueassertiondata.actualValue = "300";
+		trueassertiondata.expectedValue = "200";
+		trueassertiondata.status = "true";
 
 	}
 
@@ -63,8 +85,9 @@ public class GatlingPublisherTest {
 		List<AssertionData> koassertionlist = new ArrayList<AssertionData>();
 		koassertionlist.add(koassertiondata);
 		koassertionlist.add(koassertiondata);
+		koassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(koassertionlist);
-		String expect = "KO<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100<br>";
+		String expect = "KO<br>Global KO% =100, expect <1<br>Global KO% =100, expect <1<br>";
 		assertEquals(generate, expect);
 	}
 
@@ -73,9 +96,9 @@ public class GatlingPublisherTest {
 		List<AssertionData> performanceassertionlist = new ArrayList<AssertionData>();
 		performanceassertionlist.add(performanceassertiondata);
 		performanceassertionlist.add(performanceassertiondata);
+		performanceassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(performanceassertionlist);
-		String expect = "PERFORMANCE<br>Get Catalog Pricing requests per second is greater than 2000 : false - Actual Value : 200<br>Get Catalog Pricing requests per second is greater than 2000 : false - Actual Value : 200<br>";
-		System.out.println(generate);
+		String expect = "PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Get Catalog Pricing req/s =200, expect >2000<br>";
 		assertEquals(expect, generate);
 	}
 
@@ -86,9 +109,30 @@ public class GatlingPublisherTest {
 		koandperformanceassertionlist.add(koassertiondata);
 		koandperformanceassertionlist.add(performanceassertiondata);
 		koandperformanceassertionlist.add(koassertiondata);
+		koandperformanceassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(koandperformanceassertionlist);
-		String expect = "KO AND PERFORMANCE<br>Get Catalog Pricing requests per second is greater than 2000 : false - Actual Value : 200<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100<br>" +
-			"Get Catalog Pricing requests per second is greater than 2000 : false - Actual Value : 200<br>Global percentage of requests KO is less than 1 : false - Actual Value : 100<br>";
+		String expect = "KO AND PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Global KO% =100, expect <1<br>" +
+			"Get Catalog Pricing req/s =200, expect >2000<br>Global KO% =100, expect <1<br>";
+		assertEquals(expect, generate);
+	}
+
+	@Test
+	public void testUnrecognizeBuildDescription(){
+		List<AssertionData> unrecognizeeassertionlist = new ArrayList<AssertionData>();
+		unrecognizeeassertionlist.add(performanceassertiondata);
+		unrecognizeeassertionlist.add(unrecognizeassertiondata);
+		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(unrecognizeeassertionlist);
+		String expect = "PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Get Catalog Pricing requests unrecognize per second is equal to 2000 : false - Actual Value : 200<br>";
+		assertEquals(expect, generate);
+	}
+
+	@Test
+	public void testTrueBuildDescription(){
+		List<AssertionData> trueassertionlist = new ArrayList<AssertionData>();
+		trueassertionlist.add(trueassertiondata);
+		trueassertionlist.add(trueassertiondata);
+		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(trueassertionlist);
+		String expect = "";
 		assertEquals(expect, generate);
 	}
 

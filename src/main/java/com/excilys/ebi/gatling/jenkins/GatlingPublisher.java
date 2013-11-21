@@ -74,7 +74,11 @@ public class GatlingPublisher extends Recorder {
         build.addAction(action);
 
 		logger.println("Setting Build Description...");
-		build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
+		try{
+			build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
+		}catch(Exception e){
+			logger.println("ERROR in Setting Build Description" + e);
+		}
 
         return true;
 	}
@@ -93,31 +97,74 @@ public class GatlingPublisher extends Recorder {
 		return new GatlingProjectAction(project);
 	}
 
+	public String getShortBuildDescription(AssertionData assertionData){
+		StringBuffer description = new StringBuffer();
+		String originalAssertionType = assertionData.assertionType;
+		String convertAssertionType = "";
+		String comparionSymbol = "";
+		if(originalAssertionType.contains("95th")){
+			convertAssertionType = "95th";
+		}if(originalAssertionType.contains("99th")){
+			convertAssertionType = "99th";
+		}else if(originalAssertionType.contains("mean")){
+			convertAssertionType = "mean";
+		}else if(originalAssertionType.contains("KO")){
+			convertAssertionType = "KO%"; // not a performance assert
+		}else if(originalAssertionType.contains("min")){
+			convertAssertionType = "min";
+		}else if(originalAssertionType.contains("max")){
+			convertAssertionType = "max";
+		}else if(originalAssertionType.contains("standard deviation")){
+			convertAssertionType = "stddev";
+		}else if(originalAssertionType.contains("requests per second")){
+			convertAssertionType = "req/s";
+		}
+
+		if(assertionData.message.contains("is greater than")){
+			comparionSymbol = ">";
+		}else if(assertionData.message.contains("is less than")){
+			comparionSymbol = "<";
+		}
+
+
+	 	if (!convertAssertionType.isEmpty() && !comparionSymbol.isEmpty()){
+			description.append(assertionData.requestName + " " + convertAssertionType + " =" + assertionData.actualValue + ", expect " + comparionSymbol + assertionData.expectedValue +"<br>");
+		}else{
+			description.append(assertionData.message + " : " + assertionData.status + " - Actual Value : "  + assertionData.actualValue + "<br>");
+		}
+
+		return description.toString();
+	}
+
 	public String generateBuildDescriptionFromAssertionData(List<AssertionData> assertionDataList){
 		StringBuffer description = new StringBuffer();
 		String conclusion = "";
 		Integer kocount = 0;
-		Integer linecount = assertionDataList.size();
+		Integer falsecount = 0;
 
         for( AssertionData assertionData : assertionDataList){
-			if (assertionData.assertionType.contains("KO")) {
-				kocount = kocount + 1;
+			if (assertionData.status.contains("false")){
+				falsecount = falsecount + 1;
+				if (assertionData.assertionType.contains("KO")) {
+					kocount = kocount + 1;
+				}
+				description.append(getShortBuildDescription(assertionData));
 			}
-            description.append(
-                assertionData.message + " : " +
-                    assertionData.status +
-                    " - Actual Value : "  + assertionData.actualValue + "<br>");
 		}
 
-		if (kocount == linecount){
-			conclusion = "KO";
-		}else if (kocount == 0){
-			conclusion = "PERFORMANCE";
+		if (falsecount != 0){
+			if (kocount == falsecount){
+				conclusion = "KO";
+			}else if (kocount == 0){
+				conclusion = "PERFORMANCE";
+			}else{
+				conclusion = "KO AND PERFORMANCE";
+			}
+			return conclusion + "<br>" + description.toString();
 		}else{
-			conclusion = "KO AND PERFORMANCE";
+			return description.toString();
 		}
 
-		return conclusion + "<br>" + description.toString();
 	}
 
     private List<AssertionData> readAssertionData(List<BuildSimulation> sims) throws IOException, InterruptedException {
