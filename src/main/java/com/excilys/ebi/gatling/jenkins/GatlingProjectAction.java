@@ -15,21 +15,54 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.*;
-import hudson.model.Action;
+import com.excilys.ebi.gatling.jenkins.chart.Graph;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Action;
+import org.apache.commons.lang.text.StrSubstitutor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.excilys.ebi.gatling.jenkins.chart.Graph;
-import org.apache.commons.lang.text.StrSubstitutor;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.*;
+
 
 public class GatlingProjectAction implements Action {
+
+    private static final Logger logger = Logger.getLogger(GatlingProjectAction.class.getName());
+    public enum GRAPHITE_ASSERT_TYPE {
+        percentiles95,
+        mean,
+        min,
+        max,
+        stddev,
+        throughput,
+        ko;
+
+        public static GRAPHITE_ASSERT_TYPE fromGatlingAssertType(String assertionType){
+            if(assertionType.contains("95th")){
+                return percentiles95;
+            } else if(assertionType.contains("mean")){
+                return mean;
+            } else if(assertionType.contains("KO")){
+                return ko;
+            } else if(assertionType.contains("min")){
+                return min;
+            } else if(assertionType.contains("max")){
+                return max;
+            } else if(assertionType.contains("standard deviation")){
+                return stddev;
+            } else if(assertionType.contains("requests per second")){
+                return throughput;
+            }
+            throw new IllegalArgumentException("Unexpected gatling type: " + assertionType);
+        }
+    }
 
 	private final AbstractProject<?, ?> project;
     private final Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
@@ -177,18 +210,18 @@ public class GatlingProjectAction implements Action {
             Map<String,String> values = new HashMap<String,String>();
             String env = getEnvFromProjectName(assertionData.projectName);
             if(env != null){
-                String graphiteAssertionType = convertAssertionTypeFromGatlingToGraphite(
+                GRAPHITE_ASSERT_TYPE graphiteAssertionType = convertAssertionTypeFromGatlingToGraphite(
                     assertionData.assertionType);
                 String performanceMetricLabel = "Response_Time_in_ms";
-                if(graphiteAssertionType != null){
-                    if(graphiteAssertionType.compareTo("throughput") == 0){
+                if((graphiteAssertionType != null) && (graphiteAssertionType != GRAPHITE_ASSERT_TYPE.ko)){
+                    if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput){
                         performanceMetricLabel = "Requests_per_second";
                     }
                     values.put("env", URLEncoder.encode(env, "UTF-8"));
                     values.put("simName",URLEncoder.encode(graphiteSanitize(assertionData.simulationName),"UTF-8"));
                     values.put("reqName",URLEncoder.encode(
                         graphiteSanitize(gatlingRequestNameToGraphiteRequestName(assertionData.requestName)),"UTF-8"));
-                    values.put("assertName",URLEncoder.encode(graphiteAssertionType,"UTF-8"));
+                    values.put("assertName",URLEncoder.encode(graphiteAssertionType.name(),"UTF-8"));
                     values.put("assertDescr",URLEncoder.encode(assertionData.assertionType,"UTF-8"));
                     values.put("projName", URLEncoder.encode(assertionData.projectName,"UTF-8"));
                     values.put("performanceMetricLabel", performanceMetricLabel);
@@ -213,21 +246,13 @@ public class GatlingProjectAction implements Action {
         return data.replaceAll("[^\\w\\.\\-_]", "_");
     }
 
-    private String convertAssertionTypeFromGatlingToGraphite(String assertionType) {
-        if(assertionType.contains("95th")){
-            return "percentiles95";
-        } else if(assertionType.contains("mean")){
-            return "mean";
-        } else if(assertionType.contains("KO")){
-            return null; // not a performance assert
-        } else if(assertionType.contains("min")){
-            return "min";
-        } else if(assertionType.contains("max")){
-            return "max";
-        } else if(assertionType.contains("standard deviation")){
-            return "stddev";
-        } else if(assertionType.contains("requests per second")){
-            return "throughput";
+    private GRAPHITE_ASSERT_TYPE convertAssertionTypeFromGatlingToGraphite(String assertionType) {
+        if(assertionType == null)
+           return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
+        try{
+            return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
+        }catch(Exception ex){
+            logger.log(Level.WARNING, "Failed to convert gatling type " + assertionType + " to graphite type.", ex);
         }
         return null;
     }
