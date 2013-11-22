@@ -87,7 +87,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize_with_space+-+95th+percentile+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -116,7 +117,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+95th+percentile+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -145,7 +147,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=Global_Information+-+95th+percentile+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -172,7 +175,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+min+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -200,7 +204,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+max+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -228,7 +233,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+mean+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -256,7 +262,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+standard+deviation+response+time" +
-                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -284,7 +291,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+requests+per+second" +
-                "&vtitle=Requests_per_second&vtitleRight=Percentage_KOs";
+                "&vtitle=Requests_per_second&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
