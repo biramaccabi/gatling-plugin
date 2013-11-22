@@ -45,7 +45,9 @@ public class GatlingProjectAction implements Action {
             "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
             ")" +
             "&width=586&height=308&lineMode=connected&from=-1months&" +
-            "title=${reqName}+-+${assertDescr}";
+            "title=${reqName}+-+${assertDescr}" +
+            "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs";
+
 
 	public GatlingProjectAction(AbstractProject<?, ?> project) {
 		this.project = project;
@@ -177,7 +179,11 @@ public class GatlingProjectAction implements Action {
             if(env != null){
                 String graphiteAssertionType = convertAssertionTypeFromGatlingToGraphite(
                     assertionData.assertionType);
+                String performanceMetricLabel = "Response_Time_in_ms";
                 if(graphiteAssertionType != null){
+                    if(graphiteAssertionType.compareTo("throughput") == 0){
+                        performanceMetricLabel = "Requests_per_second";
+                    }
                     values.put("env", URLEncoder.encode(env, "UTF-8"));
                     values.put("simName",URLEncoder.encode(graphiteSanitize(assertionData.simulationName),"UTF-8"));
                     values.put("reqName",URLEncoder.encode(
@@ -185,6 +191,7 @@ public class GatlingProjectAction implements Action {
                     values.put("assertName",URLEncoder.encode(graphiteAssertionType,"UTF-8"));
                     values.put("assertDescr",URLEncoder.encode(assertionData.assertionType,"UTF-8"));
                     values.put("projName", URLEncoder.encode(assertionData.projectName,"UTF-8"));
+                    values.put("performanceMetricLabel", performanceMetricLabel);
                     StrSubstitutor sub = new StrSubstitutor(values);
                     return sub.replace(urlTemplate);
                 }

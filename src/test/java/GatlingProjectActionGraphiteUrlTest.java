@@ -57,6 +57,7 @@ public class GatlingProjectActionGraphiteUrlTest {
             param_OAuth2ForApi2Simulation_stddev(),
             param_OAuth2ForApi2Simulation_throughput(),
             param_OAuth2ForApi2Simulation_KO(),
+            param_OAuth2ForApi2Simulation_unknown(),
             param_OAuth2ForApi2Simulation_95th_req_and_sim_name_has_spaces(),
             param_OAuth2ForApi2Simulation_global()};
         return Arrays.asList(params);
@@ -85,10 +86,12 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize_with_space+-+95th+percentile+response+time";
+                "&title=authorize_with_space+-+95th+percentile+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
+
     private static Object[] param_OAuth2ForApi2Simulation_95th(){
         String title = "param_OAuth2ForApi2Simulation_95th";
 
@@ -112,7 +115,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+95th+percentile+response+time";
+                "&title=authorize+-+95th+percentile+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -140,7 +144,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=Global_Information+-+95th+percentile+response+time";
+                "&title=Global_Information+-+95th+percentile+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -166,7 +171,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+min+response+time";
+                "&title=authorize+-+min+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -193,7 +199,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+max+response+time";
+                "&title=authorize+-+max+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -220,7 +227,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+mean+response+time";
+                "&title=authorize+-+mean+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -247,7 +255,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+standard+deviation+response+time";
+                "&title=authorize+-+standard+deviation+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -274,7 +283,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
-                "&title=authorize+-+requests+per+second";
+                "&title=authorize+-+requests+per+second" +
+                "&vtitle=Requests_per_second&vtitleRight=Percentage_KOs";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -284,6 +294,24 @@ public class GatlingProjectActionGraphiteUrlTest {
         AssertionData data = new AssertionData();
         data.actualValue = "actualValue";
         data.assertionType = "percentage of requests KO";
+        data.expectedValue = "expectedValue";
+        data.message = "blah";
+        data.projectName = "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
+        data.requestName = "authorize";
+        data.simulationName = "oauth2forapi2simulation";
+        data.scenerioName = "scenerioName";
+        data.status = "false";
+
+        String expectedGraphiteUrl = null;
+        return new Object[] { title,
+            data, expectedGraphiteUrl } ;
+    }
+
+    private static Object[] param_OAuth2ForApi2Simulation_unknown(){
+        String title = "param_OAuth2ForApi2Simulation_KO";
+        AssertionData data = new AssertionData();
+        data.actualValue = "actualValue";
+        data.assertionType = "unexpected type";
         data.expectedValue = "expectedValue";
         data.message = "blah";
         data.projectName = "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
