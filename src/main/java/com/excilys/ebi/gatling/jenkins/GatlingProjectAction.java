@@ -251,7 +251,7 @@ public class GatlingProjectAction implements Action {
         if(assertionType == null)
            return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
         try{
-            return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
+           return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
         }catch(Exception ex){
             logger.log(Level.WARNING, "Failed to convert gatling type " + assertionType + " to graphite type.", ex);
         }

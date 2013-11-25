@@ -16,6 +16,7 @@
 package com.excilys.ebi.gatling.jenkins;
 
 import hudson.Extension;
+import hudson.XmlFile;
 import hudson.model.Descriptor;
 import hudson.model.Job;
 import hudson.model.Result;
@@ -25,13 +26,21 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 import hudson.views.ListViewColumnDescriptor;
 
+import java.io.*;
+import java.util.logging.Logger;
+
 
 public class LastBuildColumn extends ListViewColumn {
+
+	private static final Logger logger = Logger.getLogger(LastBuildColumn.class.getName());
+	private static final String GatlingPluginConfigTest = "com.excilys.ebi.gatling.jenkins.GatlingPublisher";
 
 	public String getLastBuildDescription(String description,Result result) {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (result.equals(Result.UNSTABLE)){
-			stringBuilder.append(description);
+			if (!description.isEmpty()){
+				stringBuilder.append(description);
+			}
 		}else if (result.equals(Result.FAILURE)){
 			stringBuilder.append("FAILURE");
 		}else if (result.equals(Result.SUCCESS)){
@@ -44,17 +53,38 @@ public class LastBuildColumn extends ListViewColumn {
 		return stringBuilder.toString();
 	}
 
-	public String getShortName(Job job) {
+	private boolean isGatlingJob(XmlFile configFile) {
+		boolean result = false;
+		try {
+			BufferedReader br = new BufferedReader(configFile.readRaw());
+			while (br.readLine() != null) {
+				String currentLine = br.readLine();
+				if (currentLine.contains(GatlingPluginConfigTest)){
+					result = true;
+					break;
+				}
+			}
+		}catch (IOException e){
+			logger.info("ERROR in Reading config.xml" + e);
+		}
+
+		return result;
+	}
+
+	public String getShortName(Job job) throws Exception{
 		Run lastBuild = job.getLastBuild();
 		StringBuilder stringBuilder = new StringBuilder();
+		XmlFile configFile = job.getConfigFile();
 
-		if (lastBuild != null) {
-			String tempdescription = lastBuild.getDescription();
-			Result result = lastBuild.getResult();
-			String description = getLastBuildDescription(tempdescription,result);
-			stringBuilder.append(description);
-		} else {
-			stringBuilder.append("N/A");
+		if (isGatlingJob(configFile)){
+			if (lastBuild != null) {
+				String tempdescription = lastBuild.getDescription();
+				Result result = lastBuild.getResult();
+				String description = getLastBuildDescription(tempdescription,result);
+				stringBuilder.append(description);
+			} else {
+				stringBuilder.append("N/A");
+			}
 		}
 
 		return stringBuilder.toString();
