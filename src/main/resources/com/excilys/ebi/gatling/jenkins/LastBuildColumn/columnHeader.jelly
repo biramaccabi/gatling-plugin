@@ -1,3 +1,3 @@
 <j:jelly xmlns:j="jelly:core">
-    <th>${%Last Build - Gatling}</th>
+    <th>${%Gatling Result Summary}</th>
 </j:jelly>
