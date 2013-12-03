@@ -105,6 +105,10 @@ public class GatlingBuildAction implements Action {
         return new StringBuilder().append(URL_NAME).append("/report/").append(simName).toString();
     }
 
+	public String getSimulationClassSourceURL(String simName) {
+		return new StringBuilder().append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
+	}
+
 
     private BuildSimulation getSimulation(String simulationName) {
         // this isn't the most efficient implementation in the world :)

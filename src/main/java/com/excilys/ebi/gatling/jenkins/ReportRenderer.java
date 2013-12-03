@@ -15,13 +15,20 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
+import hudson.FilePath;
+import hudson.XmlFile;
 import hudson.model.DirectoryBrowserSupport;
 import org.kohsuke.stapler.ForwardToView;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import javax.servlet.ServletException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class is used by the {@link GatlingBuildAction} to handle the rendering
@@ -75,4 +82,67 @@ public class ReportRenderer {
                 simulation.getSimulationName(), null, false);
         dbs.generateResponse(request, response, action);
     }
+
+	private String getSimulationClassFromMavenCommand(XmlFile configfile) throws IOException {
+		String result = "";
+		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass=([a-zA-Z0-9\\.]+).*");
+		String line = "";
+		Reader configReader = configfile.readRaw();
+		BufferedReader br = new BufferedReader(configReader);
+		line = br.readLine();
+		while (line != null) {
+			Matcher matcher = pattern.matcher(line);
+			if (matcher.find()) {
+				result = matcher.group(1);
+				break;
+			}
+			line = br.readLine();
+		}
+		br.close();
+		return result;
+	}
+
+	private String getSimulationSourcePath(String workspace,String simulationClass){
+		String parentpath = workspace + "/performance/src/test/simulations/";
+		String classpath = simulationClass.replace(".", "/")+".scala";
+		String fullpath = parentpath + classpath;
+		return fullpath;
+	}
+
+	private String getSourceCodeContent(String filePath) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(filePath));
+		StringBuilder filecontent = new StringBuilder();
+		String line = br.readLine();
+		while (line != null) {
+			filecontent.append(line);
+			filecontent.append("\n");
+			line = br.readLine();
+		}
+		br.close();
+		return filecontent.toString();
+	}
+
+	/**
+	 * This method will be called for all URLs that are routed here by
+	 * {@link GatlingBuildAction} with a prefix of `/simulationclasssource`.
+	 *
+	 * All such requests basically result in the servlet simply serving
+	 * up content files directly from the archived simulation directory
+	 * on disk.
+	 *
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public void doSimulationclasssource(StaplerRequest request, StaplerResponse response)
+		throws IOException, ServletException {
+		XmlFile configfile = action.getBuild().getProject().getConfigFile();
+		String simulationClass = getSimulationClassFromMavenCommand(configfile);
+		String fullpath = getSimulationSourcePath(action.getBuild().getWorkspace().getRemote(), simulationClass);
+		String filecontent = getSourceCodeContent(fullpath);
+		ForwardToView forward = new ForwardToView(action, "simulationclasssource.jelly")
+			.with("simName", simulation.getSimulationName()).with("simulationClass",simulationClass).with("filecontent",filecontent);
+		forward.generateResponse(request, response, action);
+	}
 }

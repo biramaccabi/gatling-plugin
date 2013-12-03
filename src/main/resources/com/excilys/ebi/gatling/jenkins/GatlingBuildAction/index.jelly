@@ -9,7 +9,7 @@
             <ul>
                 <j:forEach items="${it.simulations}" var="sim">
                     <li>
-                        <a href="../${it.getReportURL(sim.simulationName)}" target="_blank">${sim.simulationName}</a>
+                        <a href="../${it.getReportURL(sim.simulationName)}" target="_blank">${sim.simulationName}</a> - <a href="../${it.getSimulationClassSourceURL(sim.simulationName)}" target="_blank">Simulation Class Source</a>
                     </li>
                 </j:forEach>
             </ul>
