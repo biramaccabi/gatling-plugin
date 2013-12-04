@@ -83,43 +83,34 @@ public class ReportRenderer {
         dbs.generateResponse(request, response, action);
     }
 
-	private String getSimulationClassFromMavenCommand(XmlFile configfile) throws IOException {
-		String result = "";
-		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass=([a-zA-Z0-9\\.]+).*");
-		String line = "";
-		Reader configReader = configfile.readRaw();
-		BufferedReader br = new BufferedReader(configReader);
-		line = br.readLine();
-		while (line != null) {
-			Matcher matcher = pattern.matcher(line);
-			if (matcher.find()) {
-				result = matcher.group(1);
-				break;
-			}
-			line = br.readLine();
-		}
-		br.close();
-		return result;
-	}
 
-	private String getSimulationSourcePath(String workspace,String simulationClass){
-		String parentpath = workspace + "/performance/src/test/simulations/";
-		String classpath = simulationClass.replace(".", "/")+".scala";
-		String fullpath = parentpath + classpath;
-		return fullpath;
-	}
+	private String getSourceCodeContent(FilePath[] files) throws InterruptedException,IOException {
 
-	private String getSourceCodeContent(String filePath) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		StringBuilder filecontent = new StringBuilder();
-		String line = br.readLine();
-		while (line != null) {
-			filecontent.append(line);
-			filecontent.append("\n");
-			line = br.readLine();
+
+		for (FilePath file : files) {
+			BufferedReader br = new BufferedReader(new FileReader(file.getRemote()));
+			String line = br.readLine();
+			while (line != null) {
+				filecontent.append(line);
+				filecontent.append("\n");
+				line = br.readLine();
+			}
+			br.close();
 		}
-		br.close();
+
 		return filecontent.toString();
+	}
+
+	private String getSourceCodeClassName(FilePath[] files) throws InterruptedException,IOException {
+
+		StringBuilder classname = new StringBuilder();
+
+		for (FilePath file : files) {
+			classname.append(file.getName());
+		}
+
+		return classname.toString();
 	}
 
 	/**
@@ -136,11 +127,11 @@ public class ReportRenderer {
 	 * @throws ServletException
 	 */
 	public void doSimulationclasssource(StaplerRequest request, StaplerResponse response)
-		throws IOException, ServletException {
-		XmlFile configfile = action.getBuild().getProject().getConfigFile();
-		String simulationClass = getSimulationClassFromMavenCommand(configfile);
-		String fullpath = getSimulationSourcePath(action.getBuild().getWorkspace().getRemote(), simulationClass);
-		String filecontent = getSourceCodeContent(fullpath);
+		throws IOException, InterruptedException, ServletException {
+		FilePath simulationDir = simulation.getSimulationDirectory();
+		FilePath[] simulationClassSourceFiles = simulationDir.list("**/*.scala");
+		String filecontent = getSourceCodeContent(simulationClassSourceFiles);
+		String simulationClass = getSourceCodeClassName(simulationClassSourceFiles);
 		ForwardToView forward = new ForwardToView(action, "simulationclasssource.jelly")
 			.with("simName", simulation.getSimulationName()).with("simulationClass",simulationClass).with("filecontent",filecontent);
 		forward.generateResponse(request, response, action);

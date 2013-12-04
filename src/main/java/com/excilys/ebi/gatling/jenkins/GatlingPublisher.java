@@ -18,6 +18,7 @@ package com.excilys.ebi.gatling.jenkins;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.XmlFile;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
@@ -28,10 +29,11 @@ import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import javax.annotation.RegEx;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class GatlingPublisher extends Recorder {
@@ -205,16 +207,67 @@ public class GatlingPublisher extends Recorder {
         return assertionList;
     }
 
+	public String hasMatchSimulationClass(String input, Pattern pattern){
+		String line = input.replace("&apos;","");
+		String rs = "";
+
+		Matcher matcher = pattern.matcher(line);
+		if (matcher.find()) {
+			rs = matcher.group(1);
+		}
+		return rs;
+	}
+
+	private String getSimulationClassFromMavenCommand() throws IOException {
+		String result = "";
+		XmlFile configfile = project.getConfigFile();
+		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass=([a-zA-Z0-9\\.]+).*");
+		String line = "";
+		Reader configReader = configfile.readRaw();
+		BufferedReader br = new BufferedReader(configReader);
+		line = br.readLine();
+		while (line != null) {
+			result = hasMatchSimulationClass(line,pattern);
+			if (!result.isEmpty()){
+				break;
+			}
+			line = br.readLine();
+		}
+		br.close();
+		return result;
+	}
+
+	private void saveSimulationSourceClass(FilePath workspace, FilePath reportDirectory) throws IOException, InterruptedException {
+		String simSourceClass = getSimulationClassFromMavenCommand();
+		String simSourceClassPath = "**/"+getSimulationSourceClass(simSourceClass);
+		FilePath[] simSourceClassFiles = workspace.list(simSourceClassPath);
+
+		if (simSourceClassFiles.length == 0) {
+			throw new IllegalArgumentException("Could not find a simulation source class report in workspace.");
+		}
+
+		for (FilePath file : simSourceClassFiles) {
+			logger.println("Adding '" + file.getName() + "' to the Report Directory...");
+			file.getParent().copyRecursiveTo(file.getName(),reportDirectory);
+		}
+	}
+
+	public String getSimulationSourceClass(String simulationClass){
+		String classpath = simulationClass.replace(".", "/")+".scala";
+		return classpath;
+	}
+
     private List<BuildSimulation> saveFullReports(FilePath workspace, File rootDir) throws IOException, InterruptedException {
-		FilePath[] files = workspace.list("**/global_stats.json");
+		FilePath[] statsFiles = workspace.list("**/global_stats.json");
+
 		List<FilePath> reportFolders = new ArrayList<FilePath>();
 
-		if (files.length == 0) {
+		if (statsFiles.length == 0) {
 			throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
 		}
 
 		// Get reports folders for all "global_stats.json" found
-		for (FilePath file : files) {
+		for (FilePath file : statsFiles) {
 			reportFolders.add(file.getParent().getParent());
 		}
 
@@ -241,7 +294,13 @@ public class GatlingPublisher extends Recorder {
 
             FilePath reportDirectory = new FilePath(simulationDirectory);
 
-            reportToArchive.copyRecursiveTo(reportDirectory);
+			reportToArchive.copyRecursiveTo(reportDirectory);
+
+			try{
+				saveSimulationSourceClass(workspace,reportDirectory);
+			}catch(Exception e){
+				logger.println("ERROR in archiving simulation source code: " + e);
+			}
 
             SimulationReport report = new SimulationReport(reportDirectory, simulation);
             report.readStatsFile();

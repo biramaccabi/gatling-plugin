@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 
@@ -133,6 +134,33 @@ public class GatlingPublisherTest {
 		trueassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(trueassertionlist);
 		String expect = "";
+		assertEquals(expect, generate);
+	}
+
+	@Test
+	public void testCommandExtraction(){
+		String command = "-Pperformance-test clean verify -Dgatling.simulationClass=appserver.catalog.CatalogPriceSimulation";
+		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass='?([a-zA-Z0-9\\.]+).*");
+		String generate = gatlingpublisher.hasMatchSimulationClass(command,pattern);
+		String expect = "appserver.catalog.CatalogPriceSimulation";
+		assertEquals(expect, generate);
+	}
+
+	@Test
+	public void testCommandExtractionWithQuote(){
+		String command = "-Pperformance-test clean verify -Dgatling.simulationClass=&apos;appserver.catalog.CatalogPriceSimulation&apos;";
+		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass='?([a-zA-Z0-9\\.]+).*");
+		String generate = gatlingpublisher.hasMatchSimulationClass(command,pattern);
+		String expect = "appserver.catalog.CatalogPriceSimulation";
+		assertEquals(expect, generate);
+	}
+
+	@Test
+	public void testCommandExtractionWithQuoteChar(){
+		String command = "-Pperformance-test clean verify -Dgatling.simulationClass='appserver.catalog.CatalogPriceSimulation'";
+		Pattern pattern = Pattern.compile(".*-Dgatling\\.simulationClass='?([a-zA-Z0-9\\.]+).*");
+		String generate = gatlingpublisher.hasMatchSimulationClass(command,pattern);
+		String expect = "appserver.catalog.CatalogPriceSimulation";
 		assertEquals(expect, generate);
 	}
 
