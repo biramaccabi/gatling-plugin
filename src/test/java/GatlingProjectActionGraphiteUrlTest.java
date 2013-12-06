@@ -64,7 +64,7 @@ public class GatlingProjectActionGraphiteUrlTest {
     }
 
     private static Object[] param_OAuth2ForApi2Simulation_95th_req_and_sim_name_has_spaces(){
-        String title = "param_OAuth2ForApi2Simulation_95th";
+        String title = "param_OAuth2ForApi2Simulation_95th_req_and_sim_name_has_spaces";
 
         AssertionData data = new AssertionData();
         data.actualValue = "actualValue";
@@ -83,6 +83,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation_test.authorize_with_space.all.percentiles95%2C" +
                 "%2295th+percentile+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation_test.authorize_with_space.all.expected.percentiles95%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -113,6 +115,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.percentiles95%2C" +
                 "%2295th+percentile+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.percentiles95%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -124,7 +128,7 @@ public class GatlingProjectActionGraphiteUrlTest {
     }
 
     private static Object[] param_OAuth2ForApi2Simulation_global(){
-        String title = "param_OAuth2ForApi2Simulation_95th";
+        String title = "param_OAuth2ForApi2Simulation_global";
 
         AssertionData data = new AssertionData();
         data.actualValue = "actualValue";
@@ -143,6 +147,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.Global_Information.all.percentiles95%2C" +
                 "%2295th+percentile+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.Global_Information.all.expected.percentiles95%2C" +
+                    "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -171,6 +177,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.min%2C" +
                 "%22min+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.min%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -200,6 +208,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.max%2C" +
                 "%22max+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.max%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -229,6 +239,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.mean%2C" +
                 "%22mean+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.mean%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -258,6 +270,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.stddev%2C" +
                 "%22standard+deviation+response+time%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.stddev%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
@@ -287,6 +301,8 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22red%22)%2C%22percent%20KOs%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.throughput%2C" +
                 "%22requests+per+second%22)" +
+                "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.throughput%2C" +
+                "%22performance+assert+threshold%22)" +
                 "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +

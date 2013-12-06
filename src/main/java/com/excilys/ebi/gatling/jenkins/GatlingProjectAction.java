@@ -74,6 +74,9 @@ public class GatlingProjectAction implements Action {
             "&target=alias(" +
             "load.summary.${env}.${simName}.${reqName}.all.${assertName}%2C%22${assertDescr}%22" +
             ")" +
+            "&target=alias(" +
+            "load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22performance+assert+threshold%22" +
+            ")" +
             "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(" +
             "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
             ")" +
