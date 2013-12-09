@@ -172,11 +172,12 @@ public class GatlingPublisher extends Recorder {
 			comparionSymbol = "<";
 		}
 
-
 		if (!convertAssertionType.isEmpty() && !comparionSymbol.isEmpty()){
-			description.append(assertionData.requestName + " " + convertAssertionType + " =" + assertionData.actualValue + ", expect " + comparionSymbol + assertionData.expectedValue +"<br>");
+			String requestNameWithNonBreakingSpace = assertionData.requestName.replace(" ","&nbsp;");
+			description.append(requestNameWithNonBreakingSpace + "&nbsp;" + convertAssertionType + "=" + assertionData.actualValue + ",&nbsp;expect" + comparionSymbol + assertionData.expectedValue +";<br>");
 		}else{
-			description.append(assertionData.message + " : " + assertionData.status + " - Actual Value : "  + assertionData.actualValue + "<br>");
+			String messageWithNonBreakingSpace = assertionData.message.replace(" ","&nbsp;");
+			description.append(messageWithNonBreakingSpace + ":" + assertionData.status + "-Actual&nbsp;Value:"  + assertionData.actualValue + ";<br>");
 		}
 
 		return description.toString();
@@ -200,11 +201,11 @@ public class GatlingPublisher extends Recorder {
 
 		if (falsecount != 0){
 			if (kocount == falsecount){
-				conclusion = "KO";
+				conclusion = "<b>KO</b>";
 			}else if (kocount == 0){
-				conclusion = "PERFORMANCE";
+				conclusion = "<b>PERFORMANCE</b>";
 			}else{
-				conclusion = "KO AND PERFORMANCE";
+				conclusion = "<b>KO AND PERFORMANCE</b>";
 			}
 			return conclusion + "<br>" + description.toString();
 		}else{

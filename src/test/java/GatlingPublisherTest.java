@@ -88,7 +88,7 @@ public class GatlingPublisherTest {
 		koassertionlist.add(koassertiondata);
 		koassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(koassertionlist);
-		String expect = "KO<br>Global KO% =100, expect <1<br>Global KO% =100, expect <1<br>";
+		String expect = "<b>KO</b><br>Global&nbsp;KO%=100,&nbsp;expect<1;<br>Global&nbsp;KO%=100,&nbsp;expect<1;<br>";
 		assertEquals(generate, expect);
 	}
 
@@ -99,7 +99,7 @@ public class GatlingPublisherTest {
 		performanceassertionlist.add(performanceassertiondata);
 		performanceassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(performanceassertionlist);
-		String expect = "PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Get Catalog Pricing req/s =200, expect >2000<br>";
+		String expect = "<b>PERFORMANCE</b><br>Get&nbsp;Catalog&nbsp;Pricing&nbsp;req/s=200,&nbsp;expect>2000;<br>Get&nbsp;Catalog&nbsp;Pricing&nbsp;req/s=200,&nbsp;expect>2000;<br>";
 		assertEquals(expect, generate);
 	}
 
@@ -112,8 +112,8 @@ public class GatlingPublisherTest {
 		koandperformanceassertionlist.add(koassertiondata);
 		koandperformanceassertionlist.add(trueassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(koandperformanceassertionlist);
-		String expect = "KO AND PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Global KO% =100, expect <1<br>" +
-			"Get Catalog Pricing req/s =200, expect >2000<br>Global KO% =100, expect <1<br>";
+		String expect = "<b>KO AND PERFORMANCE</b><br>Get&nbsp;Catalog&nbsp;Pricing&nbsp;req/s=200,&nbsp;expect>2000;<br>Global&nbsp;KO%=100,&nbsp;expect<1;<br>" +
+			"Get&nbsp;Catalog&nbsp;Pricing&nbsp;req/s=200,&nbsp;expect>2000;<br>Global&nbsp;KO%=100,&nbsp;expect<1;<br>";
 		assertEquals(expect, generate);
 	}
 
@@ -123,7 +123,7 @@ public class GatlingPublisherTest {
 		unrecognizeeassertionlist.add(performanceassertiondata);
 		unrecognizeeassertionlist.add(unrecognizeassertiondata);
 		String generate = gatlingpublisher.generateBuildDescriptionFromAssertionData(unrecognizeeassertionlist);
-		String expect = "PERFORMANCE<br>Get Catalog Pricing req/s =200, expect >2000<br>Get Catalog Pricing requests unrecognize per second is equal to 2000 : false - Actual Value : 200<br>";
+		String expect = "<b>PERFORMANCE</b><br>Get&nbsp;Catalog&nbsp;Pricing&nbsp;req/s=200,&nbsp;expect>2000;<br>Get&nbsp;Catalog&nbsp;Pricing&nbsp;requests&nbsp;unrecognize&nbsp;per&nbsp;second&nbsp;is&nbsp;equal&nbsp;to&nbsp;2000:false-Actual&nbsp;Value:200;<br>";
 		assertEquals(expect, generate);
 	}
 
