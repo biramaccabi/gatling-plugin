@@ -31,9 +31,13 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.ICON_URL;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_NAME_SOURCE;
 
 
 public class GatlingPublisher extends Recorder {
@@ -75,6 +79,11 @@ public class GatlingPublisher extends Recorder {
 
         build.addAction(action);
 
+		List<SimulationSourceAction> simSourceActions = generateSimulationSourceActionsFromGatlingBuildAction(action, false);
+		for (SimulationSourceAction act : simSourceActions){
+			build.addAction(act);
+		}
+
 		logger.println("Setting Build Description...");
 		try{
 			build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
@@ -94,10 +103,45 @@ public class GatlingPublisher extends Recorder {
 	}
 
 	@Override
-	public Action getProjectAction(AbstractProject<?, ?> project) {
+	public final Collection<? extends Action> getProjectActions(AbstractProject<?,?> project){
 		this.project = project;
-		return new GatlingProjectAction(project);
+		List<Action> actions = new ArrayList<Action>();
+		actions.add(new GatlingProjectAction(project));
+		try{
+			GatlingBuildAction lastBuildAct = getLastBuildGatlingBuildAction(project);
+			List<SimulationSourceAction> simSourceActions = generateSimulationSourceActionsFromGatlingBuildAction(lastBuildAct, true);
+			for (SimulationSourceAction act : simSourceActions){
+				actions.add(act);
+			}
+		}catch (Exception e){}
+		return actions;
 	}
+
+	private GatlingBuildAction getLastBuildGatlingBuildAction(AbstractProject<?,?> project){
+		AbstractBuild<?,?> lastbuild = project.getLastCompletedBuild();
+		GatlingBuildAction lastBuildAct = lastbuild.getAction(GatlingBuildAction.class);
+		return lastBuildAct;
+	}
+
+	private List<SimulationSourceAction> generateSimulationSourceActionsFromGatlingBuildAction(GatlingBuildAction buildaction, Boolean isProject){
+		List<SimulationSourceAction> sourceactions = new ArrayList<SimulationSourceAction>();
+		String icon = ICON_URL;
+		String url = "";
+		for (BuildSimulation sim : buildaction.getSimulations()){
+			if (isProject){
+				Integer buildActionNum = buildaction.getBuild().getNumber();
+				url = buildaction.getSimulationClassSourceURL(buildActionNum,sim.getSimulationName());
+			}else{
+				url = buildaction.getSimulationClassSourceURL(sim.getSimulationName());
+			}
+			String text = DISPLAY_NAME_SOURCE;
+			SimulationSourceAction sourceaction = new SimulationSourceAction(url,text,icon);
+			sourceactions.add(sourceaction);
+		}
+		return sourceactions;
+	}
+
+
 
 	public String getShortBuildDescription(AssertionData assertionData){
 		StringBuffer description = new StringBuffer();
@@ -129,7 +173,7 @@ public class GatlingPublisher extends Recorder {
 		}
 
 
-	 	if (!convertAssertionType.isEmpty() && !comparionSymbol.isEmpty()){
+		if (!convertAssertionType.isEmpty() && !comparionSymbol.isEmpty()){
 			description.append(assertionData.requestName + " " + convertAssertionType + " =" + assertionData.actualValue + ", expect " + comparionSymbol + assertionData.expectedValue +"<br>");
 		}else{
 			description.append(assertionData.message + " : " + assertionData.status + " - Actual Value : "  + assertionData.actualValue + "<br>");

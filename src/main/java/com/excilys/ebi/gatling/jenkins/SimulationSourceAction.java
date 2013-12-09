@@ -15,14 +15,33 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
-public interface PluginConstants {
-	String ICON_URL = "/plugin/gatling/img/logo.png";
-	String DISPLAY_NAME_CHARTS = "Gatling - Charts";
-	String DISPLAY_NAME_REPORTS = "Gatling - Reports";
-	String URL_NAME = "gatling";
+import hudson.model.Action;
 
-	String DISPLAY_NAME_SOURCE = "Gatling - Test Source";
+public class SimulationSourceAction implements Action {
 
-	int MAX_BUILDS_TO_DISPLAY = 30;
-	int MAX_BUILDS_TO_DISPLAY_DASHBOARD = 15;
+	private String url;
+
+	private String text;
+
+	private String icon;
+
+	public SimulationSourceAction(String urlName, String displayName, String iconFileName) {
+		this.url = urlName;
+		this.text = displayName;
+		this.icon = iconFileName;
+	}
+
+	public String getUrlName() {
+		return url;
+	}
+
+	public String getDisplayName() {
+		return text;
+	}
+
+	public String getIconFileName() {
+		return icon;
+	}
+
 }
+

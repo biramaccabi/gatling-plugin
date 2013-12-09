@@ -95,7 +95,7 @@ public class GatlingProjectAction implements Action {
 	}
 
 	public String getDisplayName() {
-		return DISPLAY_NAME;
+		return DISPLAY_NAME_CHARTS;
 	}
 
 	public String getUrlName() {

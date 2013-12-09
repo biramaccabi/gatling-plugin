@@ -80,7 +80,7 @@ public class GatlingBuildAction implements Action {
 	}
 
 	public String getDisplayName() {
-		return DISPLAY_NAME;
+		return DISPLAY_NAME_REPORTS;
 	}
 
 	public String getUrlName() {
@@ -107,6 +107,10 @@ public class GatlingBuildAction implements Action {
 
 	public String getSimulationClassSourceURL(String simName) {
 		return new StringBuilder().append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
+	}
+
+	public String getSimulationClassSourceURL(Integer buildNum,String simName) {
+		return new StringBuilder().append(String.valueOf(buildNum)).append("/").append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
 	}
 
 
