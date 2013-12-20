@@ -73,7 +73,7 @@ public class LastBuildColumn extends ListViewColumn {
 	}
 
 	public String getShortName(Job job) throws Exception{
-		Run lastBuild = job.getLastBuild();
+		Run lastBuild = job.getLastCompletedBuild();
 		StringBuilder stringBuilder = new StringBuilder();
 		XmlFile configFile = job.getConfigFile();
 
