@@ -37,19 +37,20 @@ public class LastBuildColumn extends ListViewColumn {
 
 	public String getLastBuildDescription(String description,Result result) {
 		StringBuilder stringBuilder = new StringBuilder();
-		if (result.equals(Result.UNSTABLE)){
-			if (!description.isEmpty()){
+		if (result != null){
+			if (result.equals(Result.UNSTABLE)){
 				stringBuilder.append(description);
+			}else if (result.equals(Result.FAILURE)){
+				stringBuilder.append("FAILURE");
+			}else if (result.equals(Result.SUCCESS)){
+				// Do nothing for successful case
+			}else if (result.equals(Result.ABORTED)){
+				stringBuilder.append("ABORTED");
+			}else{
+				stringBuilder.append("UNKNOWN");
 			}
-		}else if (result.equals(Result.FAILURE)){
-			stringBuilder.append("FAILURE");
-		}else if (result.equals(Result.SUCCESS)){
-			// Do nothing for successful case
-		}else if (result.equals(Result.ABORTED)){
-			stringBuilder.append("ABORTED");
-		}else{
-			stringBuilder.append("UNKNOWN");
 		}
+
 		return stringBuilder.toString();
 	}
 
