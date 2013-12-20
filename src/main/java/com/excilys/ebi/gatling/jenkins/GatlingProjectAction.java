@@ -83,7 +83,7 @@ public class GatlingProjectAction implements Action {
             "&width=586&height=308&lineMode=connected&from=-1months&" +
             "title=${reqName}+-+${assertDescr}" +
             "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs" +
-            "&bgcolor=FFFFFF&fgcolor=000000";
+            "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
 
 
 	public GatlingProjectAction(AbstractProject<?, ?> project) {
