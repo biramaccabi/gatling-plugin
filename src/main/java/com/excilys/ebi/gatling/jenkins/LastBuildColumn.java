@@ -27,7 +27,9 @@ import org.kohsuke.stapler.StaplerRequest;
 import hudson.views.ListViewColumnDescriptor;
 
 import java.io.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 
 public class LastBuildColumn extends ListViewColumn {
@@ -44,50 +46,55 @@ public class LastBuildColumn extends ListViewColumn {
 				stringBuilder.append("FAILURE");
 			}else if (result.equals(Result.SUCCESS)){
 				// Do nothing for successful case
+				logger.fine("SUCCESS");
 			}else if (result.equals(Result.ABORTED)){
 				stringBuilder.append("ABORTED");
 			}else{
 				stringBuilder.append("UNKNOWN");
 			}
+		}else{
+			logger.fine("No Result");
 		}
-
 		return stringBuilder.toString();
 	}
 
-	private boolean isGatlingJob(XmlFile configFile) {
+	private boolean isGatlingJob(XmlFile configFile) throws IOException{
 		boolean result = false;
-		try {
-			BufferedReader br = new BufferedReader(configFile.readRaw());
-			while (br.readLine() != null) {
-				String currentLine = br.readLine();
-				if (currentLine.contains(GatlingPluginConfigTest)){
-					result = true;
-					break;
-				}
+		BufferedReader br = new BufferedReader(configFile.readRaw());
+		while (br.readLine() != null) {
+			String currentLine = br.readLine();
+			if (currentLine.contains(GatlingPluginConfigTest)){
+				result = true;
+				break;
 			}
-		}catch (IOException e){
-			logger.info("ERROR in Reading config.xml" + e);
 		}
-
 		return result;
 	}
 
-	public String getShortName(Job job) throws Exception{
-		Run lastBuild = job.getLastCompletedBuild();
+	public String getShortName(Job job){
 		StringBuilder stringBuilder = new StringBuilder();
-		XmlFile configFile = job.getConfigFile();
-
-		if (isGatlingJob(configFile)){
-			if (lastBuild != null) {
-				String tempdescription = lastBuild.getDescription();
-				Result result = lastBuild.getResult();
-				String description = getLastBuildDescription(tempdescription,result);
-				stringBuilder.append(description);
-			} else {
-				stringBuilder.append("N/A");
+		try {
+			Run lastBuild = job.getLastCompletedBuild();
+			logger.fine(lastBuild.getId());
+			XmlFile configFile = job.getConfigFile();
+			logger.fine(configFile.toString());
+			if (isGatlingJob(configFile)){
+				if (lastBuild != null) {
+					String tempdescription = lastBuild.getDescription();
+					Result result = lastBuild.getResult();
+					String description = getLastBuildDescription(tempdescription,result);
+					stringBuilder.append(description);
+				} else {
+					stringBuilder.append("N/A");
+				}
+			}else{
+				logger.fine("Not Gatling Project");
 			}
+		}catch (Exception e){
+			logger.log(Level.WARNING,"Exception",e);
+		}finally {
+			logger.fine(job.getDisplayName() + "-" + stringBuilder.toString());
 		}
-
 		return stringBuilder.toString();
 	}
 
