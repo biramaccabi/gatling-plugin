@@ -46,7 +46,6 @@ public class LastBuildColumn extends ListViewColumn {
 				stringBuilder.append("FAILURE");
 			}else if (result.equals(Result.SUCCESS)){
 				// Do nothing for successful case
-				logger.fine("SUCCESS");
 			}else if (result.equals(Result.ABORTED)){
 				stringBuilder.append("ABORTED");
 			}else{
@@ -61,8 +60,8 @@ public class LastBuildColumn extends ListViewColumn {
 	private boolean isGatlingJob(XmlFile configFile) throws IOException{
 		boolean result = false;
 		BufferedReader br = new BufferedReader(configFile.readRaw());
-		while (br.readLine() != null) {
-			String currentLine = br.readLine();
+		String currentLine;
+		while ((currentLine = br.readLine()) != null) {
 			if (currentLine.contains(GatlingPluginConfigTest)){
 				result = true;
 				break;
@@ -75,9 +74,7 @@ public class LastBuildColumn extends ListViewColumn {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
 			Run lastBuild = job.getLastCompletedBuild();
-			logger.fine(lastBuild.getId());
 			XmlFile configFile = job.getConfigFile();
-			logger.fine(configFile.toString());
 			if (isGatlingJob(configFile)){
 				if (lastBuild != null) {
 					String tempdescription = lastBuild.getDescription();
@@ -91,9 +88,9 @@ public class LastBuildColumn extends ListViewColumn {
 				logger.fine("Not Gatling Project");
 			}
 		}catch (Exception e){
-			logger.log(Level.WARNING,"Exception",e);
+			logger.log(Level.WARNING,"Exception - " + job.getDisplayName(), e);
 		}finally {
-			logger.fine(job.getDisplayName() + "-" + stringBuilder.toString());
+			logger.fine(job.getDisplayName() + " - " + stringBuilder.toString());
 		}
 		return stringBuilder.toString();
 	}
