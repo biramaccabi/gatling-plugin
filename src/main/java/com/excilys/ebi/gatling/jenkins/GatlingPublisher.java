@@ -37,9 +37,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.ICON_URL;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.GRAPHITE_ICON;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_SYSTEM_GRAPHS_ICON;
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_NAME_SOURCE;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_SYSTEM_INFO;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_SYSTEM_GRAPHS_DISPLAY_STRING;
 
 
 public class GatlingPublisher extends Recorder {
@@ -154,7 +154,7 @@ public class GatlingPublisher extends Recorder {
 
     private List<GraphiteAction> generateGraphiteActionFromGatlingBuildAction(GatlingBuildAction buildAction, Boolean isProject){
         List<GraphiteAction> sourceActions = new ArrayList<GraphiteAction>();
-        String icon = GRAPHITE_ICON;
+        String icon = TARGET_SYSTEM_GRAPHS_ICON;
         String url = "";
         for (BuildSimulation sim : buildAction.getSimulations()){
             if (isProject){
@@ -163,7 +163,7 @@ public class GatlingPublisher extends Recorder {
             }else{
                 url = buildAction.getGraphiteURL(sim.getSimulationName());
             }
-            String text = DISPLAY_SYSTEM_INFO;
+            String text = TARGET_SYSTEM_GRAPHS_DISPLAY_STRING;
             GraphiteAction graphiteAction = new GraphiteAction(url,text,icon, buildAction.getBuild());
             sourceActions.add(graphiteAction);
         }
