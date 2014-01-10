@@ -17,11 +17,13 @@ package com.excilys.ebi.gatling.jenkins;
 
 public interface PluginConstants {
 	String ICON_URL = "/plugin/gatling/img/logo.png";
+    String GRAPHITE_ICON = "/plugin/gatling/img/graphite.png";
 	String DISPLAY_NAME_CHARTS = "Gatling - Charts";
 	String DISPLAY_NAME_REPORTS = "Gatling - Reports";
 	String URL_NAME = "gatling";
 
 	String DISPLAY_NAME_SOURCE = "Gatling - Test Source";
+    String DISPLAY_SYSTEM_INFO = "Graphite - System Information";
 
 	int MAX_BUILDS_TO_DISPLAY = 30;
 	int MAX_BUILDS_TO_DISPLAY_DASHBOARD = 15;

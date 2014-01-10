@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,4 +137,23 @@ public class ReportRenderer {
 			.with("simName", simulation.getSimulationName()).with("simulationClass",simulationClass).with("filecontent",filecontent);
 		forward.generateResponse(request, response, action);
 	}
+
+    /**
+     * This method will be called for all URLs that are routed here by
+     * {@link GatlingBuildAction} with a prefix of `/graphitegraph`.
+     *
+     * All such requests basically result in the servlet simply serving
+     * up content files directly from the archived simulation directory
+     * on disk.
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     */
+    public void doGraphitegraph(StaplerRequest request, StaplerResponse response) throws IOException, ServletException {
+        List<String> graphiteUrls = action.getGraphiteUrls();
+        ForwardToView forward = new ForwardToView(action, "graphitegraph.jelly").with("simName", simulation.getSimulationName()).with("graphiteUrls", graphiteUrls);
+        forward.generateResponse(request, response, action);
+    }
 }

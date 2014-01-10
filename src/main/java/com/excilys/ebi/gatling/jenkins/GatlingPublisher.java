@@ -37,7 +37,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.ICON_URL;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.GRAPHITE_ICON;
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_NAME_SOURCE;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_SYSTEM_INFO;
 
 
 public class GatlingPublisher extends Recorder {
@@ -84,6 +86,11 @@ public class GatlingPublisher extends Recorder {
 			build.addAction(act);
 		}
 
+        List<GraphiteAction> graphiteActions = generateGraphiteActionFromGatlingBuildAction(action, false);
+        for(GraphiteAction graphiteAction : graphiteActions) {
+            build.addAction(graphiteAction);
+        }
+
 		logger.println("Setting Build Description...");
 		try{
 			build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
@@ -113,6 +120,10 @@ public class GatlingPublisher extends Recorder {
 			for (SimulationSourceAction act : simSourceActions){
 				actions.add(act);
 			}
+            List<GraphiteAction> graphiteActions = generateGraphiteActionFromGatlingBuildAction(lastBuildAct, true);
+            for(GraphiteAction graphiteAction : graphiteActions) {
+                actions.add(graphiteAction);
+            }
 		}catch (Exception e){}
 		return actions;
 	}
@@ -139,6 +150,24 @@ public class GatlingPublisher extends Recorder {
 			sourceactions.add(sourceaction);
 		}
 		return sourceactions;
+	}
+
+    private List<GraphiteAction> generateGraphiteActionFromGatlingBuildAction(GatlingBuildAction buildAction, Boolean isProject){
+        List<GraphiteAction> sourceActions = new ArrayList<GraphiteAction>();
+        String icon = GRAPHITE_ICON;
+        String url = "";
+        for (BuildSimulation sim : buildAction.getSimulations()){
+            if (isProject){
+                Integer buildActionNum = buildAction.getBuild().getNumber();
+                url = buildAction.getGraphiteURL(buildActionNum,sim.getSimulationName());
+            }else{
+                url = buildAction.getGraphiteURL(sim.getSimulationName());
+            }
+            String text = DISPLAY_SYSTEM_INFO;
+            GraphiteAction graphiteAction = new GraphiteAction(url,text,icon, buildAction.getBuild());
+            sourceActions.add(graphiteAction);
+        }
+        return sourceActions;
 	}
 
 

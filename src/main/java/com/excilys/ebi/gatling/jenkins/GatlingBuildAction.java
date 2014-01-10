@@ -15,6 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
+import com.excilys.ebi.gatling.jenkins.GraphiteUtilities.GraphiteUTIL;
 import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
@@ -113,6 +114,13 @@ public class GatlingBuildAction implements Action {
 		return new StringBuilder().append(String.valueOf(buildNum)).append("/").append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
 	}
 
+    public String getGraphiteURL(String simName) {
+        return new StringBuilder().append(URL_NAME).append("/report/").append(simName).append("/graphitegraph/").toString();
+    }
+
+    public String getGraphiteURL(Integer buildNum,String simName) {
+        return new StringBuilder().append(String.valueOf(buildNum)).append("/").append(URL_NAME).append("/report/").append(simName).append("/graphitegraph/").toString();
+    }
 
     private BuildSimulation getSimulation(String simulationName) {
         // this isn't the most efficient implementation in the world :)
@@ -128,4 +136,12 @@ public class GatlingBuildAction implements Action {
         return this.assertionDataList;
     }
 
+    /*
+     This probably shouldn't be here.  I need to figure out how to get jelly to call the version
+     of this method that is in GraphiteAction
+     */
+    public List<String> getGraphiteUrls() {
+        GraphiteUTIL myUtil = new GraphiteUTIL();
+        return myUtil.getGraphiteUrls(build);
+    }
 }
