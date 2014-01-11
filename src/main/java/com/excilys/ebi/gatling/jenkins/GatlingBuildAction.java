@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
-import com.excilys.ebi.gatling.jenkins.GraphiteUtilities.GraphiteUTIL;
+import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.TargetGraphGenerator;
 import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
@@ -103,23 +103,23 @@ public class GatlingBuildAction implements Action {
 
 
     public String getReportURL(String simName) {
-        return new StringBuilder().append(URL_NAME).append("/report/").append(simName).toString();
+        return URL_NAME + "/report/" + simName;
     }
 
 	public String getSimulationClassSourceURL(String simName) {
-		return new StringBuilder().append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
+		return URL_NAME + "/report/" + simName + "/simulationclasssource/";
 	}
 
 	public String getSimulationClassSourceURL(Integer buildNum,String simName) {
-		return new StringBuilder().append(String.valueOf(buildNum)).append("/").append(URL_NAME).append("/report/").append(simName).append("/simulationclasssource/").toString();
+		return String.valueOf(buildNum) + "/" + URL_NAME + "/report/" + simName + "/simulationclasssource/";
 	}
 
-    public String getGraphiteURL(String simName) {
-        return new StringBuilder().append(URL_NAME).append("/report/").append(simName).append("/graphitegraph/").toString();
+    public String getTargetEnvGraphURL(String simName) {
+        return URL_NAME + "/report/" + simName + "/targetenvgraph/";
     }
 
-    public String getGraphiteURL(Integer buildNum,String simName) {
-        return new StringBuilder().append(String.valueOf(buildNum)).append("/").append(URL_NAME).append("/report/").append(simName).append("/graphitegraph/").toString();
+    public String getTargetEnvGraphURL(Integer buildNum,String simName) {
+        return String.valueOf(buildNum) + "/" + getTargetEnvGraphURL(simName);
     }
 
     private BuildSimulation getSimulation(String simulationName) {
@@ -137,11 +137,10 @@ public class GatlingBuildAction implements Action {
     }
 
     /*
-     This probably shouldn't be here.  I need to figure out how to get jelly to call the version
-     of this method that is in GraphiteAction
+     This will be here until a dedicated reporter can be made for TargetEnvGraphs
      */
-    public List<String> getGraphiteUrls() {
-        GraphiteUTIL myUtil = new GraphiteUTIL();
-        return myUtil.getGraphiteUrls(build);
+    public List<String> getTargetEnvGraphUrls() {
+        TargetGraphGenerator myGenerator = new TargetGraphGenerator();
+        return myGenerator.getGraphitUrls(build);
     }
 }

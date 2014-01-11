@@ -13,20 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins;
+package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs;
 
-public interface PluginConstants {
-	String ICON_URL = "/plugin/gatling/img/logo.png";
-    String TARGET_ENV_GRAPHS_ICON = "/plugin/gatling/img/graph_icon.png";
+import java.util.Calendar;
 
-    String DISPLAY_NAME_CHARTS = "Gatling - Charts";
-	String DISPLAY_NAME_REPORTS = "Gatling - Reports";
+public interface GraphiteGraphInterface {
 
-    String URL_NAME = "gatling";
-
-	String DISPLAY_NAME_SOURCE = "Gatling - Test Source";
-    String TARGET_ENV_GRAPHS_DISPLAY_STRING = "Graphs - System Information";
-
-	int MAX_BUILDS_TO_DISPLAY = 30;
-	int MAX_BUILDS_TO_DISPLAY_DASHBOARD = 15;
+    public String getGraphiteGraphForTarget(String host, String target, String vTitle, String title, String yMin, String yMax, Calendar startTime, Calendar endTime);
 }

@@ -140,7 +140,7 @@ public class ReportRenderer {
 
     /**
      * This method will be called for all URLs that are routed here by
-     * {@link GatlingBuildAction} with a prefix of `/graphitegraph`.
+     * {@link GatlingBuildAction} with a prefix of `/targetenvgraph`.
      *
      * All such requests basically result in the servlet simply serving
      * up content files directly from the archived simulation directory
@@ -151,9 +151,9 @@ public class ReportRenderer {
      * @throws IOException
      * @throws ServletException
      */
-    public void doGraphitegraph(StaplerRequest request, StaplerResponse response) throws IOException, ServletException {
-        List<String> graphiteUrls = action.getGraphiteUrls();
-        ForwardToView forward = new ForwardToView(action, "graphitegraph.jelly").with("simName", simulation.getSimulationName()).with("graphiteUrls", graphiteUrls);
+    public void doTargetenvgraph(StaplerRequest request, StaplerResponse response) throws IOException, ServletException {
+        List<String> graphUrls = action.getTargetEnvGraphUrls();
+        ForwardToView forward = new ForwardToView(action, "targetenvgraph.jelly").with("simName", simulation.getSimulationName()).with("graphUrls", graphUrls);
         forward.generateResponse(request, response, action);
     }
 }

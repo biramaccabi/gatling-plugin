@@ -37,9 +37,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.ICON_URL;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_SYSTEM_GRAPHS_ICON;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_ENV_GRAPHS_ICON;
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_NAME_SOURCE;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_SYSTEM_GRAPHS_DISPLAY_STRING;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_ENV_GRAPHS_DISPLAY_STRING;
 
 
 public class GatlingPublisher extends Recorder {
@@ -154,16 +154,16 @@ public class GatlingPublisher extends Recorder {
 
     private List<GraphiteAction> generateGraphiteActionFromGatlingBuildAction(GatlingBuildAction buildAction, Boolean isProject){
         List<GraphiteAction> sourceActions = new ArrayList<GraphiteAction>();
-        String icon = TARGET_SYSTEM_GRAPHS_ICON;
+        String icon = TARGET_ENV_GRAPHS_ICON;
         String url = "";
         for (BuildSimulation sim : buildAction.getSimulations()){
             if (isProject){
                 Integer buildActionNum = buildAction.getBuild().getNumber();
-                url = buildAction.getGraphiteURL(buildActionNum,sim.getSimulationName());
+                url = buildAction.getTargetEnvGraphURL(buildActionNum,sim.getSimulationName());
             }else{
-                url = buildAction.getGraphiteURL(sim.getSimulationName());
+                url = buildAction.getTargetEnvGraphURL(sim.getSimulationName());
             }
-            String text = TARGET_SYSTEM_GRAPHS_DISPLAY_STRING;
+            String text = TARGET_ENV_GRAPHS_DISPLAY_STRING;
             GraphiteAction graphiteAction = new GraphiteAction(url,text,icon, buildAction.getBuild());
             sourceActions.add(graphiteAction);
         }
