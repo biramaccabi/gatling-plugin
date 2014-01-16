@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs;
+package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs;
 
-import java.util.Calendar;
+import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.GraphCriteria;
 
-public interface GraphiteGraphInterface {
+import java.util.ArrayList;
 
-    public String getGraphiteGraphForTarget(String host, String target, String vTitle, String title, String yMin, String yMax, Calendar startTime, Calendar endTime);
+public interface EnvGraphGenerator {
+
+    public ArrayList<String> getUrlsForCriteria(GraphCriteria criteria);
 }

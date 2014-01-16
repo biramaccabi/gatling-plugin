@@ -15,91 +15,95 @@
  */
 package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs;
 
+import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.EnvGraphGenerator;
+import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.Graphite.GraphiteUrlGenerator;
 import hudson.model.AbstractBuild;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class TargetGraphGenerator {
 
-    public ArrayList<String> getGraphitUrls(AbstractBuild<?, ?> build){
-        ArrayList<String> result = new ArrayList<String>();
-        int buildNumber = build.getNumber();
+    private ArrayList<EnvGraphGenerator> graphGenerators;
+    private int graphStartBufferTimeMinutes;
+    private int graphEndBufferTimeMinutes;
 
-        Calendar startTime = build.getTimestamp();
-        Calendar endTime = build.getTimestamp();
+    public TargetGraphGenerator() {
+        graphGenerators = new ArrayList<EnvGraphGenerator>();
+        graphGenerators.add(new GraphiteUrlGenerator());
+        graphEndBufferTimeMinutes = 5;
+        graphStartBufferTimeMinutes = -5;
+    }
 
-        endTime.setTimeInMillis(endTime.getTimeInMillis() + build.getDuration());
+    public ArrayList<String> getGraphUrls(AbstractBuild<?, ?> build){
+        ArrayList<String> graphUrls = new ArrayList<String>();
 
-        startTime.add(Calendar.MINUTE, -5);
-        endTime.add(Calendar.MINUTE, 5);
+        GraphCriteria criteria = getCriteriaFromBuild(build);
+        for(EnvGraphGenerator graphGenerator: graphGenerators) {
+            graphUrls.addAll(graphGenerator.getUrlsForCriteria(criteria));
+        }
 
-        result.add(getGraphiteURLGraphOfGCMarkSweepHeapUsage(startTime, endTime));
-        result.add(getGraphiteURLGraphOfGCMarkSweepCollectionTime(startTime,endTime));
-        result.add(getGraphiteURLGraphOfGCParNewHeapUsage(startTime, endTime));
-        result.add(getGraphiteURLGraphOfGCParNewCollectionTime(startTime, endTime));
-        result.add(getGraphiteURLGraphOfAppPoolCpuUsage(startTime, endTime));
-        result.add(getGraphiteURLGraphOfAppPoolMemmoryUsage(startTime,endTime));
-        result.add(getGraphiteURLGraphOfAppPoolSwapUsage(startTime, endTime));
-        // No API data collected for foxtrot
-        //result.add(getGraphiteURLGraphOfApiPoolCpuUsage(startTime, endTime));
-        //result.add(getGraphiteURLGraphOfApiPoolMemmoryUsage(startTime, endTime));
+        return graphUrls;
+    }
+
+    public GraphCriteria getCriteriaFromBuild(AbstractBuild build){
+        GraphCriteria result = new GraphCriteria();
+
+        result.setEnvironmentName(getEnvFromBuild(build));
+        result.setPoolName(getPoolFromBuild(build));
+        result.setStartTime(getStartTime(build));
+        result.setEndTime(getEndTime(build));
+        result.setDuration(build.getDuration());
 
         return result;
     }
 
-    private String getGraphiteURLGraphOfGCMarkSweepHeapUsage(Calendar startTime, Calendar endTime) {
-        String graphiteTarget = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
-        TREGraphiteGraph markSweepHeapUsage = new TREGraphiteGraph();
-        return markSweepHeapUsage.getGraphiteGraphForTarget(graphiteTarget, "percent_heap_used", graphiteTarget, "0", "100", startTime, endTime);
+    public Calendar getStartTime(AbstractBuild build) {
+        Calendar startTime = (Calendar)build.getTimestamp().clone();
+
+        startTime.add(Calendar.MINUTE, getGraphStartBufferTimeMinutes());
+
+        return startTime;
     }
 
-    private String getGraphiteURLGraphOfGCMarkSweepCollectionTime(Calendar startTime, Calendar endTime) {
-        String graphiteTarget = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime";
-        TREGraphiteGraph markSweepCollectionTime = new TREGraphiteGraph();
-        return markSweepCollectionTime.getGraphiteGraphForTargetNoYMinYMax(graphiteTarget, "collection_time_in_ms", graphiteTarget, startTime, endTime);
+    public Calendar getEndTime(AbstractBuild build) {
+        Calendar endTime = (Calendar)build.getTimestamp().clone();
+
+        endTime.setTimeInMillis(endTime.getTimeInMillis() + build.getDuration());
+        endTime.add(Calendar.MINUTE, getGraphEndBufferTimeMinutes());
+
+        return endTime;
     }
 
-    private String getGraphiteURLGraphOfGCParNewHeapUsage(Calendar startTime, Calendar endTime) {
-        String graphiteTarget = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage&vtitle=percent_heap_used";
-        TREGraphiteGraph parNewHeapUsage = new TREGraphiteGraph();
-        return parNewHeapUsage.getGraphiteGraphForTarget(graphiteTarget, "percent_heap_used", graphiteTarget, "0", "100", startTime, endTime);
+    public String getEnvFromBuild(AbstractBuild build) {
+        String projectName = build.getProject().getName();
+        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
+        Matcher matcher = envPattern.matcher(projectName);
+        if(matcher.find()){
+            return matcher.group(1).toLowerCase();
+        }
+        return "";
     }
 
-    private String getGraphiteURLGraphOfGCParNewCollectionTime(Calendar startTime, Calendar endTime) {
-        String graphiteTarget = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.collectionTime";
-        TREGraphiteGraph parNewCollectionTime = new TREGraphiteGraph();
-        return parNewCollectionTime.getGraphiteGraphForTargetNoYMinYMax(graphiteTarget, "collection_time_in_ms", graphiteTarget, startTime, endTime);
+    public String getPoolFromBuild(AbstractBuild build) {
+        String projectName = build.getProject().getName();
+        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-+([^_]+).*?$");
+        Matcher matcher = envPattern.matcher(projectName);
+        if(matcher.find()){
+            return matcher.group(2).toLowerCase();
+        }
+        return "";
     }
 
-    private String getGraphiteURLGraphOfAppPoolCpuUsage(Calendar startTime, Calendar endTime) {
-         String target = "sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle";
-        IOPSGraphiteGraph appPoolCpuUsage = new IOPSGraphiteGraph();
-        return appPoolCpuUsage.getGraphiteGraphForTarget(target, "cpu_percent_usage", "APP_Pool_CPU_Usage", "", "", startTime, endTime);
+    public int getGraphStartBufferTimeMinutes() {
+        return graphStartBufferTimeMinutes;
     }
 
-    private String getGraphiteURLGraphOfAppPoolMemmoryUsage(Calendar startTime, Calendar endTime) {
-        String target = "sfly.foxtrot.host.app.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.memory.memory-buffered";
-        IOPSGraphiteGraph appPoolMemoryUsage = new IOPSGraphiteGraph();
-        return appPoolMemoryUsage.getGraphiteGraphForTarget(target, "ram_usage", "APP_Pool_RAM_Usage", "", "", startTime, endTime);
+    public int getGraphEndBufferTimeMinutes() {
+        return graphEndBufferTimeMinutes;
     }
-
-    private String getGraphiteURLGraphOfAppPoolSwapUsage(Calendar startTime, Calendar endTime) {
-        String target = "sfly.foxtrot.host.app.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.swap.swap-used";
-        IOPSGraphiteGraph appPoolSwapUsage = new IOPSGraphiteGraph();
-        return appPoolSwapUsage.getGraphiteGraphForTarget(target, "swap_usage", "APP_Pool_Swap_Usage", "", "", startTime, endTime);
-    }
-
-    private String getGraphiteURLGraphOfApiPoolCpuUsage(Calendar startTime, Calendar endTime) {
-        String target = "sfly.foxtrot.host.api.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.api.*.aggregation-cpu-average.cpu-idle";
-        IOPSGraphiteGraph apiPoolCpuUsage = new IOPSGraphiteGraph();
-        return apiPoolCpuUsage.getGraphiteGraphForTarget(target, "cpu_percent_usage", "API_Pool_CPU_Usage", "", "", startTime, endTime);
-    }
-
-    private String getGraphiteURLGraphOfApiPoolMemmoryUsage(Calendar startTime, Calendar endTime) {
-        String target = "sfly.foxtrot.host.api.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.api.*.memory.memory-buffered";
-        IOPSGraphiteGraph apiPoolMemoryUsage = new IOPSGraphiteGraph();
-        return apiPoolMemoryUsage.getGraphiteGraphForTarget(target, "ram_usage", "API_Pool_RAM_Usage", "", "", startTime, endTime);
-    }
-
 }

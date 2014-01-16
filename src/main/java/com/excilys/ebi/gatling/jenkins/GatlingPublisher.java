@@ -86,9 +86,9 @@ public class GatlingPublisher extends Recorder {
 			build.addAction(act);
 		}
 
-        List<GraphiteAction> graphiteActions = generateGraphiteActionFromGatlingBuildAction(action, false);
-        for(GraphiteAction graphiteAction : graphiteActions) {
-            build.addAction(graphiteAction);
+        List<TargetEnvGraphAction> graphActions = generateTargetEnvGraphActionFromGatlingBuildAction(action, false);
+        for(TargetEnvGraphAction graphAction : graphActions) {
+            build.addAction(graphAction);
         }
 
 		logger.println("Setting Build Description...");
@@ -120,9 +120,9 @@ public class GatlingPublisher extends Recorder {
 			for (SimulationSourceAction act : simSourceActions){
 				actions.add(act);
 			}
-            List<GraphiteAction> graphiteActions = generateGraphiteActionFromGatlingBuildAction(lastBuildAct, true);
-            for(GraphiteAction graphiteAction : graphiteActions) {
-                actions.add(graphiteAction);
+            List<TargetEnvGraphAction> graphActions = generateTargetEnvGraphActionFromGatlingBuildAction(lastBuildAct, true);
+            for(TargetEnvGraphAction graphAction : graphActions) {
+                actions.add(graphAction);
             }
 		}catch (Exception e){}
 		return actions;
@@ -152,8 +152,8 @@ public class GatlingPublisher extends Recorder {
 		return sourceactions;
 	}
 
-    private List<GraphiteAction> generateGraphiteActionFromGatlingBuildAction(GatlingBuildAction buildAction, Boolean isProject){
-        List<GraphiteAction> sourceActions = new ArrayList<GraphiteAction>();
+    private List<TargetEnvGraphAction> generateTargetEnvGraphActionFromGatlingBuildAction(GatlingBuildAction buildAction, Boolean isProject){
+        List<TargetEnvGraphAction> sourceActions = new ArrayList<TargetEnvGraphAction>();
         String icon = TARGET_ENV_GRAPHS_ICON;
         String url = "";
         for (BuildSimulation sim : buildAction.getSimulations()){
@@ -164,8 +164,8 @@ public class GatlingPublisher extends Recorder {
                 url = buildAction.getTargetEnvGraphURL(sim.getSimulationName());
             }
             String text = TARGET_ENV_GRAPHS_DISPLAY_STRING;
-            GraphiteAction graphiteAction = new GraphiteAction(url,text,icon, buildAction.getBuild());
-            sourceActions.add(graphiteAction);
+            TargetEnvGraphAction graphAction = new TargetEnvGraphAction(url,text,icon, buildAction.getBuild());
+            sourceActions.add(graphAction);
         }
         return sourceActions;
 	}

@@ -20,14 +20,14 @@ import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import java.util.List;
 
-public class GraphiteAction implements Action {
+public class TargetEnvGraphAction implements Action {
 
     AbstractBuild build;
     String url;
     String icon;
     String displayName;
 
-    public GraphiteAction(String urlName, String displayName, String iconFileName, AbstractBuild build) {
+    public TargetEnvGraphAction(String urlName, String displayName, String iconFileName, AbstractBuild build) {
         super();
         this.url = urlName;
         this.displayName = displayName;
@@ -37,11 +37,6 @@ public class GraphiteAction implements Action {
 
     public AbstractBuild<?,?> getBuild() {
         return build;
-    }
-
-     public List<String> getGraphiteUrls() {
-        TargetGraphGenerator myUtil = new TargetGraphGenerator();
-        return myUtil.getGraphitUrls(build);
     }
 
     public String getIconFileName() {
@@ -54,5 +49,18 @@ public class GraphiteAction implements Action {
 
     public String getUrlName() {
         return url;
+    }
+
+    public List<String> getGraphiteUrls() {
+        TargetGraphGenerator myUtil = new TargetGraphGenerator();
+        return myUtil.getGraphUrls(build);
+    }
+
+    public String getTargetEnvGraphMessage() {
+        if(getGraphiteUrls().size() < 1) {
+            return "No Graphs available for this simulation.";
+        } else {
+            return "";
+        }
     }
 }

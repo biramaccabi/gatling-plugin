@@ -8,6 +8,7 @@
 		</l:side-panel>
 		<l:main-panel>
 			<h1>System Information Graphs</h1>
+			<h2>${it.getTargetEnvGraphMessage()}</h2>
                 <div class="test-trend-caption">
                      <j:forEach items="${it.getTargetEnvGraphUrls()}" var="graphUrls">
                          <img src="${graphUrls}"/>

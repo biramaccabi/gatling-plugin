@@ -141,6 +141,14 @@ public class GatlingBuildAction implements Action {
      */
     public List<String> getTargetEnvGraphUrls() {
         TargetGraphGenerator myGenerator = new TargetGraphGenerator();
-        return myGenerator.getGraphitUrls(build);
+        return myGenerator.getGraphUrls(build);
+    }
+
+    public String getTargetEnvGraphMessage() {
+        if(getTargetEnvGraphUrls().size() < 1) {
+            return "No Graphs available for this simulation.";
+        } else {
+            return "";
+        }
     }
 }
