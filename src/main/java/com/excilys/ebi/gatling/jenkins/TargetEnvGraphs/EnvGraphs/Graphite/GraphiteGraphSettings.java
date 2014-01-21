@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.Graphite;
+package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 import java.util.HashMap;
 
-public class GraphiteMetrics {
+public class GraphiteGraphSettings {
+
     public String host;
     public String target;
     public String title;
@@ -107,4 +108,51 @@ public class GraphiteMetrics {
         return (null != s && s.trim().length() > 0);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GraphiteGraphSettings that = (GraphiteGraphSettings) o;
+
+        if (host != null ? !host.equals(that.host) : that.host != null) {
+            return false;
+        }
+        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) {
+            return false;
+        }
+        if (target != null ? !target.equals(that.target) : that.target != null) {
+            return false;
+        }
+        if (title != null ? !title.equals(that.title) : that.title != null) {
+            return false;
+        }
+        if (verticalTitle != null ? !verticalTitle.equals(that.verticalTitle) : that.verticalTitle != null) {
+            return false;
+        }
+        if (yMax != null ? !yMax.equals(that.yMax) : that.yMax != null) {
+            return false;
+        }
+        if (yMin != null ? !yMin.equals(that.yMin) : that.yMin != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = host != null ? host.hashCode() : 0;
+        result = 31 * result + (target != null ? target.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (verticalTitle != null ? verticalTitle.hashCode() : 0);
+        result = 31 * result + (yMin != null ? yMin.hashCode() : 0);
+        result = 31 * result + (yMax != null ? yMax.hashCode() : 0);
+        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        return result;
+    }
 }

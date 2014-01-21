@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs;
+package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
 import java.util.Calendar;
 
 public class GraphCriteria {
     public String environmentName;
     public String poolName;
-    public Calendar startTime;
-    public Calendar endTime;
-    public Long duration;
+
+    public Long buildDuration;
+    private Calendar buildStartTime;
+
+    public static final int graphStartBufferTimeMinutes = -5;
+    public static final int graphEndBufferTimeMinutes = 5;
 
     public String getEnvironmentName() {
         return environmentName;
@@ -40,52 +43,69 @@ public class GraphCriteria {
         this.poolName = poolName;
     }
 
-    public Calendar getStartTime() {
-        return startTime;
+    public void setBuildDuration(Long duration) {
+        this.buildDuration = duration;
     }
 
-    public void setStartTime(Calendar startTime) {
-        this.startTime = startTime;
+    public void setBuildStartTime(Calendar startTime) {
+        this.buildStartTime = startTime;
     }
 
-    public Calendar getEndTime() {
+    public Calendar getGraphStartTime() {
+        Calendar graphStartTime = (Calendar)getBuildStartTime().clone();
+        graphStartTime.add(Calendar.MINUTE, graphStartBufferTimeMinutes);
+        return graphStartTime;
+    }
+
+    public Calendar getGraphEndTime() {
+        Calendar endTime = (Calendar)this.getBuildStartTime().clone();
+        endTime.setTimeInMillis(endTime.getTimeInMillis() + this.getBuildDuration());
+        endTime.add(Calendar.MINUTE, GraphCriteria.graphEndBufferTimeMinutes);
+
         return endTime;
     }
 
-    public void setEndTime(Calendar endTime) {
-        this.endTime = endTime;
-    }
-
-    public Long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Long duration) {
-        this.duration = duration;
-    }
-
-    /*
-        I'm not including the start/end time or duration
-        I'm considering two criteria to be equal if they are the same pool+environment combination
-     */
     @Override
     public boolean equals(Object o) {
-        boolean result = false;
-        if( o instanceof GraphCriteria) {
-            GraphCriteria compareTo = (GraphCriteria) o;
-            if(this.getEnvironmentName().equals(compareTo.getEnvironmentName())) {
-                if(this.getPoolName().equals(compareTo.getPoolName())){
-                    return true;
-                }
-            }
+        if (this == o) {
+            return true;
         }
-        return result;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GraphCriteria criteria = (GraphCriteria) o;
+
+        if (buildDuration != null ? !buildDuration.equals(criteria.buildDuration) : criteria.buildDuration != null) {
+            return false;
+        }
+        if (buildStartTime != null ? !buildStartTime.equals(criteria.buildStartTime) : criteria.buildStartTime != null) {
+            return false;
+        }
+        if (environmentName != null ? !environmentName.equals(criteria.environmentName) : criteria.environmentName != null) {
+            return false;
+        }
+        if (poolName != null ? !poolName.equals(criteria.poolName) : criteria.poolName != null) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        String mashUp = this.getEnvironmentName() + this.getPoolName();
-        return mashUp.hashCode();
+        int result = environmentName != null ? environmentName.hashCode() : 0;
+        result = 31 * result + (poolName != null ? poolName.hashCode() : 0);
+        result = 31 * result + (buildDuration != null ? buildDuration.hashCode() : 0);
+        result = 31 * result + (buildStartTime != null ? buildStartTime.hashCode() : 0);
+        return result;
     }
 
+    private long getBuildDuration() {
+        return buildDuration;
+    }
+
+    private Calendar getBuildStartTime() {
+        return buildStartTime;
+    }
 }

@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
-import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.TargetGraphGenerator;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.TargetGraphGenerator;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import java.util.List;

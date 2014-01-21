@@ -13,73 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs;
+package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.EnvGraphGenerator;
-import com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.Graphite.GraphiteUrlGenerator;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GraphCriteriaBasedUrlGenerator;
 import hudson.model.AbstractBuild;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class TargetGraphGenerator {
 
-    private ArrayList<EnvGraphGenerator> graphGenerators;
-    private int graphStartBufferTimeMinutes;
-    private int graphEndBufferTimeMinutes;
+    GraphCriteriaBasedUrlGenerator envPoolUrlGenerator;
 
     public TargetGraphGenerator() {
-        graphGenerators = new ArrayList<EnvGraphGenerator>();
-        graphGenerators.add(new GraphiteUrlGenerator());
-        graphEndBufferTimeMinutes = 5;
-        graphStartBufferTimeMinutes = -5;
+        envPoolUrlGenerator =  new GraphCriteriaBasedUrlGenerator();
     }
 
     public ArrayList<String> getGraphUrls(AbstractBuild<?, ?> build){
-        ArrayList<String> graphUrls = new ArrayList<String>();
-
         GraphCriteria criteria = getCriteriaFromBuild(build);
-        for(EnvGraphGenerator graphGenerator: graphGenerators) {
-            graphUrls.addAll(graphGenerator.getUrlsForCriteria(criteria));
-        }
-
-        return graphUrls;
+        return envPoolUrlGenerator.getUrlsForCriteria(criteria);
     }
 
-    public GraphCriteria getCriteriaFromBuild(AbstractBuild build){
+    private GraphCriteria getCriteriaFromBuild(AbstractBuild build){
         GraphCriteria result = new GraphCriteria();
 
         result.setEnvironmentName(getEnvFromBuild(build));
         result.setPoolName(getPoolFromBuild(build));
-        result.setStartTime(getStartTime(build));
-        result.setEndTime(getEndTime(build));
-        result.setDuration(build.getDuration());
+        result.setBuildStartTime(build.getTimestamp());
+        result.setBuildDuration(build.getDuration());
 
         return result;
     }
 
-    public Calendar getStartTime(AbstractBuild build) {
-        Calendar startTime = (Calendar)build.getTimestamp().clone();
 
-        startTime.add(Calendar.MINUTE, getGraphStartBufferTimeMinutes());
-
-        return startTime;
-    }
-
-    public Calendar getEndTime(AbstractBuild build) {
-        Calendar endTime = (Calendar)build.getTimestamp().clone();
-
-        endTime.setTimeInMillis(endTime.getTimeInMillis() + build.getDuration());
-        endTime.add(Calendar.MINUTE, getGraphEndBufferTimeMinutes());
-
-        return endTime;
-    }
-
-    public String getEnvFromBuild(AbstractBuild build) {
+    private String getEnvFromBuild(AbstractBuild build) {
         String projectName = build.getProject().getName();
         Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
         Matcher matcher = envPattern.matcher(projectName);
@@ -89,7 +59,7 @@ public class TargetGraphGenerator {
         return "";
     }
 
-    public String getPoolFromBuild(AbstractBuild build) {
+    private String getPoolFromBuild(AbstractBuild build) {
         String projectName = build.getProject().getName();
         Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-+([^_]+).*?$");
         Matcher matcher = envPattern.matcher(projectName);
@@ -99,11 +69,4 @@ public class TargetGraphGenerator {
         return "";
     }
 
-    public int getGraphStartBufferTimeMinutes() {
-        return graphStartBufferTimeMinutes;
-    }
-
-    public int getGraphEndBufferTimeMinutes() {
-        return graphEndBufferTimeMinutes;
-    }
 }

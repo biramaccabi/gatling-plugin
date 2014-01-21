@@ -13,19 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.excilys.ebi.gatling.jenkins.TargetEnvGraphs.EnvGraphs.Graphite;
+package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
+
 
 public enum GraphiteTargetEnum {
-    FOXTROT_APP_POOLCPU_USAGE("sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle"),
-    FOXTROT_APP_POOLMEMORY_USAGE("sfly.foxtrot.host.app.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.memory.memory-buffered"),
-    FOXTROT_APP_POOLSWAP_USAGE("sfly.foxtrot.host.app.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.swap.swap-used"),
+    POOL_CPU_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}." +
+            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
+    POOL_RAM_USAGE("sfly.{$env}.host.{$pool}.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.{$env}.host.{$pool}.*." +
+            "memory.memory-buffered"),
+    POOL_SWAP_USAGE("sfly.{$env}.host.{$pool}.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.{$env}.host.{$pool}.*." +
+            "swap.swap-used"),
 
-    FOXTROT_GC_MARK_SWEEP_HEAP_USAGE("sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage"),
-    FOXTROT_GC_MARK_SWEEP_COLLECTION_TIME("sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime"),
+    GC_MARK_SWEEP_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+            "heapUsagePercentage"),
+    GC_MARK_SWEEP_COLLECTION_TIME("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+            "collectionTime"),
 
-    FOXTROT_GC_PAR_NEW_HEAP_USAGE("sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
-    FOXTROT_GC_PAR_NEW_COLLECTION_TIME("sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.collectionTime")
-    ;
+    GC_PAR_NEW_COLLECTION_TIME("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.collectionTime"),
+    GC_PAR_NEW_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+
+
 
     private final String target;
 
@@ -33,7 +40,20 @@ public enum GraphiteTargetEnum {
         this.target = target;
     }
 
-    public String getTarget() {
-        return target;
+    public String getTarget(String env, String pool) {
+        return target.replace("{$env}", env).replace("{$pool}", getPoolShortNameFromPoolLongName(pool));
+    }
+
+    private String getPoolShortNameFromPoolLongName(String bigPool) {
+        String result = bigPool;
+        if(bigPool.equalsIgnoreCase("appserver")) {
+            result = "app";
+        } else if(bigPool.equalsIgnoreCase("apiserver")) {
+            result = "api";
+        } else if(bigPool.equalsIgnoreCase("wsserver")) {
+            result = "ws";
+        }
+
+        return  result;
     }
 }
