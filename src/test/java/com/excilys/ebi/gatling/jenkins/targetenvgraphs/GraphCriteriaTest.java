@@ -32,7 +32,7 @@ public class GraphCriteriaTest {
         testCriteria.setBuildStartTime(startTime);
 
         Calendar expectedGraphStartTime = (Calendar)startTime.clone();
-        expectedGraphStartTime.add(Calendar.MINUTE, GraphCriteria.graphStartBufferTimeMinutes);
+        expectedGraphStartTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_START_BUFFER_TIME_IN_MINUTES);
 
         Assert.assertEquals(expectedGraphStartTime, testCriteria.getGraphStartTime());
 
@@ -50,7 +50,7 @@ public class GraphCriteriaTest {
 
         Calendar expectedEndTime = (Calendar)startTime.clone();
         expectedEndTime.add(Calendar.MINUTE, 10);
-        expectedEndTime.add(Calendar.MINUTE, GraphCriteria.graphEndBufferTimeMinutes);
+        expectedEndTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_END_BUFFER_TIME_IN_MINUTES);
 
 
         Assert.assertEquals(expectedEndTime, testCriteria.getGraphEndTime());

@@ -18,21 +18,21 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 import java.util.Calendar;
 
 public class GraphCriteria {
-    public String environmentName;
-    public String poolName;
+    private String envName;
+    private String poolName;
 
-    public Long buildDuration;
+    private long buildDuration;
     private Calendar buildStartTime;
 
-    public static final int graphStartBufferTimeMinutes = -5;
-    public static final int graphEndBufferTimeMinutes = 5;
+    static final int GRAPH_START_BUFFER_TIME_IN_MINUTES = -5;
+    static final int GRAPH_END_BUFFER_TIME_IN_MINUTES = 5;
 
     public String getEnvironmentName() {
-        return environmentName;
+        return envName;
     }
 
     public void setEnvironmentName(String environmentName) {
-        this.environmentName = environmentName;
+        this.envName = environmentName;
     }
 
     public String getPoolName() {
@@ -53,14 +53,14 @@ public class GraphCriteria {
 
     public Calendar getGraphStartTime() {
         Calendar graphStartTime = (Calendar)getBuildStartTime().clone();
-        graphStartTime.add(Calendar.MINUTE, graphStartBufferTimeMinutes);
+        graphStartTime.add(Calendar.MINUTE, GRAPH_START_BUFFER_TIME_IN_MINUTES);
         return graphStartTime;
     }
 
     public Calendar getGraphEndTime() {
         Calendar endTime = (Calendar)this.getBuildStartTime().clone();
         endTime.setTimeInMillis(endTime.getTimeInMillis() + this.getBuildDuration());
-        endTime.add(Calendar.MINUTE, GraphCriteria.graphEndBufferTimeMinutes);
+        endTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_END_BUFFER_TIME_IN_MINUTES);
 
         return endTime;
     }
@@ -76,13 +76,13 @@ public class GraphCriteria {
 
         GraphCriteria criteria = (GraphCriteria) o;
 
-        if (buildDuration != null ? !buildDuration.equals(criteria.buildDuration) : criteria.buildDuration != null) {
+        if (buildDuration != criteria.buildDuration) {
             return false;
         }
         if (buildStartTime != null ? !buildStartTime.equals(criteria.buildStartTime) : criteria.buildStartTime != null) {
             return false;
         }
-        if (environmentName != null ? !environmentName.equals(criteria.environmentName) : criteria.environmentName != null) {
+        if (envName != null ? !envName.equals(criteria.envName) : criteria.envName != null) {
             return false;
         }
         if (poolName != null ? !poolName.equals(criteria.poolName) : criteria.poolName != null) {
@@ -94,9 +94,9 @@ public class GraphCriteria {
 
     @Override
     public int hashCode() {
-        int result = environmentName != null ? environmentName.hashCode() : 0;
+        int result = envName != null ? envName.hashCode() : 0;
         result = 31 * result + (poolName != null ? poolName.hashCode() : 0);
-        result = 31 * result + (buildDuration != null ? buildDuration.hashCode() : 0);
+        result = 31 * result + (int) (buildDuration ^ (buildDuration >>> 32));
         result = 31 * result + (buildStartTime != null ? buildStartTime.hashCode() : 0);
         return result;
     }
