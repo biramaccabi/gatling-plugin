@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GraphCriteriaBasedUrlGenerator;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.BuildInfoBasedUrlGenerator;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class TargetGraphGeneratorTest {
     public static final String ENVIRONMENT_NAME = "foxtrot";
     public static final String POOL_NAME = "appserver";
     @Mock
-    GraphCriteriaBasedUrlGenerator graphCriteriaBasedUrlGenerator;
+    BuildInfoBasedUrlGenerator buildInfoBasedUrlGenerator;
 
     @Mock
     AbstractProject mockedProject;
@@ -43,7 +43,7 @@ public class TargetGraphGeneratorTest {
 
     @Before
     public void setup() {
-        graphCriteriaBasedUrlGenerator = mock(GraphCriteriaBasedUrlGenerator.class);
+        buildInfoBasedUrlGenerator = mock(BuildInfoBasedUrlGenerator.class);
 
         mockedBuild = mock(AbstractBuild.class);
         mockedProject = mock(AbstractProject.class);
@@ -58,17 +58,17 @@ public class TargetGraphGeneratorTest {
     @Test
     public void testGetGraphUrls() {
         TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
-        targetGraphGenerator.envPoolUrlGenerator = graphCriteriaBasedUrlGenerator;
+        targetGraphGenerator.envPoolUrlGenerator = buildInfoBasedUrlGenerator;
 
         targetGraphGenerator.getGraphUrls(mockedBuild);
 
-        GraphCriteria expectedCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph expectedCriteria = new BuildInfoForTargetEnvGraph();
         expectedCriteria.setBuildDuration(this.getDuration());
         expectedCriteria.setEnvironmentName(ENVIRONMENT_NAME);
         expectedCriteria.setPoolName(POOL_NAME);
         expectedCriteria.setBuildStartTime(this.getStartTime());
 
-        verify(graphCriteriaBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
+        verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
 
     }
 

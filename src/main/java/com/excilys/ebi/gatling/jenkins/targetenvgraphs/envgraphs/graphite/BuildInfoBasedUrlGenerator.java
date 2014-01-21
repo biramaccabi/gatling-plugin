@@ -16,31 +16,31 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.GraphCriteria;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
-public class GraphCriteriaBasedUrlGenerator {
+public class BuildInfoBasedUrlGenerator {
 
-    public GraphCriteriaBasedUrlGenerator() {}
+    public BuildInfoBasedUrlGenerator() {}
 
     GraphiteGraphSettingsBuilder graphiteGraphSettingsBuilder = new GraphiteGraphSettingsBuilder();
 
-    public ArrayList<String> getUrlsForCriteria(GraphCriteria criteria) {
+    public ArrayList<String> getUrlsForCriteria(BuildInfoForTargetEnvGraph buildInfo) {
 
         ArrayList<String> urlList = new ArrayList<String>();
 
-        for(GraphiteGraphSettings setting: graphiteGraphSettingsBuilder.getGraphiteGraphSettings(criteria) ) {
-            urlList.add(getGraphiteGraphForCriteriaGraphSettings(criteria, setting));
+        for(GraphiteGraphSettings setting: graphiteGraphSettingsBuilder.getGraphiteGraphSettings(buildInfo) ) {
+            urlList.add(getGraphiteGraphForCriteriaGraphSettings(buildInfo, setting));
         }
 
         return urlList;
     }
 
 
-    private String getGraphiteGraphForCriteriaGraphSettings(GraphCriteria criteria, GraphiteGraphSettings graphSettings) {
+    private String getGraphiteGraphForCriteriaGraphSettings(BuildInfoForTargetEnvGraph criteria, GraphiteGraphSettings graphSettings) {
         StringBuilder result = new StringBuilder();
 
         SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMDD");

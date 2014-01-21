@@ -16,7 +16,7 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.GraphCriteria;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class GraphiteGraphSettingsBuilderTest {
         String env = FOXTROT;
         String pool = APPSERVER;
 
-        GraphCriteria inputCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
         inputCriteria.setEnvironmentName(env);
         inputCriteria.setPoolName(pool);
         inputCriteria.setBuildStartTime(getStartTime());
@@ -130,7 +130,7 @@ public class GraphiteGraphSettingsBuilderTest {
         String env = FOXTROT;
         String pool = APISERVER;
 
-        GraphCriteria inputCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
         inputCriteria.setEnvironmentName(env);
         inputCriteria.setPoolName(pool);
         inputCriteria.setBuildStartTime(getStartTime());

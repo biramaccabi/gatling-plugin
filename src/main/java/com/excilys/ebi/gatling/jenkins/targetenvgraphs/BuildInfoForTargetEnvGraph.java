@@ -17,7 +17,7 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
 import java.util.Calendar;
 
-public class GraphCriteria {
+public class BuildInfoForTargetEnvGraph {
     private String envName;
     private String poolName;
 
@@ -60,7 +60,7 @@ public class GraphCriteria {
     public Calendar getGraphEndTime() {
         Calendar endTime = (Calendar)this.getBuildStartTime().clone();
         endTime.setTimeInMillis(endTime.getTimeInMillis() + this.getBuildDuration());
-        endTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_END_BUFFER_TIME_IN_MINUTES);
+        endTime.add(Calendar.MINUTE, BuildInfoForTargetEnvGraph.GRAPH_END_BUFFER_TIME_IN_MINUTES);
 
         return endTime;
     }
@@ -74,7 +74,7 @@ public class GraphCriteria {
             return false;
         }
 
-        GraphCriteria criteria = (GraphCriteria) o;
+        BuildInfoForTargetEnvGraph criteria = (BuildInfoForTargetEnvGraph) o;
 
         if (buildDuration != criteria.buildDuration) {
             return false;

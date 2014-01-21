@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GraphCriteriaBasedUrlGenerator;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.BuildInfoBasedUrlGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -32,21 +32,21 @@ import static org.mockito.Mockito.when;
 public class GraphCriteriaBasedUrlGeneratorTest {
 
     @Mock
-    GraphCriteria foxtrotAppCriteria;
+    BuildInfoForTargetEnvGraph foxtrotAppCriteria;
 
     @Mock
-    GraphCriteria foxtrotNonAppCriteria;
+    BuildInfoForTargetEnvGraph foxtrotNonAppCriteria;
 
     @Before
     public void setup() {
-        foxtrotAppCriteria = mock(GraphCriteria.class);
+        foxtrotAppCriteria = mock(BuildInfoForTargetEnvGraph.class);
         when(foxtrotAppCriteria.getEnvironmentName()).thenReturn("foxtrot");
         when(foxtrotAppCriteria.getPoolName()).thenReturn("appserver");
 
         when(foxtrotAppCriteria.getGraphEndTime()).thenReturn(getEndTime());
         when(foxtrotAppCriteria.getGraphStartTime()).thenReturn(getStartTime());
 
-        foxtrotNonAppCriteria = mock(GraphCriteria.class);
+        foxtrotNonAppCriteria = mock(BuildInfoForTargetEnvGraph.class);
         when(foxtrotNonAppCriteria.getEnvironmentName()).thenReturn("foxtrot");
         when(foxtrotNonAppCriteria.getPoolName()).thenReturn("apiserver");
 
@@ -56,7 +56,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
     @org.junit.Test
     public void testGetGraphUrlsForFoxtrotApp() {
-        GraphCriteriaBasedUrlGenerator testGenerator = new GraphCriteriaBasedUrlGenerator();
+        BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(foxtrotAppCriteria);
 
@@ -70,7 +70,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
     @org.junit.Test
     public void testGetGraphUrlsForFoxtrotNonApp() {
-        GraphCriteriaBasedUrlGenerator testGenerator = new GraphCriteriaBasedUrlGenerator();
+        BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(foxtrotNonAppCriteria);
 

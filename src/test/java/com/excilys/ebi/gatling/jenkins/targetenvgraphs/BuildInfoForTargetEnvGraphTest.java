@@ -19,20 +19,20 @@ import org.junit.Assert;
 
 import java.util.Calendar;
 
-public class GraphCriteriaTest {
+public class BuildInfoForTargetEnvGraphTest {
 
 
     public static final long TEN_MIN_IN_MS = 10 * 60 * 1000;
 
     @org.junit.Test
     public void testBuildStartTime() {
-        GraphCriteria testCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph testCriteria = new BuildInfoForTargetEnvGraph();
         Calendar startTime = Calendar.getInstance();
 
         testCriteria.setBuildStartTime(startTime);
 
         Calendar expectedGraphStartTime = (Calendar)startTime.clone();
-        expectedGraphStartTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_START_BUFFER_TIME_IN_MINUTES);
+        expectedGraphStartTime.add(Calendar.MINUTE, BuildInfoForTargetEnvGraph.GRAPH_START_BUFFER_TIME_IN_MINUTES);
 
         Assert.assertEquals(expectedGraphStartTime, testCriteria.getGraphStartTime());
 
@@ -40,7 +40,7 @@ public class GraphCriteriaTest {
 
     @org.junit.Test
     public void testBuildEndTime() {
-        GraphCriteria testCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph testCriteria = new BuildInfoForTargetEnvGraph();
         Calendar startTime = Calendar.getInstance();
 
 
@@ -50,7 +50,7 @@ public class GraphCriteriaTest {
 
         Calendar expectedEndTime = (Calendar)startTime.clone();
         expectedEndTime.add(Calendar.MINUTE, 10);
-        expectedEndTime.add(Calendar.MINUTE, GraphCriteria.GRAPH_END_BUFFER_TIME_IN_MINUTES);
+        expectedEndTime.add(Calendar.MINUTE, BuildInfoForTargetEnvGraph.GRAPH_END_BUFFER_TIME_IN_MINUTES);
 
 
         Assert.assertEquals(expectedEndTime, testCriteria.getGraphEndTime());
@@ -58,7 +58,7 @@ public class GraphCriteriaTest {
 
     @org.junit.Test
     public void testEquals() {
-        GraphCriteria testCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph testCriteria = new BuildInfoForTargetEnvGraph();
         Calendar startTime = Calendar.getInstance();
         long duration = 123456;
 
@@ -67,7 +67,7 @@ public class GraphCriteriaTest {
         testCriteria.setEnvironmentName("TestEnv");
         testCriteria.setPoolName("SwimmingPool");
 
-        GraphCriteria expectedCriteria = new GraphCriteria();
+        BuildInfoForTargetEnvGraph expectedCriteria = new BuildInfoForTargetEnvGraph();
         expectedCriteria.setBuildDuration(duration);
         expectedCriteria.setBuildStartTime(startTime);
         expectedCriteria.setEnvironmentName("TestEnv");

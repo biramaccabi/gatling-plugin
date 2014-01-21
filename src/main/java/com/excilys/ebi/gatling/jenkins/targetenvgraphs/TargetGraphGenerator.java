@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GraphCriteriaBasedUrlGenerator;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.BuildInfoBasedUrlGenerator;
 import hudson.model.AbstractBuild;
 
 
@@ -26,19 +26,19 @@ import java.util.regex.Pattern;
 
 public class TargetGraphGenerator {
 
-    GraphCriteriaBasedUrlGenerator envPoolUrlGenerator;
+    BuildInfoBasedUrlGenerator envPoolUrlGenerator;
 
     public TargetGraphGenerator() {
-        envPoolUrlGenerator =  new GraphCriteriaBasedUrlGenerator();
+        envPoolUrlGenerator =  new BuildInfoBasedUrlGenerator();
     }
 
     public ArrayList<String> getGraphUrls(AbstractBuild<?, ?> build){
-        GraphCriteria criteria = getCriteriaFromBuild(build);
+        BuildInfoForTargetEnvGraph criteria = getCriteriaFromBuild(build);
         return envPoolUrlGenerator.getUrlsForCriteria(criteria);
     }
 
-    private GraphCriteria getCriteriaFromBuild(AbstractBuild build){
-        GraphCriteria result = new GraphCriteria();
+    private BuildInfoForTargetEnvGraph getCriteriaFromBuild(AbstractBuild build){
+        BuildInfoForTargetEnvGraph result = new BuildInfoForTargetEnvGraph();
 
         result.setEnvironmentName(getEnvFromBuild(build));
         result.setPoolName(getPoolFromBuild(build));

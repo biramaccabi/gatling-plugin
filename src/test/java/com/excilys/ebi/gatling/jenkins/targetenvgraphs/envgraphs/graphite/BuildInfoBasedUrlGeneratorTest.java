@@ -15,7 +15,7 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.GraphCriteria;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class GraphCriteriaBasedUrlGeneratorTest {
+public class BuildInfoBasedUrlGeneratorTest {
 
     public static final String TARGET_HOST_NAME = "http://graphite.internal.shutterfly.com:443/";
     @Mock
@@ -73,20 +73,20 @@ public class GraphCriteriaBasedUrlGeneratorTest {
     }
 
     private List<String> getUrlsForGraphiteGraphSetting(GraphiteGraphSettings settings) {
-        GraphCriteria testGraphCriteria = new GraphCriteria();
-        testGraphCriteria.setBuildDuration(getDuration());
-        testGraphCriteria.setBuildStartTime(getStartTime());
-        testGraphCriteria.setEnvironmentName("foxtrot");
-        testGraphCriteria.setPoolName("appserver");
+        BuildInfoForTargetEnvGraph testBuildInfoForTargetEnvGraph = new BuildInfoForTargetEnvGraph();
+        testBuildInfoForTargetEnvGraph.setBuildDuration(getDuration());
+        testBuildInfoForTargetEnvGraph.setBuildStartTime(getStartTime());
+        testBuildInfoForTargetEnvGraph.setEnvironmentName("foxtrot");
+        testBuildInfoForTargetEnvGraph.setPoolName("appserver");
 
         List<GraphiteGraphSettings> settingsList = new ArrayList<GraphiteGraphSettings>();
         settingsList.add(settings);
 
-        when(mockedSettingsBuilder.getGraphiteGraphSettings((GraphCriteria) any())).thenReturn(settingsList);
+        when(mockedSettingsBuilder.getGraphiteGraphSettings((BuildInfoForTargetEnvGraph) any())).thenReturn(settingsList);
 
-        GraphCriteriaBasedUrlGenerator testGraphCriteriaBasedUrlGenerator = new GraphCriteriaBasedUrlGenerator();
-        testGraphCriteriaBasedUrlGenerator.graphiteGraphSettingsBuilder = mockedSettingsBuilder;
-        return testGraphCriteriaBasedUrlGenerator.getUrlsForCriteria(testGraphCriteria);
+        BuildInfoBasedUrlGenerator testBuildInfoBasedUrlGenerator = new BuildInfoBasedUrlGenerator();
+        testBuildInfoBasedUrlGenerator.graphiteGraphSettingsBuilder = mockedSettingsBuilder;
+        return testBuildInfoBasedUrlGenerator.getUrlsForCriteria(testBuildInfoForTargetEnvGraph);
     }
 
 
