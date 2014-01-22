@@ -15,16 +15,19 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.util.HashMap;
 
 public class GraphiteGraphSettings {
 
-    public String host;
-    public String target;
-    public String title;
-    public String verticalTitle;
-    public String yMin;
-    public String yMax;
+    private String host;
+    private String target;
+    private String title;
+    private String verticalTitle;
+    private String yMin;
+    private String yMax;
 
     public HashMap<String, String> parameters = new HashMap<String, String>();
 
@@ -109,50 +112,33 @@ public class GraphiteGraphSettings {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object obj) {
+        if(obj instanceof GraphiteGraphSettings) {
+            GraphiteGraphSettings other = (GraphiteGraphSettings) obj;
+            return new EqualsBuilder()
+                    .append(host, other.host)
+                    .append(parameters, other.parameters)
+                    .append(target, other.target)
+                    .append(title, other.title)
+                    .append(verticalTitle, other.verticalTitle)
+                    .append(yMax, other.yMax)
+                    .append(yMin, other.yMin)
+                    .isEquals();
+        } else {
             return false;
         }
-
-        GraphiteGraphSettings that = (GraphiteGraphSettings) o;
-
-        if (host != null ? !host.equals(that.host) : that.host != null) {
-            return false;
-        }
-        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) {
-            return false;
-        }
-        if (target != null ? !target.equals(that.target) : that.target != null) {
-            return false;
-        }
-        if (title != null ? !title.equals(that.title) : that.title != null) {
-            return false;
-        }
-        if (verticalTitle != null ? !verticalTitle.equals(that.verticalTitle) : that.verticalTitle != null) {
-            return false;
-        }
-        if (yMax != null ? !yMax.equals(that.yMax) : that.yMax != null) {
-            return false;
-        }
-        if (yMin != null ? !yMin.equals(that.yMin) : that.yMin != null) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = host != null ? host.hashCode() : 0;
-        result = 31 * result + (target != null ? target.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (verticalTitle != null ? verticalTitle.hashCode() : 0);
-        result = 31 * result + (yMin != null ? yMin.hashCode() : 0);
-        result = 31 * result + (yMax != null ? yMax.hashCode() : 0);
-        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder()
+                .append(host)
+                .append(target)
+                .append(title)
+                .append(verticalTitle)
+                .append(yMin)
+                .append(yMax)
+                .append(parameters)
+                .toHashCode();
     }
 }

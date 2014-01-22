@@ -15,6 +15,9 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.util.Calendar;
 
 public class BuildInfoForTargetEnvGraph {
@@ -66,39 +69,28 @@ public class BuildInfoForTargetEnvGraph {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object obj) {
+        if(obj instanceof BuildInfoForTargetEnvGraph) {
+            BuildInfoForTargetEnvGraph other = (BuildInfoForTargetEnvGraph) obj;
+            return new EqualsBuilder()
+                    .append(buildDuration, other.buildDuration)
+                    .append(buildStartTime,other.buildStartTime)
+                    .append(envName, other.envName)
+                    .append(poolName, other.poolName)
+                    .isEquals();
+        } else {
             return false;
         }
-
-        BuildInfoForTargetEnvGraph criteria = (BuildInfoForTargetEnvGraph) o;
-
-        if (buildDuration != criteria.buildDuration) {
-            return false;
-        }
-        if (buildStartTime != null ? !buildStartTime.equals(criteria.buildStartTime) : criteria.buildStartTime != null) {
-            return false;
-        }
-        if (envName != null ? !envName.equals(criteria.envName) : criteria.envName != null) {
-            return false;
-        }
-        if (poolName != null ? !poolName.equals(criteria.poolName) : criteria.poolName != null) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = envName != null ? envName.hashCode() : 0;
-        result = 31 * result + (poolName != null ? poolName.hashCode() : 0);
-        result = 31 * result + (int) (buildDuration ^ (buildDuration >>> 32));
-        result = 31 * result + (buildStartTime != null ? buildStartTime.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder()
+                .append(envName)
+                .append(poolName)
+                .append(buildDuration)
+                .append(buildStartTime)
+                .toHashCode();
     }
 
     private long getBuildDuration() {
