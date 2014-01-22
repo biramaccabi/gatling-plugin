@@ -20,11 +20,12 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Calendar;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -70,6 +71,69 @@ public class TargetGraphGeneratorTest {
 
         verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
 
+    }
+
+    @Test
+    public void testPoolParsing() {
+        TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
+
+        Iterator it = getProjectToPoolMap().entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            String projectName = (String) pairs.getKey();
+            String expectedPool = (String) pairs.getValue();
+
+            mockedBuild = mock(AbstractBuild.class);
+            mockedProject = mock(AbstractProject.class);
+            when(mockedProject.getName()).thenReturn(projectName);
+            when(mockedBuild.getProject()).thenReturn(mockedProject);
+            when(mockedBuild.getTimestamp()).thenReturn(this.getStartTime());
+            when(mockedBuild.getDuration()).thenReturn(this.getDuration());
+
+
+            Assert.assertEquals(expectedPool, targetGraphGenerator.getPoolFromBuild(mockedBuild));
+
+        }
+    }
+
+    private Map<String, String> getProjectToPoolMap() {
+        /*
+        currently our naming convention for load test jobs in tre-jenkins is:
+         Web_Performance_Tests-${ENV}-${SIMULATION_PACKAGE_AND_NAME}
+
+         We are assuming ( <- bad sign) that the package name begins with the pool name.
+
+         Testing various ways of formatting the package name . _
+         */
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home.Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home_Some_Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home-Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home_Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home-Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home.Some_Simulation", "appserver");
+
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home.Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home_Some_Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home-Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home_Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home-Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home.Some_Simulation", "apiserver");
+
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home.Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home_Some_Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home-Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home_Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home-Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home.Some_Simulation", "wsserver");
+
+        resultMap.put("Web_Performance_Tests-foxtrot-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
+        resultMap.put("Web_Performance_Tests-foxtrot-fakeserver_home_SomeSimulation", "fakeserver");
+        resultMap.put("Web_Performance_Tests-foxtrot-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
+
+        return resultMap;
     }
 
     private Calendar getStartTime() {

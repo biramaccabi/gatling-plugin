@@ -59,9 +59,9 @@ public class TargetGraphGenerator {
         return "";
     }
 
-    private String getPoolFromBuild(AbstractBuild build) {
+    String getPoolFromBuild(AbstractBuild build) {
         String projectName = build.getProject().getName();
-        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-+([^_]+).*?$");
+        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$");
         Matcher matcher = envPattern.matcher(projectName);
         if(matcher.find()){
             return matcher.group(2).toLowerCase();
