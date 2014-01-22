@@ -77,9 +77,8 @@ public class TargetGraphGeneratorTest {
     public void testPoolParsing() {
         TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
 
-        Iterator it = getProjectToPoolMap().entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
+        for (Map.Entry<String, String> stringStringEntry : getProjectToPoolMap().entrySet()) {
+            Map.Entry pairs = (Map.Entry) stringStringEntry;
             String projectName = (String) pairs.getKey();
             String expectedPool = (String) pairs.getValue();
 
