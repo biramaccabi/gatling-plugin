@@ -70,7 +70,11 @@ public class BuildInfoForTargetEnvGraph {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof BuildInfoForTargetEnvGraph) {
+        if(this == obj) {
+            return true;
+        } else if(obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        } else if(obj instanceof BuildInfoForTargetEnvGraph) {
             BuildInfoForTargetEnvGraph other = (BuildInfoForTargetEnvGraph) obj;
             return new EqualsBuilder()
                     .append(buildDuration, other.buildDuration)

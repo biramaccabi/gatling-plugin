@@ -113,7 +113,11 @@ public class GraphiteGraphSettings {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof GraphiteGraphSettings) {
+        if(this == obj) {
+            return true;
+        } else if(obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        } else if(obj instanceof GraphiteGraphSettings) {
             GraphiteGraphSettings other = (GraphiteGraphSettings) obj;
             return new EqualsBuilder()
                     .append(host, other.host)
