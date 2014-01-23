@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 
 public class TargetGraphGenerator {
 
-    public static final String PROJECT_NAME_REGEX = "^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$";
-    public static final Pattern PROJECT_NAME_PATTERN = Pattern.compile(PROJECT_NAME_REGEX);
+    private static final String PROJECT_NAME_REGEX = "^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$";
+    private static final Pattern PROJECT_NAME_PATTERN = Pattern.compile(PROJECT_NAME_REGEX);
 
     BuildInfoBasedUrlGenerator envPoolUrlGenerator;
 
