@@ -26,7 +26,11 @@ import java.util.regex.Pattern;
 
 public class TargetGraphGenerator {
 
+    public static final String PROJECT_NAME_REGEX = "^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$";
+    public static final Pattern PROJECT_NAME_PATTERN = Pattern.compile(PROJECT_NAME_REGEX);
+
     BuildInfoBasedUrlGenerator envPoolUrlGenerator;
+
 
     public TargetGraphGenerator() {
         envPoolUrlGenerator =  new BuildInfoBasedUrlGenerator();
@@ -49,20 +53,18 @@ public class TargetGraphGenerator {
     }
 
 
-    private String getEnvFromBuild(AbstractBuild build) {
+    static String getEnvFromBuild(AbstractBuild build) {
         String projectName = build.getProject().getName();
-        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
-        Matcher matcher = envPattern.matcher(projectName);
+        Matcher matcher = PROJECT_NAME_PATTERN.matcher(projectName);
         if(matcher.find()){
             return matcher.group(1).toLowerCase();
         }
         return "";
     }
 
-    String getPoolFromBuild(AbstractBuild build) {
+    static String getPoolFromBuild(AbstractBuild build) {
         String projectName = build.getProject().getName();
-        Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$");
-        Matcher matcher = envPattern.matcher(projectName);
+        Matcher matcher = PROJECT_NAME_PATTERN.matcher(projectName);
         if(matcher.find()){
             return matcher.group(2).toLowerCase();
         }

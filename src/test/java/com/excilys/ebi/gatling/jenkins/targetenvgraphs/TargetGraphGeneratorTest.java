@@ -75,7 +75,7 @@ public class TargetGraphGeneratorTest {
 
     @Test
     public void testPoolParsing() {
-        TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
+        //TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
 
         for (Map.Entry<String, String> stringStringEntry : getProjectToPoolMap().entrySet()) {
             Map.Entry pairs = (Map.Entry) stringStringEntry;
@@ -90,7 +90,7 @@ public class TargetGraphGeneratorTest {
             when(mockedBuild.getDuration()).thenReturn(this.getDuration());
 
 
-            Assert.assertEquals(expectedPool, targetGraphGenerator.getPoolFromBuild(mockedBuild));
+            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedBuild));
 
         }
     }
