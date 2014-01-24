@@ -52,7 +52,7 @@ public class BuildInfoBasedUrlGeneratorTest {
         String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=07:55_20140101&until=08:50_20140101" +
                 "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
                 "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
-                "&vtitle=CPU_usage&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_CPU_Usage";
+                "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
         Assert.assertEquals(1, generatedUrls.size());
         Assert.assertEquals(expectedURL, generatedUrls.get(0));
     }
@@ -66,8 +66,8 @@ public class BuildInfoBasedUrlGeneratorTest {
         String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=07:55_20140101&until=08:50_20140101" +
                 "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
                 "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
-                "&vtitle=CPU_usage&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100" +
-                "&_uniq=0.06565146492917762&title=APP_CPU_Usage";
+                "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100" +
+                "&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
         Assert.assertEquals(1, generatedUrls.size());
         Assert.assertEquals(expectedURL, generatedUrls.get(0));
     }
@@ -113,12 +113,12 @@ public class BuildInfoBasedUrlGeneratorTest {
     private GraphiteGraphSettings getSettingWithoutYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
         appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
-        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USAGE.getTarget("foxtrot","app"));
+        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("foxtrot","app"));
         //appCpu.setTarget(GraphiteTargetEnum.FOXTROT_APP_POOLCPU_USAGE.getTarget());
         appCpu.setYMax("");
         appCpu.setYMin("");
-        appCpu.setTitle("APP_CPU_Usage");
-        appCpu.setVerticalTitle("CPU_usage");
+        appCpu.setTitle("APP_POOL_CPU_User_Usage");
+        appCpu.setVerticalTitle("CPU_Percent_User_Used");
 
         return appCpu;
     }
@@ -126,11 +126,11 @@ public class BuildInfoBasedUrlGeneratorTest {
     private GraphiteGraphSettings getSettingWithYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
         appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
-        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USAGE.getTarget("foxtrot","app"));
+        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("foxtrot","app"));
         appCpu.setYMax("100");
         appCpu.setYMin("0");
-        appCpu.setTitle("APP_CPU_Usage");
-        appCpu.setVerticalTitle("CPU_usage");
+        appCpu.setTitle("APP_POOL_CPU_User_Usage");
+        appCpu.setVerticalTitle("CPU_Percent_User_Used");
 
         return appCpu;
     }

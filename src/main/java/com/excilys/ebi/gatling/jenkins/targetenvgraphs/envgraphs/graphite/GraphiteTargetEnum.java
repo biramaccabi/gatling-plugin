@@ -17,7 +17,11 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
 public enum GraphiteTargetEnum {
-    POOL_CPU_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}." +
+    POOL_CPU_USER_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}." +
+            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
+    POOL_CPU_SYSTEM_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}." +
+            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
+    POOL_CPU_IOWAIT_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}." +
             "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
     POOL_RAM_USAGE("sfly.{$env}.host.{$pool}.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.{$env}.host.{$pool}.*." +
             "memory.memory-buffered"),

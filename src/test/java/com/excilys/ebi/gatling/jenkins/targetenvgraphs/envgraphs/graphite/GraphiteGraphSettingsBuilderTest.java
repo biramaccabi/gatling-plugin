@@ -29,23 +29,21 @@ public class GraphiteGraphSettingsBuilderTest {
     public static final String FOXTROT = "foxtrot";
     public static final String APPSERVER = "appserver";
     public static final String APISERVER = "apiserver";
+    public static final int expectedNumOfGraphs = 9;
 
     @Test
     public void testGetDefinedSettings() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
-        String env = FOXTROT;
-        String pool = APPSERVER;
-
         BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setEnvironmentName(env);
-        inputCriteria.setPoolName(pool);
+        inputCriteria.setEnvironmentName(FOXTROT);
+        inputCriteria.setPoolName(APPSERVER);
         inputCriteria.setBuildStartTime(getStartTime());
         inputCriteria.setBuildDuration(getDuration());
 
         List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
-        Assert.assertEquals(7, generatedSettings.size());
+        Assert.assertEquals(expectedNumOfGraphs, generatedSettings.size());
 
         ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings();
         for(GraphiteGraphSettings generatedSetting: generatedSettings) {
@@ -89,13 +87,29 @@ public class GraphiteGraphSettingsBuilderTest {
         gcParNewTime.setYMax("");
         gcParNewTime.setYMin("");
 
-        GraphiteGraphSettings appPoolCPU= new GraphiteGraphSettings();
-        appPoolCPU.setHost("http://graphite.internal.shutterfly.com:443/");
-        appPoolCPU.setTarget("sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle");
-        appPoolCPU.setTitle("APP_POOL_CPU_Usage");
-        appPoolCPU.setVerticalTitle("CPU_Percent_Used");
-        appPoolCPU.setYMax("");
-        appPoolCPU.setYMin("");
+        GraphiteGraphSettings appPoolCPUUser= new GraphiteGraphSettings();
+        appPoolCPUUser.setHost("http://graphite.internal.shutterfly.com:443/");
+        appPoolCPUUser.setTarget("sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle");
+        appPoolCPUUser.setTitle("APP_POOL_CPU_User_Usage");
+        appPoolCPUUser.setVerticalTitle("CPU_Percent_User_Used");
+        appPoolCPUUser.setYMax("100");
+        appPoolCPUUser.setYMin("0");
+
+        GraphiteGraphSettings appPoolCPUSystem= new GraphiteGraphSettings();
+        appPoolCPUSystem.setHost("http://graphite.internal.shutterfly.com:443/");
+        appPoolCPUSystem.setTarget("sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle");
+        appPoolCPUSystem.setTitle("APP_POOL_CPU_System_Usage");
+        appPoolCPUSystem.setVerticalTitle("CPU_Percent_System_Used");
+        appPoolCPUSystem.setYMax("100");
+        appPoolCPUSystem.setYMin("0");
+
+        GraphiteGraphSettings appPoolCPUIOWait = new GraphiteGraphSettings();
+        appPoolCPUIOWait.setHost("http://graphite.internal.shutterfly.com:443/");
+        appPoolCPUIOWait.setTarget("sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle");
+        appPoolCPUIOWait.setTitle("APP_POOL_CPU_IO_Wait_Usage");
+        appPoolCPUIOWait.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        appPoolCPUIOWait.setYMax("100");
+        appPoolCPUIOWait.setYMin("0");
 
         GraphiteGraphSettings appPoolRam= new GraphiteGraphSettings();
         appPoolRam.setHost("http://graphite.internal.shutterfly.com:443/");
@@ -117,7 +131,9 @@ public class GraphiteGraphSettingsBuilderTest {
         expectedSettings.add(gcMarkSweepTime);
         expectedSettings.add(gcParNewHeap);
         expectedSettings.add(gcParNewTime);
-        expectedSettings.add(appPoolCPU);
+        expectedSettings.add(appPoolCPUUser);
+        expectedSettings.add(appPoolCPUSystem);
+        expectedSettings.add(appPoolCPUIOWait);
         expectedSettings.add(appPoolRam);
         expectedSettings.add(appPoolSwap);
         return expectedSettings;

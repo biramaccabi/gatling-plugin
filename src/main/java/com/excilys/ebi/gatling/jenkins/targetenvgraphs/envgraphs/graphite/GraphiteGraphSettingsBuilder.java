@@ -86,12 +86,30 @@ public class GraphiteGraphSettingsBuilder {
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_USAGE.getTarget(environment, pool));
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget(environment, pool));
         madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("");
-        madeSetting.setYMin("");
-        madeSetting.setVerticalTitle("CPU_Percent_Used");
-        madeSetting.setTitle("APP_POOL_CPU_Usage");
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
+        madeSetting.setTitle("APP_POOL_CPU_User_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_SYSTEM_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
+        madeSetting.setTitle("APP_POOL_CPU_System_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_IOWAIT_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        madeSetting.setTitle("APP_POOL_CPU_IO_Wait_Usage");
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
