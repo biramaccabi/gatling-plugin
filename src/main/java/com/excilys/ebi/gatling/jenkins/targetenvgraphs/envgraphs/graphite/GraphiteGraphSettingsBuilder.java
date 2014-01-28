@@ -26,8 +26,11 @@ public class GraphiteGraphSettingsBuilder {
 
     private static final String FOXTROT_ENV = "foxtrot";
     private static final String APPSERVER_POOL = "appserver";
-    private final String TRE_HOST = "http://tre-stats.internal.shutterfly.com";
-    private final String IOPS_HOST = "http://graphite.internal.shutterfly.com:443/";
+    private static final String WSSERVER_POOL = "wsserver";
+    private static final String GIMSERVER_POOL = "gimserver";
+    private static final String IMSERVER_POOL = "imserver";
+
+
 
     Map<String, Map<String, List<GraphiteGraphSettings>>> envPoolSettings;
 
@@ -48,88 +51,35 @@ public class GraphiteGraphSettingsBuilder {
 
     }
 
-    private void addEnvPoolSetting(String environment, String pool) {
+    private void addEnvPoolSetting(String env, String pool) {
         GraphiteGraphSettings madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(TRE_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("percent_heap_used");
-        madeSetting.setTitle(madeSetting.getTarget());
-        addSetting(environment, pool, madeSetting);
+        for(GraphiteTargetEnum graphiteTarget: GraphiteTargetEnum.values()) {
+            if(dataExistsForEnvPool(env, pool, graphiteTarget)) {
+                madeSetting.setTarget(graphiteTarget.getTarget(env, pool));
+                madeSetting.setHost(graphiteTarget.host);
+                madeSetting.setYMax(graphiteTarget.yMax);
+                madeSetting.setYMin(graphiteTarget.yMin);
+                madeSetting.setVerticalTitle(graphiteTarget.vTitle);
+                madeSetting.setTitle(graphiteTarget.getTitle(env, pool));
+                addSetting(env, pool, madeSetting);
+            }
+        }
+    }
 
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_COLLECTION_TIME.getTarget(environment, pool));
-        madeSetting.setHost(TRE_HOST);
-        madeSetting.setYMax("");
-        madeSetting.setYMin("");
-        madeSetting.setVerticalTitle("collection_time_in_ms");
-        madeSetting.setTitle(madeSetting.getTarget());
-        addSetting(environment, pool, madeSetting);
+    private boolean dataExistsForEnvPool(String env, String pool, GraphiteTargetEnum targetEnum) {
+        boolean result = false;
 
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_HEAP_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(TRE_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("percent_heap_used");
-        madeSetting.setTitle(madeSetting.getTarget());
-        addSetting(environment, pool, madeSetting);
+        List<String> foxtrotPools = new ArrayList<String>();
+        foxtrotPools.add(APPSERVER_POOL);
+        foxtrotPools.add(WSSERVER_POOL);
+        foxtrotPools.add(GIMSERVER_POOL);
+        foxtrotPools.add(IMSERVER_POOL);
 
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_COLLECTION_TIME.getTarget(environment, pool));
-        madeSetting.setHost(TRE_HOST);
-        madeSetting.setYMax("");
-        madeSetting.setYMin("");
-        madeSetting.setVerticalTitle("collection_time_in_ms");
-        madeSetting.setTitle(madeSetting.getTarget());
-        addSetting(environment, pool, madeSetting);
+        if(env.equals(FOXTROT_ENV)) {
+            result = foxtrotPools.contains(pool);
+        }
 
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
-        madeSetting.setTitle("APP_POOL_CPU_User_Usage");
-        addSetting(environment, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_SYSTEM_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
-        madeSetting.setTitle("APP_POOL_CPU_System_Usage");
-        addSetting(environment, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_IOWAIT_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
-        madeSetting.setTitle("APP_POOL_CPU_IO_Wait_Usage");
-        addSetting(environment, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_RAM_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("");
-        madeSetting.setYMin("");
-        madeSetting.setVerticalTitle("Amount_RAM_Used");
-        madeSetting.setTitle("APP_POOL_RAM_Usage");
-        addSetting(environment, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.POOL_SWAP_USAGE.getTarget(environment, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("");
-        madeSetting.setYMin("");
-        madeSetting.setVerticalTitle("Amount_SWAP_Used");
-        madeSetting.setTitle("APP_POOL_SWAP_Usage");
-        addSetting(environment, pool, madeSetting);
-
+        return result;
     }
 
     private void addSetting(String env, String pool, GraphiteGraphSettings setting) {

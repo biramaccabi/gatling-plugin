@@ -21,24 +21,24 @@ import org.junit.Test;
 public class GraphiteTargetEnumTest {
 
     public static final String ENV = "foxtrot";
-    public static final String LONGPOOL = "appserver";
-    public static final String SHORTPOOL = "app";
+    public static final String LONGPOOLFULLNAME = "appserver";
+    public static final String LONGPOOLSHORTNAME = "app";
 
     public static final String SHORTESTPOOLFULLNAME = "wsserver";
     public static final String SHORTESTPOOLSHORTNAME = "ws";
 
     @Test
     public void testGetTargetWithLongPoolname() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONGPOOL);
-        String expectedTarget = "sfly."+ ENV +".host."+ SHORTPOOL +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONGPOOLFULLNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ LONGPOOLSHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
 
     }
 
     @Test
     public void testGetTargetWithShortPoolName() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, SHORTPOOL);
-        String expectedTarget = "sfly."+ ENV +".host."+ SHORTPOOL +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONGPOOLSHORTNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ LONGPOOLSHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
 
     }
