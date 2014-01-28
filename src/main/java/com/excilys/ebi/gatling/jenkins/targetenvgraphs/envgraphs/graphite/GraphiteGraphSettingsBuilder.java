@@ -151,7 +151,8 @@ public class GraphiteGraphSettingsBuilder {
             envPoolSettings.put(env, newPoolSettingsForEnv);
             poolMapForEnv = envPoolSettings.get(env);
         }
-        if(!poolMapForEnv.containsKey(pool)){
+
+        if(null == envPoolSettings.get(env) || !poolMapForEnv.containsKey(pool)){
             poolMapForEnv.put(pool, new ArrayList<GraphiteGraphSettings>());
         }
         envPoolSettings.get(env).get(pool).add(setting);

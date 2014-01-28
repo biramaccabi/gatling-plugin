@@ -57,31 +57,4 @@ public class GraphiteTargetEnumTest {
         Assert.assertEquals(expectedTarget, getTarget);
     }
 
-    @Test
-    public void testGetTitleWithLongPoolFulllName() {
-        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, LONG_POOL_FULLNAME);
-        String expectedTitle = LONG_POOL_SHORTNAME +"_POOL_RAM_Usage";
-        Assert.assertEquals(expectedTitle, getTitle);
-    }
-
-    @Test
-    public void testGetTitleWithLongPoolShortName() {
-        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, LONG_POOL_SHORTNAME);
-        String expectedTitle = LONG_POOL_SHORTNAME +"_POOL_RAM_Usage";
-        Assert.assertEquals(expectedTitle, getTitle);
-    }
-
-    @Test
-    public void testGetTitleWithShortestPooFulllName() {
-        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, SHORT_POOL_FULLNAME);
-        String expectedTitle = SHORT_POOL_SHORTNAME +"_POOL_RAM_Usage";
-        Assert.assertEquals(expectedTitle, getTitle);
-    }
-
-    @Test
-    public void testGetTitleWithShortestPooShortlName() {
-        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, SHORT_POOL_SHORTNAME);
-        String expectedTitle = SHORT_POOL_SHORTNAME +"_POOL_RAM_Usage";
-        Assert.assertEquals(expectedTitle, getTitle);
-    }
 }
