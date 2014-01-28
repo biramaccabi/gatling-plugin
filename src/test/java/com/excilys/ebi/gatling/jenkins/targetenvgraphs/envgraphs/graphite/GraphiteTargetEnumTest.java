@@ -21,33 +21,67 @@ import org.junit.Test;
 public class GraphiteTargetEnumTest {
 
     public static final String ENV = "foxtrot";
-    public static final String LONGPOOLFULLNAME = "appserver";
-    public static final String LONGPOOLSHORTNAME = "app";
+    public static final String LONG_POOL_FULLNAME = "appserver";
+    public static final String LONG_POOL_SHORTNAME = "app";
 
-    public static final String SHORTESTPOOLFULLNAME = "wsserver";
-    public static final String SHORTESTPOOLSHORTNAME = "ws";
+    public static final String SHORT_POOL_FULLNAME = "wsserver";
+    public static final String SHORT_POOL_SHORTNAME = "ws";
 
     @Test
-    public void testGetTargetWithLongPoolname() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONGPOOLFULLNAME);
-        String expectedTarget = "sfly."+ ENV +".host."+ LONGPOOLSHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+    public void testGetTargetWithLongPoolFullName() {
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONG_POOL_FULLNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ LONG_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
 
     }
 
     @Test
-    public void testGetTargetWithShortPoolName() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONGPOOLSHORTNAME);
-        String expectedTarget = "sfly."+ ENV +".host."+ LONGPOOLSHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+    public void testGetTargetWithShortPoolShortName() {
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, LONG_POOL_SHORTNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ LONG_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
 
     }
 
     @Test
-    public void testGetTargetWithShortestPoolName() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, SHORTESTPOOLFULLNAME);
-        String expectedTarget = "sfly."+ ENV +".host."+ SHORTESTPOOLSHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+    public void testGetTargetWithShortestPooFulllName() {
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, SHORT_POOL_FULLNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ SHORT_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
+    }
 
+    @Test
+    public void testGetTargetWithShortestPoolShortName() {
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(ENV, SHORT_POOL_SHORTNAME);
+        String expectedTarget = "sfly."+ ENV +".host."+ SHORT_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        Assert.assertEquals(expectedTarget, getTarget);
+    }
+
+    @Test
+    public void testGetTitleWithLongPoolFulllName() {
+        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, LONG_POOL_FULLNAME);
+        String expectedTitle = LONG_POOL_SHORTNAME +"_POOL_RAM_Usage";
+        Assert.assertEquals(expectedTitle, getTitle);
+    }
+
+    @Test
+    public void testGetTitleWithLongPoolShortName() {
+        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, LONG_POOL_SHORTNAME);
+        String expectedTitle = LONG_POOL_SHORTNAME +"_POOL_RAM_Usage";
+        Assert.assertEquals(expectedTitle, getTitle);
+    }
+
+    @Test
+    public void testGetTitleWithShortestPooFulllName() {
+        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, SHORT_POOL_FULLNAME);
+        String expectedTitle = SHORT_POOL_SHORTNAME +"_POOL_RAM_Usage";
+        Assert.assertEquals(expectedTitle, getTitle);
+    }
+
+    @Test
+    public void testGetTitleWithShortestPooShortlName() {
+        String getTitle = GraphiteTargetEnum.POOL_RAM_USAGE.getTitle(ENV, SHORT_POOL_SHORTNAME);
+        String expectedTitle = SHORT_POOL_SHORTNAME +"_POOL_RAM_Usage";
+        Assert.assertEquals(expectedTitle, getTitle);
     }
 }

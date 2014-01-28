@@ -102,10 +102,18 @@ public enum GraphiteTargetEnum {
 
     private String getPoolShortNameFromPoolLongName(String bigPool) {
         String result = bigPool;
-        if(bigPool.equalsIgnoreCase("appserver")) {
-            result = "app";
-        } else if(bigPool.equalsIgnoreCase("apiserver")) {
+        if(bigPool.equalsIgnoreCase("apiserver")) {
             result = "api";
+        } else if(bigPool.equalsIgnoreCase("appserver")) {
+            result = "app";
+        } else if(bigPool.equalsIgnoreCase("gimserver")) {
+            result = "gim";
+        } else if(bigPool.equalsIgnoreCase("grfserver")) {
+            result = "grf";
+        } else if(bigPool.equalsIgnoreCase("imserver")) {
+            result = "im";
+        } else if(bigPool.equalsIgnoreCase("upserver")) {
+            result = "up";
         } else if(bigPool.equalsIgnoreCase("wsserver")) {
             result = "ws";
         }

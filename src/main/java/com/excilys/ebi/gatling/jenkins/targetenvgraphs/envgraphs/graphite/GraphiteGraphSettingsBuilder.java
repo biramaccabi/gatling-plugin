@@ -25,22 +25,27 @@ import java.util.Map;
 public class GraphiteGraphSettingsBuilder {
 
     private static final String FOXTROT_ENV = "foxtrot";
-    private static final String APPSERVER_POOL = "appserver";
-    private static final String WSSERVER_POOL = "wsserver";
-    private static final String GIMSERVER_POOL = "gimserver";
-    private static final String IMSERVER_POOL = "imserver";
+    private static final String STAGE_ENV = "stage";
+    private static final String PROD_ENV = "prod";
+    private static final String BETA_ENV = "beta";
 
+    private static final String APISERVER_POOL = "apiserver";
+    private static final String APPSERVER_POOL = "appserver";
+    private static final String GIMSERVER_POOL = "gimserver";
+    private static final String GRFSERVER_POOL = "grfserver";
+    private static final String IMSERVER_POOL = "imserver";
+    private static final String UPLOADSERVER_POOL = "upserver";
+    private static final String WSSERVER_POOL = "wsserver";
 
 
     Map<String, Map<String, List<GraphiteGraphSettings>>> envPoolSettings;
 
     public GraphiteGraphSettingsBuilder() {
         envPoolSettings = new HashMap<String, Map<String, List<GraphiteGraphSettings>>>();
-        addEnvPoolSetting(FOXTROT_ENV, APPSERVER_POOL);
-
     }
 
     public List<GraphiteGraphSettings> getGraphiteGraphSettings(BuildInfoForTargetEnvGraph criteria) {
+        configureSettingsForEnvPool(criteria);
         List<GraphiteGraphSettings> result = envPoolSettings.get(criteria.getEnvironmentName()).get(criteria.getPoolName());
 
         if(null != result) {
@@ -48,13 +53,14 @@ public class GraphiteGraphSettingsBuilder {
         } else {
             return new ArrayList<GraphiteGraphSettings>();
         }
-
     }
 
-    private void addEnvPoolSetting(String env, String pool) {
+    private void configureSettingsForEnvPool(BuildInfoForTargetEnvGraph criteria) {
+        String env = criteria.getEnvironmentName();
+        String pool = criteria.getPoolName();
         GraphiteGraphSettings madeSetting = new GraphiteGraphSettings();
-        for(GraphiteTargetEnum graphiteTarget: GraphiteTargetEnum.values()) {
-            if(dataExistsForEnvPool(env, pool, graphiteTarget)) {
+        if(dataExistsForEnvPool(env, pool)) {
+            for(GraphiteTargetEnum graphiteTarget: GraphiteTargetEnum.values()) {
                 madeSetting.setTarget(graphiteTarget.getTarget(env, pool));
                 madeSetting.setHost(graphiteTarget.host);
                 madeSetting.setYMax(graphiteTarget.yMax);
@@ -63,23 +69,30 @@ public class GraphiteGraphSettingsBuilder {
                 madeSetting.setTitle(graphiteTarget.getTitle(env, pool));
                 addSetting(env, pool, madeSetting);
             }
+        } else {
+            addSetting(env, pool, null);
         }
     }
 
-    private boolean dataExistsForEnvPool(String env, String pool, GraphiteTargetEnum targetEnum) {
-        boolean result = false;
+    private boolean dataExistsForEnvPool(String env, String pool) {
 
-        List<String> foxtrotPools = new ArrayList<String>();
-        foxtrotPools.add(APPSERVER_POOL);
-        foxtrotPools.add(WSSERVER_POOL);
-        foxtrotPools.add(GIMSERVER_POOL);
-        foxtrotPools.add(IMSERVER_POOL);
+        List<String> supportedPools = new ArrayList<String>();
+        supportedPools.add(APISERVER_POOL);
+        supportedPools.add(APPSERVER_POOL);
+        supportedPools.add(GIMSERVER_POOL);
+        supportedPools.add(GRFSERVER_POOL);
+        supportedPools.add(IMSERVER_POOL);
+        supportedPools.add(UPLOADSERVER_POOL);
+        supportedPools.add(WSSERVER_POOL);
 
-        if(env.equals(FOXTROT_ENV)) {
-            result = foxtrotPools.contains(pool);
-        }
+        List<String> supportedEnvs = new ArrayList<String>();
+        supportedEnvs.add(FOXTROT_ENV);
+        supportedEnvs.add(STAGE_ENV);
+        supportedEnvs.add(PROD_ENV);
+        supportedEnvs.add(BETA_ENV);
 
-        return result;
+        return supportedEnvs.contains(env) && supportedPools.contains(pool);
+
     }
 
     private void addSetting(String env, String pool, GraphiteGraphSettings setting) {
@@ -89,12 +102,14 @@ public class GraphiteGraphSettingsBuilder {
 
         Map<String, List<GraphiteGraphSettings>> poolMapForEnv = envPoolSettings.get(env);
 
-        if(null == poolMapForEnv) {
+        if(null == poolMapForEnv || !poolMapForEnv.containsKey(pool)) {
             Map<String, List<GraphiteGraphSettings>> newPoolSettingsForEnv = new HashMap<String, List<GraphiteGraphSettings>>();
             newPoolSettingsForEnv.put(pool, new ArrayList<GraphiteGraphSettings>());
             envPoolSettings.put(env, newPoolSettingsForEnv);
         }
-        envPoolSettings.get(env).get(pool).add(setting);
+        if(null != setting) {
+            envPoolSettings.get(env).get(pool).add(setting);
+        }
     }
 
 

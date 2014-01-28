@@ -27,8 +27,8 @@ import java.util.List;
 public class GraphiteGraphSettingsBuilderTest {
 
     public static final String FOXTROT = "foxtrot";
-    public static final String APPSERVER = "appserver";
-    public static final String APISERVER = "apiserver";
+    public static final String SUPPORTED_SERVER = "appserver";
+    public static final String UNSUPPORTED_SERVER = "nonsenseserver";
     public static final int expectedNumOfGraphs = 9;
 
     @Test
@@ -37,7 +37,7 @@ public class GraphiteGraphSettingsBuilderTest {
 
         BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
         inputCriteria.setEnvironmentName(FOXTROT);
-        inputCriteria.setPoolName(APPSERVER);
+        inputCriteria.setPoolName(SUPPORTED_SERVER);
         inputCriteria.setBuildStartTime(getStartTime());
         inputCriteria.setBuildDuration(getDuration());
 
@@ -49,6 +49,24 @@ public class GraphiteGraphSettingsBuilderTest {
         for(GraphiteGraphSettings generatedSetting: generatedSettings) {
             Assert.assertTrue(expectedSettings.contains(generatedSetting));
         }
+    }
+
+    @Test
+    public void testGetUndefinedSettings() {
+        GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
+
+        String env = FOXTROT;
+        String pool = UNSUPPORTED_SERVER;
+
+        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
+        inputCriteria.setEnvironmentName(env);
+        inputCriteria.setPoolName(pool);
+        inputCriteria.setBuildStartTime(getStartTime());
+        inputCriteria.setBuildDuration(getDuration());
+
+        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
+
+        Assert.assertEquals(0, generatedSettings.size());
     }
 
     private ArrayList<GraphiteGraphSettings> getListGraphiteSettings() {
@@ -137,24 +155,6 @@ public class GraphiteGraphSettingsBuilderTest {
         expectedSettings.add(appPoolRam);
         expectedSettings.add(appPoolSwap);
         return expectedSettings;
-    }
-
-    @Test
-    public void testGetUndefinedSettings() {
-        GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
-
-        String env = FOXTROT;
-        String pool = APISERVER;
-
-        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setEnvironmentName(env);
-        inputCriteria.setPoolName(pool);
-        inputCriteria.setBuildStartTime(getStartTime());
-        inputCriteria.setBuildDuration(getDuration());
-
-        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
-
-        Assert.assertEquals(0, generatedSettings.size());
     }
 
     private Calendar getStartTime() {

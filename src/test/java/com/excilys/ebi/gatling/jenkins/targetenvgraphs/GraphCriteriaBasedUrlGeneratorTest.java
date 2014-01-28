@@ -32,33 +32,33 @@ import static org.mockito.Mockito.when;
 public class GraphCriteriaBasedUrlGeneratorTest {
 
     @Mock
-    BuildInfoForTargetEnvGraph foxtrotAppCriteria;
+    BuildInfoForTargetEnvGraph supportedEnvPoolCriteria;
 
     @Mock
-    BuildInfoForTargetEnvGraph foxtrotNonAppCriteria;
+    BuildInfoForTargetEnvGraph unsupportedEnvPoolCriteria;
 
     @Before
     public void setup() {
-        foxtrotAppCriteria = mock(BuildInfoForTargetEnvGraph.class);
-        when(foxtrotAppCriteria.getEnvironmentName()).thenReturn("foxtrot");
-        when(foxtrotAppCriteria.getPoolName()).thenReturn("appserver");
+        supportedEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(supportedEnvPoolCriteria.getEnvironmentName()).thenReturn("foxtrot");
+        when(supportedEnvPoolCriteria.getPoolName()).thenReturn("appserver");
 
-        when(foxtrotAppCriteria.getGraphEndTime()).thenReturn(getEndTime());
-        when(foxtrotAppCriteria.getGraphStartTime()).thenReturn(getStartTime());
+        when(supportedEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(supportedEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
 
-        foxtrotNonAppCriteria = mock(BuildInfoForTargetEnvGraph.class);
-        when(foxtrotNonAppCriteria.getEnvironmentName()).thenReturn("foxtrot");
-        when(foxtrotNonAppCriteria.getPoolName()).thenReturn("apiserver");
+        unsupportedEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(unsupportedEnvPoolCriteria.getEnvironmentName()).thenReturn("fakeenv");
+        when(unsupportedEnvPoolCriteria.getPoolName()).thenReturn("fakeserver");
 
-        when(foxtrotNonAppCriteria.getGraphEndTime()).thenReturn(getEndTime());
-        when(foxtrotNonAppCriteria.getGraphStartTime()).thenReturn(getStartTime());
+        when(unsupportedEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(unsupportedEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
     }
 
     @org.junit.Test
-    public void testGetGraphUrlsForFoxtrotApp() {
+    public void testGetGraphUrlsForSupportedEnvPool() {
         BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
-        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(foxtrotAppCriteria);
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedEnvPoolCriteria);
 
         Assert.assertEquals("should come back with 4 graphs for GC and 5 for App Pool", 9, graphUrls.size());
 
@@ -69,10 +69,10 @@ public class GraphCriteriaBasedUrlGeneratorTest {
     }
 
     @org.junit.Test
-    public void testGetGraphUrlsForFoxtrotNonApp() {
+    public void testGetGraphUrlsForUnsupportedEnvPool() {
         BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
-        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(foxtrotNonAppCriteria);
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(unsupportedEnvPoolCriteria);
 
         Assert.assertEquals("should come back with 0, we only support foxtrot/app pool", 0, graphUrls.size());
     }
