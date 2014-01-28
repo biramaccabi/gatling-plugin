@@ -16,82 +16,125 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.EnvironmentEnum;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 public class GraphiteGraphSettingsBuilder {
 
-    private static final String FOXTROT_ENV = "foxtrot";
-    private static final String STAGE_ENV = "stage";
-    private static final String PROD_ENV = "prod";
-    private static final String BETA_ENV = "beta";
-
-    private static final String APISERVER_POOL = "apiserver";
-    private static final String APPSERVER_POOL = "appserver";
-    private static final String GIMSERVER_POOL = "gimserver";
-    private static final String GRFSERVER_POOL = "grfserver";
-    private static final String IMSERVER_POOL = "imserver";
-    private static final String UPLOADSERVER_POOL = "upserver";
-    private static final String WSSERVER_POOL = "wsserver";
-
+    private final String TRE_HOST = "http://tre-stats.internal.shutterfly.com";
+    private final String IOPS_HOST = "http://graphite.internal.shutterfly.com:443/";
 
     Map<String, Map<String, List<GraphiteGraphSettings>>> envPoolSettings;
 
     public GraphiteGraphSettingsBuilder() {
         envPoolSettings = new HashMap<String, Map<String, List<GraphiteGraphSettings>>>();
+
+        for(EnvironmentEnum envEnum: EnvironmentEnum.values()) {
+            for(ServerPoolEnum serverEnum: ServerPoolEnum.values()) {
+                addEnvPoolSetting(envEnum.name, serverEnum.name);
+            }
+        }
     }
 
     public List<GraphiteGraphSettings> getGraphiteGraphSettings(BuildInfoForTargetEnvGraph criteria) {
-        configureSettingsForEnvPool(criteria);
-        List<GraphiteGraphSettings> result = envPoolSettings.get(criteria.getEnvironmentName()).get(criteria.getPoolName());
+        Map<String, List<GraphiteGraphSettings>> poolsForEnvironments = envPoolSettings.get(criteria.getEnvironmentName());
+        if(null != poolsForEnvironments) {
+            List<GraphiteGraphSettings> result = poolsForEnvironments.get(criteria.getPoolName());
 
-        if(null != result) {
-            return result;
-        } else {
-            return new ArrayList<GraphiteGraphSettings>();
-        }
-    }
-
-    private void configureSettingsForEnvPool(BuildInfoForTargetEnvGraph criteria) {
-        String env = criteria.getEnvironmentName();
-        String pool = criteria.getPoolName();
-        GraphiteGraphSettings madeSetting = new GraphiteGraphSettings();
-        if(dataExistsForEnvPool(env, pool)) {
-            for(GraphiteTargetEnum graphiteTarget: GraphiteTargetEnum.values()) {
-                madeSetting.setTarget(graphiteTarget.getTarget(env, pool));
-                madeSetting.setHost(graphiteTarget.host);
-                madeSetting.setYMax(graphiteTarget.yMax);
-                madeSetting.setYMin(graphiteTarget.yMin);
-                madeSetting.setVerticalTitle(graphiteTarget.vTitle);
-                madeSetting.setTitle(graphiteTarget.getTitle(env, pool));
-                addSetting(env, pool, madeSetting);
+            if(null != result) {
+                return result;
             }
-        } else {
-            addSetting(env, pool, null);
         }
+        return new ArrayList<GraphiteGraphSettings>();
     }
 
-    private boolean dataExistsForEnvPool(String env, String pool) {
+    private void addEnvPoolSetting(String environment, String pool) {
+        GraphiteGraphSettings madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(TRE_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("percent_heap_used");
+        madeSetting.setTitle(madeSetting.getTarget());
+        addSetting(environment, pool, madeSetting);
 
-        List<String> supportedPools = new ArrayList<String>();
-        supportedPools.add(APISERVER_POOL);
-        supportedPools.add(APPSERVER_POOL);
-        supportedPools.add(GIMSERVER_POOL);
-        supportedPools.add(GRFSERVER_POOL);
-        supportedPools.add(IMSERVER_POOL);
-        supportedPools.add(UPLOADSERVER_POOL);
-        supportedPools.add(WSSERVER_POOL);
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_COLLECTION_TIME.getTarget(environment, pool));
+        madeSetting.setHost(TRE_HOST);
+        madeSetting.setYMax("");
+        madeSetting.setYMin("");
+        madeSetting.setVerticalTitle("collection_time_in_ms");
+        madeSetting.setTitle(madeSetting.getTarget());
+        addSetting(environment, pool, madeSetting);
 
-        List<String> supportedEnvs = new ArrayList<String>();
-        supportedEnvs.add(FOXTROT_ENV);
-        supportedEnvs.add(STAGE_ENV);
-        supportedEnvs.add(PROD_ENV);
-        supportedEnvs.add(BETA_ENV);
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_HEAP_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(TRE_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("percent_heap_used");
+        madeSetting.setTitle(madeSetting.getTarget());
+        addSetting(environment, pool, madeSetting);
 
-        return supportedEnvs.contains(env) && supportedPools.contains(pool);
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_COLLECTION_TIME.getTarget(environment, pool));
+        madeSetting.setHost(TRE_HOST);
+        madeSetting.setYMax("");
+        madeSetting.setYMin("");
+        madeSetting.setVerticalTitle("collection_time_in_ms");
+        madeSetting.setTitle(madeSetting.getTarget());
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
+        madeSetting.setTitle("APP_POOL_CPU_User_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_SYSTEM_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
+        madeSetting.setTitle("APP_POOL_CPU_System_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_CPU_IOWAIT_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        madeSetting.setTitle("APP_POOL_CPU_IO_Wait_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_RAM_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("");
+        madeSetting.setYMin("");
+        madeSetting.setVerticalTitle("Amount_RAM_Used");
+        madeSetting.setTitle("APP_POOL_RAM_Usage");
+        addSetting(environment, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.POOL_SWAP_USAGE.getTarget(environment, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("");
+        madeSetting.setYMin("");
+        madeSetting.setVerticalTitle("Amount_SWAP_Used");
+        madeSetting.setTitle("APP_POOL_SWAP_Usage");
+        addSetting(environment, pool, madeSetting);
 
     }
 
@@ -102,14 +145,16 @@ public class GraphiteGraphSettingsBuilder {
 
         Map<String, List<GraphiteGraphSettings>> poolMapForEnv = envPoolSettings.get(env);
 
-        if(null == poolMapForEnv || !poolMapForEnv.containsKey(pool)) {
+        if(null == poolMapForEnv) {
             Map<String, List<GraphiteGraphSettings>> newPoolSettingsForEnv = new HashMap<String, List<GraphiteGraphSettings>>();
             newPoolSettingsForEnv.put(pool, new ArrayList<GraphiteGraphSettings>());
             envPoolSettings.put(env, newPoolSettingsForEnv);
+            poolMapForEnv = envPoolSettings.get(env);
         }
-        if(null != setting) {
-            envPoolSettings.get(env).get(pool).add(setting);
+        if(!poolMapForEnv.containsKey(pool)){
+            poolMapForEnv.put(pool, new ArrayList<GraphiteGraphSettings>());
         }
+        envPoolSettings.get(env).get(pool).add(setting);
     }
 
 

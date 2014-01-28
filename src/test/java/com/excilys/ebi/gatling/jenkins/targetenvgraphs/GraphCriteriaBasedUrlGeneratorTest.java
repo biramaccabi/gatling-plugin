@@ -74,7 +74,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(unsupportedEnvPoolCriteria);
 
-        Assert.assertEquals("should come back with 0, we only support foxtrot/app pool", 0, graphUrls.size());
+        Assert.assertEquals("should come back with 0, when looking for an unsupported env/pool combo", 0, graphUrls.size());
     }
 
     private Calendar getStartTime() {
