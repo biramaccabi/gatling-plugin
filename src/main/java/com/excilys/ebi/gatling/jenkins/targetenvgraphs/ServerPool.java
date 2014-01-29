@@ -1,6 +1,6 @@
-package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
+package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-public enum ServerPoolEnum {
+public enum ServerPool {
     APISERVER_POOL("apiserver"),
     APPSERVER_POOL("appserver"),
     GIMSERVER_POOL("gimserver"),
@@ -8,11 +8,10 @@ public enum ServerPoolEnum {
     IMSERVER_POOL("imserver"),
     UPLOADSERVER_POOL("upload"),
     WSSERVER_POOL("wsserver");
-    ;
 
     public final String name;
 
-    private ServerPoolEnum(String name) {
+    private ServerPool(String name) {
         this.name = name;
     }
 }

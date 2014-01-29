@@ -1,6 +1,6 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-public enum EnvironmentEnum {
+public enum Environment {
     FOXTROT("foxtrot"),
     STAGE("stage"),
     PROD("prod"),
@@ -8,7 +8,7 @@ public enum EnvironmentEnum {
 
     public final String name;
 
-    private EnvironmentEnum(String name) {
+    private Environment(String name) {
         this.name = name;
     }
 }

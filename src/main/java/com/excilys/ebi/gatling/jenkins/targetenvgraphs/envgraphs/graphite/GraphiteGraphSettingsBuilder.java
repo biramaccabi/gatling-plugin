@@ -16,14 +16,13 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
-import com.excilys.ebi.gatling.jenkins.targetenvgraphs.EnvironmentEnum;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Environment;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ServerPool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
 
 public class GraphiteGraphSettingsBuilder {
 
@@ -34,24 +33,29 @@ public class GraphiteGraphSettingsBuilder {
 
     public GraphiteGraphSettingsBuilder() {
         envPoolSettings = new HashMap<String, Map<String, List<GraphiteGraphSettings>>>();
-
-        for(EnvironmentEnum envEnum: EnvironmentEnum.values()) {
-            for(ServerPoolEnum serverEnum: ServerPoolEnum.values()) {
-                addEnvPoolSetting(envEnum.name, serverEnum.name);
-            }
+        for(ServerPool serverEnum: ServerPool.values()) {
+            addEnvPoolSetting(Environment.FOXTROT.name, serverEnum.name);
         }
     }
 
     public List<GraphiteGraphSettings> getGraphiteGraphSettings(BuildInfoForTargetEnvGraph criteria) {
-        Map<String, List<GraphiteGraphSettings>> poolsForEnvironments = envPoolSettings.get(criteria.getEnvironmentName());
-        if(null != poolsForEnvironments) {
-            List<GraphiteGraphSettings> result = poolsForEnvironments.get(criteria.getPoolName());
+        List<GraphiteGraphSettings> result = getGraphiteGraphSettings(criteria.getEnvironmentName(), criteria.getPoolName());
+        if(null != result) {
+            return result;
+        } else {
+            return new ArrayList<GraphiteGraphSettings>();
+        }
+    }
 
+    private List<GraphiteGraphSettings> getGraphiteGraphSettings(String env, String pool) {
+        Map<String, List<GraphiteGraphSettings>> poolsForEnvironments = envPoolSettings.get(env);
+        if(null != poolsForEnvironments) {
+            List<GraphiteGraphSettings> result = poolsForEnvironments.get(pool);
             if(null != result) {
                 return result;
             }
         }
-        return new ArrayList<GraphiteGraphSettings>();
+        return null;
     }
 
     private void addEnvPoolSetting(String environment, String pool) {
