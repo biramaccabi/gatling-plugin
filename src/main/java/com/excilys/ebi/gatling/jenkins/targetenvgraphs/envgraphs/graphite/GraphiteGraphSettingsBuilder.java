@@ -101,7 +101,7 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setYMax("100");
         madeSetting.setYMin("0");
         madeSetting.setVerticalTitle("CPU_Percent_User_Used");
-        madeSetting.setTitle("APP_POOL_CPU_User_Usage");
+        madeSetting.setTitle(ServerPool.getEnumForPoolName(pool).shortName.toUpperCase() + "_POOL_CPU_User_Usage");
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
@@ -110,7 +110,7 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setYMax("100");
         madeSetting.setYMin("0");
         madeSetting.setVerticalTitle("CPU_Percent_System_Used");
-        madeSetting.setTitle("APP_POOL_CPU_System_Usage");
+        madeSetting.setTitle(ServerPool.getEnumForPoolName(pool).shortName.toUpperCase() + "_POOL_CPU_System_Usage");
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
@@ -119,7 +119,7 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setYMax("100");
         madeSetting.setYMin("0");
         madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
-        madeSetting.setTitle("APP_POOL_CPU_IO_Wait_Usage");
+        madeSetting.setTitle(ServerPool.getEnumForPoolName(pool).shortName.toUpperCase() + "_POOL_CPU_IO_Wait_Usage");
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
@@ -128,7 +128,7 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setYMax("");
         madeSetting.setYMin("");
         madeSetting.setVerticalTitle("Amount_RAM_Used");
-        madeSetting.setTitle("APP_POOL_RAM_Usage");
+        madeSetting.setTitle(ServerPool.getEnumForPoolName(pool).shortName.toUpperCase() + "_POOL_RAM_Usage");
         addSetting(environment, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
@@ -137,7 +137,7 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setYMax("");
         madeSetting.setYMin("");
         madeSetting.setVerticalTitle("Amount_SWAP_Used");
-        madeSetting.setTitle("APP_POOL_SWAP_Usage");
+        madeSetting.setTitle(ServerPool.getEnumForPoolName(pool).shortName.toUpperCase() + "_POOL_SWAP_Usage");
         addSetting(environment, pool, madeSetting);
 
     }

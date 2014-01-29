@@ -40,7 +40,11 @@ public class GraphiteGraphSettingsTest {
         Assert.assertEquals("testValue1", graphiteGraphSettingsTester.getParameter("testParam1"));
 
         Assert.assertEquals(null, graphiteGraphSettingsTester.getParameter(""));
-        graphiteGraphSettingsTester.addParameter("", "valueFromNullKey");
+        graphiteGraphSettingsTester.addParameter("", "valueFromEmptyStringKey");
+        Assert.assertEquals(null, graphiteGraphSettingsTester.getParameter(""));
+
+        Assert.assertEquals(null, graphiteGraphSettingsTester.getParameter(""));
+        graphiteGraphSettingsTester.addParameter(null, "valueFromNullKey");
         Assert.assertEquals(null, graphiteGraphSettingsTester.getParameter(""));
     }
 
