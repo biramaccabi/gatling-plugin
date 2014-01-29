@@ -28,12 +28,18 @@ import java.util.List;
 public class GraphiteGraphSettingsBuilderTest {
 
     public static final String FOXTROT = "foxtrot";
+
     public static final String SUPPORTED_POOL = "appserver";
+    public static final String SUPPORTED_POOL_WITH_SUPPLEMENTAL = "apiserver";
+    public static final String SUPPLMENTAL_POOL = "wsserver";
     public static final String UNSUPPORTED_POOL = "nonsenseserver";
-    public static final int expectedNumOfGraphs = 9;
+
+
+    public static final int NORMAL_EXPECTED_NUM_GRAPHS = 9;
+    public static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = 2 * NORMAL_EXPECTED_NUM_GRAPHS;
 
     @Test
-    public void testGetDefinedSettings() {
+    public void testGetDefinedSettingsNoSupplementalGraphs() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
         BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
@@ -44,11 +50,43 @@ public class GraphiteGraphSettingsBuilderTest {
 
         List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
-        Assert.assertEquals(expectedNumOfGraphs, generatedSettings.size());
+        Assert.assertEquals(NORMAL_EXPECTED_NUM_GRAPHS, generatedSettings.size());
 
         ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL);
         for(GraphiteGraphSettings generatedSetting: generatedSettings) {
             Assert.assertTrue(expectedSettings.contains(generatedSetting));
+        }
+
+        for(GraphiteGraphSettings expectedSetting: expectedSettings) {
+            Assert.assertTrue(generatedSettings.contains(expectedSetting));
+        }
+    }
+
+    @Test
+    public void testGetDefinedSettingsWithSupplementalGraphs() {
+        GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
+
+        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
+        inputCriteria.setEnvironmentName(FOXTROT);
+        inputCriteria.setPoolName(SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+        inputCriteria.setBuildStartTime(getStartTime());
+        inputCriteria.setBuildDuration(getDuration());
+
+        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
+
+        Assert.assertEquals(SUPPLEMENTED_EXPECTED_NUM_GRAPHS, generatedSettings.size());
+
+        ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+
+        expectedSettings.addAll(getListGraphiteSettings(FOXTROT, SUPPLMENTAL_POOL));
+
+        for(GraphiteGraphSettings generatedSetting: generatedSettings) {
+
+            Assert.assertTrue(expectedSettings.contains(generatedSetting));
+        }
+
+        for(GraphiteGraphSettings expectedSetting: expectedSettings) {
+            Assert.assertTrue(generatedSettings.contains(expectedSetting));
         }
     }
 

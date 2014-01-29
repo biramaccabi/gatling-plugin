@@ -63,8 +63,13 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         Assert.assertEquals("should come back with 4 graphs for GC and 5 for App Pool", 9, graphUrls.size());
 
         ArrayList<String> expectedUrls = getListFoxtrotAppUrls();
+
         for(String url: graphUrls) {
             Assert.assertTrue(expectedUrls.contains(url));
+        }
+
+        for(String expectedURl: expectedUrls) {
+            Assert.assertTrue(graphUrls.contains(expectedURl));
         }
     }
 

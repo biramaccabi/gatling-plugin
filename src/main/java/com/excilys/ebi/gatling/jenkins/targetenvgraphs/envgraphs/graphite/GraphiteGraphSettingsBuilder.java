@@ -51,11 +51,25 @@ public class GraphiteGraphSettingsBuilder {
         Map<String, List<GraphiteGraphSettings>> poolsForEnvironments = envPoolSettings.get(env);
         if(null != poolsForEnvironments) {
             List<GraphiteGraphSettings> result = poolsForEnvironments.get(pool);
+
+            if(shouldAlsoIncludeWSPool(pool)) {
+                List<GraphiteGraphSettings> supplementalResults = poolsForEnvironments.get(ServerPool.WSSERVER.longName);
+                if(null != result) {
+                    result.addAll(supplementalResults);
+                } else {
+                    result = supplementalResults;
+                }
+            }
+
             if(null != result) {
                 return result;
             }
         }
         return null;
+    }
+
+    private boolean shouldAlsoIncludeWSPool(String pool) {
+        return pool.equalsIgnoreCase(ServerPool.APISERVER.longName);
     }
 
     private void addEnvPoolSetting(Environment environment, ServerPool serverPool) {
