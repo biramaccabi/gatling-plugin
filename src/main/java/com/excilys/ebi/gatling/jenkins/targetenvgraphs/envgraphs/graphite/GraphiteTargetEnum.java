@@ -16,6 +16,8 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ServerPool;
+
 public enum GraphiteTargetEnum {
     POOL_CPU_USER_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}." +
             "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
@@ -50,24 +52,27 @@ public enum GraphiteTargetEnum {
 
     private String getPoolShortNameFromPoolLongName(String bigPool) {
         String result = bigPool;
-        if(bigPool.equalsIgnoreCase("appserver")) {
-            result = "app";
-        } else if(bigPool.equalsIgnoreCase("apiserver")) {
-            result = "api";
-        } else if(bigPool.equalsIgnoreCase("appserver")) {
-            result = "app";
-        } else if(bigPool.equalsIgnoreCase("gimserver")) {
-            result = "gim";
-        } else if(bigPool.equalsIgnoreCase("grfserver")) {
-            result = "grf";
-        } else if(bigPool.equalsIgnoreCase("imserver")) {
-            result = "im";
-        } else if(bigPool.equalsIgnoreCase("upload")) {
-            result = "up";
-        } else if(bigPool.equalsIgnoreCase("wsserver")) {
-            result = "ws";
+//        if(bigPool.equalsIgnoreCase("appserver")) {
+//            result = "app";
+//        } else if(bigPool.equalsIgnoreCase("apiserver")) {
+//            result = "api";
+//        } else if(bigPool.equalsIgnoreCase("appserver")) {
+//            result = "app";
+//        } else if(bigPool.equalsIgnoreCase("gimserver")) {
+//            result = "gim";
+//        } else if(bigPool.equalsIgnoreCase("grfserver")) {
+//            result = "grf";
+//        } else if(bigPool.equalsIgnoreCase("imserver")) {
+//            result = "im";
+//        } else if(bigPool.equalsIgnoreCase("upload")) {
+//            result = "up";
+//        } else if(bigPool.equalsIgnoreCase("wsserver")) {
+//            result = "ws";
+//        }
+        ServerPool serverPool = ServerPool.getEnumForPoolName(bigPool.toLowerCase());
+        if(null != serverPool) {
+            result = serverPool.shortName;
         }
-
         return  result;
     }
 }

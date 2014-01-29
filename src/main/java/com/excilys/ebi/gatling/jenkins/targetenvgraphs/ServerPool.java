@@ -1,17 +1,35 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public enum ServerPool {
-    APISERVER_POOL("apiserver"),
-    APPSERVER_POOL("appserver"),
-    GIMSERVER_POOL("gimserver"),
-    GRFSERVER_POOL("grfserver"),
-    IMSERVER_POOL("imserver"),
-    UPLOADSERVER_POOL("upload"),
-    WSSERVER_POOL("wsserver");
+    APISERVER("apiserver", "api"),
+    APPSERVER("appserver", "app"),
+    GIMSERVER("gimserver", "gim"),
+    GRFSERVER("grfserver", "grf"),
+    IMSERVER("imserver", "im"),
+    UPLOADSERVER("upload", "up"),
+    WSSERVER("wsserver", "ws");
 
-    public final String name;
+    public final String longName;
+    public final String shortName;
 
-    private ServerPool(String name) {
-        this.name = name;
+    private static final Logger logger = Logger.getLogger(ServerPool.class.getName());
+
+    private ServerPool(String longNname, String shortName) {
+        this.longName = longNname;
+        this.shortName = shortName;
+    }
+
+    public static ServerPool getEnumForPoolName(String poolName) {
+        if(null != poolName && poolName.trim().length() > 0) {
+            for(ServerPool serverPool: ServerPool.values()) {
+                if(poolName.trim().equalsIgnoreCase(serverPool.longName)) {
+                    return serverPool;
+                }
+            }
+        }
+        return null;
     }
 }

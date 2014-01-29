@@ -34,7 +34,7 @@ public class GraphiteGraphSettingsBuilder {
     public GraphiteGraphSettingsBuilder() {
         envPoolSettings = new HashMap<String, Map<String, List<GraphiteGraphSettings>>>();
         for(ServerPool serverEnum: ServerPool.values()) {
-            addEnvPoolSetting(Environment.FOXTROT.name, serverEnum.name);
+            addEnvPoolSetting(Environment.FOXTROT.name, serverEnum.longName);
         }
     }
 
