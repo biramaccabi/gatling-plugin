@@ -19,8 +19,7 @@ public interface PluginConstants {
 	String ICON_URL = "/plugin/gatling/img/logo.png";
     String TARGET_ENV_GRAPHS_ICON = "/plugin/gatling/img/graph_icon.png";
 
-    String DISPLAY_NAME_CHARTS = "Gatling - Charts";
-	String DISPLAY_NAME_REPORTS = "Gatling - Reports";
+    String DISPLAY_NAME_REPORTS = "Gatling - Reports";
 
     String URL_NAME = "gatling";
 

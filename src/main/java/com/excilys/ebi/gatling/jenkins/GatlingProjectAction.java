@@ -95,11 +95,11 @@ public class GatlingProjectAction implements Action {
 	}
 
 	public String getDisplayName() {
-		return DISPLAY_NAME_CHARTS;
+		return DISPLAY_NAME_REPORTS;
 	}
 
 	public String getUrlName() {
-		return URL_NAME;
+		return this.project.getLastBuild().getNumber() + "/" + URL_NAME;
 	}
 
 	public AbstractProject<?, ?> getProject() {
