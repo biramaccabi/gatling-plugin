@@ -41,6 +41,8 @@ public class GatlingProjectActionGraphiteUrlTest {
     private AbstractProject<?, ?> project;
     private GatlingProjectAction projectAction;
 
+    private String gatlingReportUrl = "0/charts";
+
     @SuppressWarnings("UnusedParameters")
     public GatlingProjectActionGraphiteUrlTest(String paramName, AssertionData assertionData, String expectedUrl){
         this.assertionData = assertionData;
@@ -351,7 +353,7 @@ public class GatlingProjectActionGraphiteUrlTest {
     @Before
     public void setup(){
         project = mock(AbstractProject.class);
-        projectAction = new GatlingProjectAction(project);
+        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
     }
 
     private void prepareWithOneBuild(List<AssertionData> assertDataList) {
@@ -363,7 +365,7 @@ public class GatlingProjectActionGraphiteUrlTest {
 
     private void prepareWithBuilds(List<AbstractBuild> builds, List<AssertionData> assertDataList){
         RunList runList = mock(RunList.class);
-        projectAction = new GatlingProjectAction(project);
+        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
         stub(runList.iterator()).toReturn(builds.iterator());
         //noinspection unchecked
         stub(project.getBuilds()).toReturn(runList);

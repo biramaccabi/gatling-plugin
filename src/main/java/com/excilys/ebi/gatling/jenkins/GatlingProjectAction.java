@@ -64,6 +64,7 @@ public class GatlingProjectAction implements Action {
         }
     }
 
+    private String gatlingReportUrl;
 	private final AbstractProject<?, ?> project;
     private final Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
     private final String urlTemplate =
@@ -86,8 +87,9 @@ public class GatlingProjectAction implements Action {
             "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
 
 
-	public GatlingProjectAction(AbstractProject<?, ?> project) {
+	public GatlingProjectAction(AbstractProject<?, ?> project, String gatlingReportUrl) {
 		this.project = project;
+        this.gatlingReportUrl = gatlingReportUrl;
 	}
 
 	public String getIconFileName() {
@@ -99,7 +101,7 @@ public class GatlingProjectAction implements Action {
 	}
 
 	public String getUrlName() {
-		return this.project.getLastBuild().getNumber() + "/" + URL_NAME;
+		return gatlingReportUrl;
 	}
 
 	public AbstractProject<?, ?> getProject() {

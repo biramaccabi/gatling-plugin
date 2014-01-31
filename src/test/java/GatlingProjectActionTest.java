@@ -33,11 +33,12 @@ import static org.mockito.Mockito.stub;
 public class GatlingProjectActionTest{
     private AbstractProject<?, ?> project;
     private GatlingProjectAction projectAction;
+    private String gatlingReportUrl = "0/charts";
 
     @Before
     public void setup(){
         project = mock(AbstractProject.class);
-        projectAction = new GatlingProjectAction(project);
+        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
     }
 
     @org.junit.Test
@@ -82,7 +83,7 @@ public class GatlingProjectActionTest{
 
     private void prepareWithBuilds(List<AbstractBuild> builds, List<AssertionData> assertDataList){
         RunList runList = mock(RunList.class);
-        projectAction = new GatlingProjectAction(project);
+        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
         stub(runList.iterator()).toReturn(builds.iterator());
         //noinspection unchecked
         stub(project.getBuilds()).toReturn(runList);

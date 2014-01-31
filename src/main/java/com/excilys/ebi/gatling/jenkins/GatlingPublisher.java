@@ -36,10 +36,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.ICON_URL;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_ENV_GRAPHS_ICON;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.DISPLAY_NAME_SOURCE;
-import static com.excilys.ebi.gatling.jenkins.PluginConstants.TARGET_ENV_GRAPHS_DISPLAY_STRING;
+import static com.excilys.ebi.gatling.jenkins.PluginConstants.*;
 
 
 public class GatlingPublisher extends Recorder {
@@ -113,7 +110,8 @@ public class GatlingPublisher extends Recorder {
 	public final Collection<? extends Action> getProjectActions(AbstractProject<?,?> project){
 		this.project = project;
 		List<Action> actions = new ArrayList<Action>();
-		actions.add(new GatlingProjectAction(project));
+        String gatlingReportUrl = build.getNumber() + "/" + URL_NAME;
+		actions.add(new GatlingProjectAction(project, gatlingReportUrl));
 		try{
 			GatlingBuildAction lastBuildAct = getLastBuildGatlingBuildAction(project);
 			List<SimulationSourceAction> simSourceActions = generateSimulationSourceActionsFromGatlingBuildAction(lastBuildAct, true);
