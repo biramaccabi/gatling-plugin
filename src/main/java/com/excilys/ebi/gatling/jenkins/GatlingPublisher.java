@@ -110,9 +110,9 @@ public class GatlingPublisher extends Recorder {
 	public final Collection<? extends Action> getProjectActions(AbstractProject<?,?> project){
 		this.project = project;
 		List<Action> actions = new ArrayList<Action>();
-        String gatlingReportUrl = build.getNumber() + "/" + URL_NAME;
-		actions.add(new GatlingProjectAction(project, gatlingReportUrl));
 		try{
+            String gatlingReportUrl = build.getNumber() + "/" + URL_NAME;
+            actions.add(new GatlingProjectAction(project, gatlingReportUrl));
 			GatlingBuildAction lastBuildAct = getLastBuildGatlingBuildAction(project);
 			List<SimulationSourceAction> simSourceActions = generateSimulationSourceActionsFromGatlingBuildAction(lastBuildAct, true);
 			for (SimulationSourceAction act : simSourceActions){
