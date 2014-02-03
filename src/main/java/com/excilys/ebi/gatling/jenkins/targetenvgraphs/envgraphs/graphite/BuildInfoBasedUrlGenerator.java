@@ -43,7 +43,7 @@ public class BuildInfoBasedUrlGenerator {
     private String getGraphiteGraphForCriteriaGraphSettings(BuildInfoForTargetEnvGraph criteria, GraphiteGraphSettings graphSettings) {
         StringBuilder result = new StringBuilder();
 
-        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMDD");
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
         String startTimeString = graphiteFormat.format(criteria.getGraphStartTime().getTime());
         String endTimeString = graphiteFormat.format(criteria.getGraphEndTime().getTime());
 

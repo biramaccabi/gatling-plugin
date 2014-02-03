@@ -23,9 +23,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -36,9 +38,15 @@ import static org.mockito.Mockito.when;
 public class BuildInfoBasedUrlGeneratorTest {
 
     public static final String TARGET_HOST_NAME = "http://graphite.internal.shutterfly.com:443/";
+    public static final String URL_DATE_FORMAT = "HH:mm_yyyyMMdd";
     @Mock
     GraphiteGraphSettingsBuilder mockedSettingsBuilder;
 
+    Calendar testStartTime = Calendar.getInstance();
+
+    static final int GRAPH_START_BUFFER_TIME_IN_MINUTES = -5;
+    static final int GRAPH_END_BUFFER_TIME_IN_MINUTES = 5;
+    static final int BUILD_DURATION_IN_MINUTES = 10;
 
     @Before
     public void setup() {
@@ -49,10 +57,14 @@ public class BuildInfoBasedUrlGeneratorTest {
     public void testGetUrlsForCriteriaWithoutYMinYMax() {
         List<String> generatedUrls = getUrlsForGraphiteGraphSetting(getSettingWithoutYMinYMax());
 
-        String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=07:55_20140101&until=08:50_20140101" +
+        String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=${fromTime}&until=${untilTime}" +
                 "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
                 "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
                 "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
+
+        expectedURL = expectedURL.replace("${fromTime}", getStartTimeString());
+        expectedURL = expectedURL.replace("${untilTime}", getBuildEndTimeString());
+
         Assert.assertEquals(1, generatedUrls.size());
         Assert.assertEquals(expectedURL, generatedUrls.get(0));
     }
@@ -63,11 +75,15 @@ public class BuildInfoBasedUrlGeneratorTest {
         List<String> generatedUrls = getUrlsForGraphiteGraphSetting(getSettingWithYMinYMax());
 
 
-        String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=07:55_20140101&until=08:50_20140101" +
+        String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=${fromTime}&until=${untilTime}" +
                 "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
                 "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
                 "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100" +
                 "&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
+
+        expectedURL = expectedURL.replace("${fromTime}", getStartTimeString());
+        expectedURL = expectedURL.replace("${untilTime}", getBuildEndTimeString());
+
         Assert.assertEquals(1, generatedUrls.size());
         Assert.assertEquals(expectedURL, generatedUrls.get(0));
     }
@@ -75,7 +91,7 @@ public class BuildInfoBasedUrlGeneratorTest {
     private List<String> getUrlsForGraphiteGraphSetting(GraphiteGraphSettings settings) {
         BuildInfoForTargetEnvGraph testBuildInfoForTargetEnvGraph = new BuildInfoForTargetEnvGraph();
         testBuildInfoForTargetEnvGraph.setBuildDuration(getDuration());
-        testBuildInfoForTargetEnvGraph.setBuildStartTime(getStartTime());
+        testBuildInfoForTargetEnvGraph.setBuildStartTime(getBuildStartTime());
         testBuildInfoForTargetEnvGraph.setEnvironmentName("foxtrot");
         testBuildInfoForTargetEnvGraph.setPoolName("appserver");
 
@@ -90,31 +106,45 @@ public class BuildInfoBasedUrlGeneratorTest {
     }
 
 
-    private Calendar getStartTime() {
-        Calendar startTime = Calendar.getInstance();
-        // set date to Jan 1, 2000 at 8:00 am
-        startTime.set(2014, Calendar.JANUARY, 1, 8, 0, 0);
-        startTime.set(Calendar.MILLISECOND, 0);
+    private Calendar getBuildStartTime() {
+        Calendar startTime = (Calendar) testStartTime.clone();
         return startTime;
     }
 
-    private Calendar getEndTime() {
-        Calendar endTime = Calendar.getInstance();
-        // set date to Jan 1, 2000 at 8:30 am
-        endTime.set(2014, Calendar.JANUARY, 1, 8, 45, 0);
-        endTime.set(Calendar.MILLISECOND, 0);
+    private Calendar getBuildEndTime() {
+        Calendar endTime = (Calendar) getBuildStartTime().clone();
+        endTime.add(Calendar.MINUTE, BUILD_DURATION_IN_MINUTES);
         return endTime;
     }
 
+    private String getStartTimeString() {
+        Calendar startTime = (Calendar) getBuildStartTime().clone();
+        startTime.add(Calendar.MINUTE, GRAPH_START_BUFFER_TIME_IN_MINUTES);
+
+        return buildDateTimeStringFromDate(startTime.getTime());
+    }
+
+    private String getBuildEndTimeString() {
+        Calendar endTime = (Calendar) getBuildEndTime().clone();
+        endTime.add(Calendar.MINUTE, GRAPH_END_BUFFER_TIME_IN_MINUTES);
+
+        return buildDateTimeStringFromDate(endTime.getTime());
+    }
+
+    private String buildDateTimeStringFromDate(Date date) {
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat(URL_DATE_FORMAT);
+        String result = graphiteFormat.format(date);
+        return result;
+    }
+
     private long getDuration() {
-        return getEndTime().getTimeInMillis() - getStartTime().getTimeInMillis();
+        return getBuildEndTime().getTimeInMillis() - getBuildStartTime().getTimeInMillis();
     }
 
     private GraphiteGraphSettings getSettingWithoutYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
         appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
         appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("foxtrot","app"));
-        //appCpu.setTarget(GraphiteTargetEnum.FOXTROT_APP_POOLCPU_USAGE.getTarget());
         appCpu.setYMax("");
         appCpu.setYMin("");
         appCpu.setTitle("APP_POOL_CPU_User_Usage");
