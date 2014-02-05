@@ -27,38 +27,32 @@ import java.util.List;
 
 public class GraphiteGraphSettingsBuilderTest {
 
-    public static final String FOXTROT = "foxtrot";
+    private static final String FOXTROT = "foxtrot";
 
-    public static final String SUPPORTED_POOL = "appserver";
-    public static final String SUPPORTED_POOL_WITH_SUPPLEMENTAL = "apiserver";
-    public static final String SUPPLMENTAL_POOL = "wsserver";
-    public static final String UNSUPPORTED_POOL = "nonsenseserver";
+    private static final String SUPPORTED_POOL = "appserver";
+    private static final String SUPPORTED_POOL_WITH_SUPPLEMENTAL = "apiserver";
+    private static final String SUPPLMENTAL_POOL = "wsserver";
+    private static final String UNSUPPORTED_POOL = "nonsenseserver";
 
 
-    public static final int NORMAL_EXPECTED_NUM_GRAPHS = 9;
-    public static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = 2 * NORMAL_EXPECTED_NUM_GRAPHS;
+    private static final int NORMAL_EXPECTED_NUM_GRAPHS = 9;
+    private static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = 2 * NORMAL_EXPECTED_NUM_GRAPHS;
 
     @Test
     public void testGetDefinedSettingsNoSupplementalGraphs() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
-        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setEnvironmentName(FOXTROT);
-        inputCriteria.setPoolName(SUPPORTED_POOL);
-        inputCriteria.setBuildStartTime(getStartTime());
-        inputCriteria.setBuildDuration(getDuration());
+        BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(FOXTROT, SUPPORTED_POOL);
 
         List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
         Assert.assertEquals(NORMAL_EXPECTED_NUM_GRAPHS, generatedSettings.size());
 
         ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL);
-        for(GraphiteGraphSettings generatedSetting: generatedSettings) {
-            Assert.assertTrue(expectedSettings.contains(generatedSetting));
-        }
 
-        for(GraphiteGraphSettings expectedSetting: expectedSettings) {
-            Assert.assertTrue(generatedSettings.contains(expectedSetting));
+        Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
+        for( int i = 0; i < expectedSettings.size(); i++) {
+            Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
         }
     }
 
@@ -66,27 +60,20 @@ public class GraphiteGraphSettingsBuilderTest {
     public void testGetDefinedSettingsWithSupplementalGraphs() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
-        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setEnvironmentName(FOXTROT);
-        inputCriteria.setPoolName(SUPPORTED_POOL_WITH_SUPPLEMENTAL);
-        inputCriteria.setBuildStartTime(getStartTime());
-        inputCriteria.setBuildDuration(getDuration());
+        BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
 
         List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
         Assert.assertEquals(SUPPLEMENTED_EXPECTED_NUM_GRAPHS, generatedSettings.size());
 
-        ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+        List<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+        List<GraphiteGraphSettings> expectedSupplementalSettings = getListGraphiteSettings(FOXTROT, SUPPLMENTAL_POOL);
 
-        expectedSettings.addAll(getListGraphiteSettings(FOXTROT, SUPPLMENTAL_POOL));
+        expectedSettings = mergeAndSortGraphSettings(expectedSettings, expectedSupplementalSettings);
 
-        for(GraphiteGraphSettings generatedSetting: generatedSettings) {
-
-            Assert.assertTrue(expectedSettings.contains(generatedSetting));
-        }
-
-        for(GraphiteGraphSettings expectedSetting: expectedSettings) {
-            Assert.assertTrue(generatedSettings.contains(expectedSetting));
+        Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
+        for( int i = 0; i < expectedSettings.size(); i++) {
+            Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
         }
     }
 
@@ -106,6 +93,15 @@ public class GraphiteGraphSettingsBuilderTest {
         List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
         Assert.assertEquals(0, generatedSettings.size());
+    }
+
+    private BuildInfoForTargetEnvGraph getBuildInfoForEnvPool(String env, String pool) {
+        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
+        inputCriteria.setEnvironmentName(env);
+        inputCriteria.setPoolName(pool);
+        inputCriteria.setBuildStartTime(getStartTime());
+        inputCriteria.setBuildDuration(getDuration());
+        return inputCriteria;
     }
 
     private ArrayList<GraphiteGraphSettings> getListGraphiteSettings(String env, String pool) {
@@ -198,9 +194,22 @@ public class GraphiteGraphSettingsBuilderTest {
         return expectedSettings;
     }
 
+    private List<GraphiteGraphSettings> mergeAndSortGraphSettings(List<GraphiteGraphSettings> a, List<GraphiteGraphSettings> b ) {
+        if(a.size() == b.size()) {
+            ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
+            for(int i = 0; i < a.size(); i++) {
+                temp.add(a.get(i));
+                temp.add(b.get(i));
+            }
+            return temp;
+        } else {
+            a.addAll(b);
+            return a;
+        }
+    }
+
     private Calendar getStartTime() {
         Calendar startTime = Calendar.getInstance();
-        // set date to Jan 1, 2000 at 8:00 am
         startTime.set(2014, Calendar.JANUARY, 1, 8, 0, 0);
         startTime.set(Calendar.MILLISECOND, 0);
         return startTime;
@@ -208,7 +217,6 @@ public class GraphiteGraphSettingsBuilderTest {
 
     private Calendar getEndTime() {
         Calendar endTime = Calendar.getInstance();
-        // set date to Jan 1, 2000 at 8:30 am
         endTime.set(2014, Calendar.JANUARY, 1, 8, 45, 0);
         endTime.set(Calendar.MILLISECOND, 0);
         return endTime;

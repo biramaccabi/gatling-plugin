@@ -55,7 +55,7 @@ public class GraphiteGraphSettingsBuilder {
             if(shouldAlsoIncludeWSPool(pool)) {
                 List<GraphiteGraphSettings> supplementalResults = poolsForEnvironments.get(ServerPool.WSSERVER.longName);
                 if(null != result) {
-                    result.addAll(supplementalResults);
+                    result = mergeAndSortGraphSettings(result, supplementalResults);
                 } else {
                     result = supplementalResults;
                 }
@@ -66,6 +66,20 @@ public class GraphiteGraphSettingsBuilder {
             }
         }
         return null;
+    }
+
+    private List<GraphiteGraphSettings> mergeAndSortGraphSettings(List<GraphiteGraphSettings> a, List<GraphiteGraphSettings> b ) {
+        if(a.size() == b.size()) {
+            ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
+            for(int i = 0; i < a.size(); i++) {
+                temp.add(a.get(i));
+                temp.add(b.get(i));
+            }
+            return temp;
+        } else {
+            a.addAll(b);
+            return a;
+        }
     }
 
     private boolean shouldAlsoIncludeWSPool(String pool) {
