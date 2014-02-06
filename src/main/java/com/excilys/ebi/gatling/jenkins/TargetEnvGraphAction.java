@@ -27,8 +27,6 @@ public class TargetEnvGraphAction implements Action {
     String icon;
     String displayName;
 
-    private final String helpUrl = PluginConstants.TARGET_ENV_GRAPHS_HELP_URL;
-
     public TargetEnvGraphAction(String urlName, String displayName, String iconFileName, AbstractBuild build) {
         super();
         this.url = urlName;
@@ -64,9 +62,5 @@ public class TargetEnvGraphAction implements Action {
         } else {
             return "";
         }
-    }
-
-    public String getHelpUrl() {
-        return helpUrl;
     }
 }
