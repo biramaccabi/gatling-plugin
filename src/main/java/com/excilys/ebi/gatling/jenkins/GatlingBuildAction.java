@@ -36,6 +36,8 @@ public class GatlingBuildAction implements Action {
 	private final RequestReport requestReport = null;
 	private final FilePath simulationDirectory = null;
 
+    private final String helpUrl = PluginConstants.TARGET_ENV_GRAPHS_HELP_URL;
+
 	public String getSimulationName() {
 		return simulationName;
 	}
@@ -150,5 +152,9 @@ public class GatlingBuildAction implements Action {
         } else {
             return "";
         }
+    }
+
+    public String getHelpUrl() {
+        return helpUrl;
     }
 }

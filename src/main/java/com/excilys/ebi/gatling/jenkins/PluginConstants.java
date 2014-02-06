@@ -25,6 +25,7 @@ public interface PluginConstants {
 
 	String DISPLAY_NAME_SOURCE = "Gatling - Test Source";
     String TARGET_ENV_GRAPHS_DISPLAY_STRING = "Graphs - System Information";
+    String TARGET_ENV_GRAPHS_HELP_URL = "https://ignite.shutterfly.com/docs/DOC-6185";
 
 	int MAX_BUILDS_TO_DISPLAY = 30;
 	int MAX_BUILDS_TO_DISPLAY_DASHBOARD = 15;

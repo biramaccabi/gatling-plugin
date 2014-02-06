@@ -8,12 +8,15 @@
 		</l:side-panel>
 		<l:main-panel>
 			<h1>System Information Graphs</h1>
+            <h2>
+                <a href="${it.getHelpUrl()}">Learn more about the System Information Graphs</a>
+            </h2>
 			<h2>${it.getTargetEnvGraphMessage()}</h2>
-                <div class="test-trend-caption">
-                     <j:forEach items="${it.getTargetEnvGraphUrls()}" var="graphUrls">
-                         <img src="${graphUrls}"/>
-                     </j:forEach>
-                </div>
+            <div class="test-trend-caption">
+                 <j:forEach items="${it.getTargetEnvGraphUrls()}" var="graphUrls">
+                     <img src="${graphUrls}"/>
+                 </j:forEach>
+            </div>
 		</l:main-panel>
 	</l:layout>
 </j:jelly>
