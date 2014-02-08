@@ -23,6 +23,7 @@ import org.apache.commons.lang.text.StrSubstitutor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,7 +82,7 @@ public class GatlingProjectAction implements Action {
             "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(" +
             "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
             ")" +
-            "&width=586&height=308&lineMode=connected&from=-1months&" +
+            "&width=586&height=308&lineMode=connected&from=${fromDateTime}&" +
             "title=${reqName}+-+${assertDescr}" +
             "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs" +
             "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
@@ -231,6 +232,7 @@ public class GatlingProjectAction implements Action {
                     values.put("assertDescr",URLEncoder.encode(assertionData.assertionType,"UTF-8"));
                     values.put("projName", URLEncoder.encode(assertionData.projectName,"UTF-8"));
                     values.put("performanceMetricLabel", performanceMetricLabel);
+                    values.put("fromDateTime", getOldestBuildDateTime());
                     StrSubstitutor sub = new StrSubstitutor(values);
                     return sub.replace(urlTemplate);
                 }
@@ -239,6 +241,20 @@ public class GatlingProjectAction implements Action {
              throw new RuntimeException(ex);
         }
         return null;
+    }
+
+    private String getOldestBuildDateTime() {
+        try {
+            AbstractBuild oldestBuild = project.getFirstBuild();
+
+            SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+
+            String startTimeString = graphiteFormat.format(oldestBuild.getTimestamp().getTime());
+
+            return startTimeString;
+        } catch(Exception e) {
+            return "-1months";
+        }
     }
 
     private String gatlingRequestNameToGraphiteRequestName(String requestName) {

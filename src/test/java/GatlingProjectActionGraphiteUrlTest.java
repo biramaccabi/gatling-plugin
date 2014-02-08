@@ -26,8 +26,10 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -392,6 +394,53 @@ public class GatlingProjectActionGraphiteUrlTest {
         }
     }
 
+    @org.junit.Test
+    public void testWithOldBuild(){
+        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
+        AssertionData data = new AssertionData();
+        data.assertionType = "requests per second";
+        data.actualValue = "1123";
+        data.expectedValue = "10";
+        data.message = "Global requests per second is greater than 10";
+        data.projectName = "Web_Performance_Tests-foxtrot-apiserver_IndividualServerBenchmarkSimulation";
+        data.requestName = "Global";
+        data.simulationName = "individualserverbenchmarksimulation";
+        data.scenerioName = "foxtrot Benchmarks";
+        data.status = "true";
 
+        AbstractBuild build = mock(AbstractBuild.class);
+        Calendar currentTime = Calendar.getInstance();
+        currentTime.add(Calendar.MONTH, -3);
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+        String currentTimeString = graphiteFormat.format(currentTime.getTime());
+
+        stub(build.getTimestamp()).toReturn(currentTime);
+        stub(project.getFirstBuild()).toReturn(build);
+
+        assertionDataList.add(data);
+
+        List<AbstractBuild> builds = new ArrayList<AbstractBuild>();
+        builds.add(build);
+
+        String urlWithDate = "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787" +
+                "&target=alias(color(secondYAxis(load.summary.foxtrot.individualserverbenchmarksimulation." +
+                    "Global_Information.ko.percent)%2C%22red%22)%2C%22percent%20KOs%22)" +
+                "&target=alias(load.summary.foxtrot.individualserverbenchmarksimulation.Global_Information.all." +
+                    "throughput%2C%22requests+per+second%22)" +
+                "&target=alias(load.summary.foxtrot.individualserverbenchmarksimulation.Global_Information.all." +
+                    "expected.throughput%2C%22performance+assert+threshold%22)" +
+                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22" +
+                    "yellow%22)%2C%22Release%20Branch%20Created%22)" +
+                "&width=586&height=308&lineMode=connected&from=" + currentTimeString +
+                "&title=Global_Information+-+requests+per+second&vtitle=Requests_per_second" +
+                "&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+
+        prepareWithBuilds(builds, assertionDataList);
+
+        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
+        Assert.assertEquals(1, graphiteGraphUrls.size());
+        String graphiteUrl = graphiteGraphUrls.get(0);
+        Assert.assertEquals(urlWithDate, graphiteUrl);
+    }
 
 }
