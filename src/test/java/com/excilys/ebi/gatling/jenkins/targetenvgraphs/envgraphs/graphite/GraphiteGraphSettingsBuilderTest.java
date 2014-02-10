@@ -17,6 +17,7 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Environment;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ServerPool;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,60 +40,72 @@ public class GraphiteGraphSettingsBuilderTest {
     private static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = 2 * NORMAL_EXPECTED_NUM_GRAPHS;
 
     @Test
-    public void testGetDefinedSettingsNoSupplementalGraphs() {
+    public void testGetDefinedSettingsNoSupplementalGraphsAllEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
-        BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(FOXTROT, SUPPORTED_POOL);
+        for(Environment env: Environment.values()) {
+            String envName = env.name;
 
-        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
+            BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(envName, SUPPORTED_POOL);
 
-        Assert.assertEquals(NORMAL_EXPECTED_NUM_GRAPHS, generatedSettings.size());
+            List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
-        ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL);
+            String assertMessage = "Error getting num for env/pool: " + envName +"/" + SUPPORTED_POOL;
+            Assert.assertEquals(assertMessage, NORMAL_EXPECTED_NUM_GRAPHS, generatedSettings.size());
 
-        Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
-        for( int i = 0; i < expectedSettings.size(); i++) {
-            Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
+            ArrayList<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(envName, SUPPORTED_POOL);
+
+            Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
+            for( int i = 0; i < expectedSettings.size(); i++) {
+                Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
+            }
         }
     }
 
     @Test
-    public void testGetDefinedSettingsWithSupplementalGraphs() {
+    public void testGetDefinedSettingsWithSupplementalGraphsAllEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
+        for(Environment env: Environment.values()) {
+            String envName = env.name;
 
-        BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
 
-        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
+            BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
 
-        Assert.assertEquals(SUPPLEMENTED_EXPECTED_NUM_GRAPHS, generatedSettings.size());
+            List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
-        List<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(FOXTROT, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
-        List<GraphiteGraphSettings> expectedSupplementalSettings = getListGraphiteSettings(FOXTROT, SUPPLMENTAL_POOL);
 
-        expectedSettings = mergeAndSortGraphSettings(expectedSettings, expectedSupplementalSettings);
+            String assertMessage = "Error getting num for env/pool: " + envName +"/" + SUPPORTED_POOL;
+            Assert.assertEquals(assertMessage, SUPPLEMENTED_EXPECTED_NUM_GRAPHS, generatedSettings.size());
 
-        Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
-        for( int i = 0; i < expectedSettings.size(); i++) {
-            Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
+            List<GraphiteGraphSettings> expectedSettings = getListGraphiteSettings(envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+            List<GraphiteGraphSettings> expectedSupplementalSettings = getListGraphiteSettings(envName, SUPPLMENTAL_POOL);
+
+            expectedSettings = mergeAndSortGraphSettings(expectedSettings, expectedSupplementalSettings);
+
+            Assert.assertEquals(expectedSettings.size(), generatedSettings.size());
+            for( int i = 0; i < expectedSettings.size(); i++) {
+                Assert.assertEquals(expectedSettings.get(i), generatedSettings.get(i));
+            }
         }
     }
 
     @Test
-    public void testGetUndefinedSettings() {
+    public void testGetUndefinedSettingsAllEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
+        for(Environment env: Environment.values()) {
+            String envName = env.name;
+            String pool = UNSUPPORTED_POOL;
 
-        String env = FOXTROT;
-        String pool = UNSUPPORTED_POOL;
+            BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
+            inputCriteria.setEnvironmentName(envName);
+            inputCriteria.setPoolName(pool);
+            inputCriteria.setBuildStartTime(getStartTime());
+            inputCriteria.setBuildDuration(getDuration());
 
-        BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setEnvironmentName(env);
-        inputCriteria.setPoolName(pool);
-        inputCriteria.setBuildStartTime(getStartTime());
-        inputCriteria.setBuildDuration(getDuration());
+            List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
-        List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
-
-        Assert.assertEquals(0, generatedSettings.size());
+            Assert.assertEquals(0, generatedSettings.size());
+        }
     }
 
     private BuildInfoForTargetEnvGraph getBuildInfoForEnvPool(String env, String pool) {
