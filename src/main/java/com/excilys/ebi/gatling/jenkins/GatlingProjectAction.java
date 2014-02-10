@@ -252,7 +252,8 @@ public class GatlingProjectAction implements Action {
             String startTimeString = graphiteFormat.format(oldestBuild.getTimestamp().getTime());
 
             return startTimeString;
-        } catch(Exception e) {
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Failed to find date/time of oldest build for project.  Defaulting range to -1 month", e);
             return "-1months";
         }
     }
