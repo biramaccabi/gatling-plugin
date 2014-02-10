@@ -28,8 +28,6 @@ import java.util.List;
 
 public class GraphiteGraphSettingsBuilderTest {
 
-    private static final String FOXTROT = "foxtrot";
-
     private static final String SUPPORTED_POOL = "appserver";
     private static final String SUPPORTED_POOL_WITH_SUPPLEMENTAL = "apiserver";
     private static final String SUPPLMENTAL_POOL = "wsserver";
