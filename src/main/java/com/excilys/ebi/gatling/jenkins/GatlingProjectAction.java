@@ -68,6 +68,9 @@ public class GatlingProjectAction implements Action {
     private String gatlingReportUrl;
 	private final AbstractProject<?, ?> project;
     private final Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
+
+    // use integral when combining data for drawAsInfinite because the xFilesFactor is 0 --
+    //   otherwise graphite ignores the data (because there is not enough data points) -VITO
     private final String urlTemplate =
         "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&" +
             "target=alias(color(secondYAxis(" +
@@ -79,7 +82,7 @@ public class GatlingProjectAction implements Action {
             "&target=alias(" +
             "load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22performance+assert+threshold%22" +
             ")" +
-            "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(" +
+            "&target=alias(color(lineWidth(drawAsInfinite(integral(" +
             "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
             ")" +
             "&width=586&height=308&lineMode=connected&from=${fromDateTime}&" +

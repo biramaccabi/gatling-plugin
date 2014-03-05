@@ -89,7 +89,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%2295th+percentile+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation_test.authorize_with_space.all.expected.percentiles95%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize_with_space+-+95th+percentile+response+time" +
@@ -121,7 +121,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%2295th+percentile+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.percentiles95%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+95th+percentile+response+time" +
@@ -153,7 +153,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%2295th+percentile+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.Global_Information.all.expected.percentiles95%2C" +
                     "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=Global_Information+-+95th+percentile+response+time" +
@@ -183,7 +183,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22min+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.min%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+min+response+time" +
@@ -214,7 +214,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22max+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.max%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+max+response+time" +
@@ -245,7 +245,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22mean+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.mean%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+mean+response+time" +
@@ -276,7 +276,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22standard+deviation+response+time%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.stddev%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+standard+deviation+response+time" +
@@ -307,7 +307,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "%22requests+per+second%22)" +
                 "&target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all.expected.throughput%2C" +
                 "%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C"+
                 "%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected" +
                 "&from=-1months" +
                 "&title=authorize+-+requests+per+second" +
@@ -429,7 +429,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                     "throughput%2C%22requests+per+second%22)" +
                 "&target=alias(load.summary.foxtrot.individualserverbenchmarksimulation.Global_Information.all." +
                     "expected.throughput%2C%22performance+assert+threshold%22)" +
-                "&target=alias(color(lineWidth(drawAsInfinite(maxSeries(sfly.releng.branch.*))%2C1)%2C%22" +
+                "&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22" +
                     "yellow%22)%2C%22Release%20Branch%20Created%22)" +
                 "&width=586&height=308&lineMode=connected&from=" + currentTimeString +
                 "&title=Global_Information+-+requests+per+second&vtitle=Requests_per_second" +
