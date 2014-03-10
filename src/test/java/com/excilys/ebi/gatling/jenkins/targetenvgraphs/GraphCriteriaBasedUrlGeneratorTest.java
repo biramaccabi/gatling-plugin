@@ -60,7 +60,8 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedEnvPoolCriteria);
 
-        Assert.assertEquals("should come back with 4 graphs for GC and 5 for App Pool", 9, graphUrls.size());
+        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4.  21 Total.";
+        Assert.assertEquals(sizeAssertString, 21, graphUrls.size());
 
         ArrayList<String> expectedUrls = getListFoxtrotAppUrls();
 
@@ -108,6 +109,20 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         String foxtrotAppCpuIOWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_IO_Wait_Usage";
         String foxtrotAppRamUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.memory.memory-buffered&vtitle=Amount_RAM_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_RAM_Usage";
         String foxtrotAppSwapUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.swap.swap-used&vtitle=Amount_SWAP_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_SWAP_Usage";
+        String foxtrotMspCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_User_Usage";
+        String foxtrotMspCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_System_Usage";
+        String foxtrotMspCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_IO_Wait_Usage";
+        String foxtrotMspLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_Load_Average";
+
+        String foxtrotNxGenCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_User_Usage";
+        String foxtrotNxGenCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_System_Usage";
+        String foxtrotNxGenCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_IO_Wait_Usage";
+        String foxtrotNxGenLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_Load_Average";
+
+        String foxtrotMongoDBCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_User_Usage";
+        String foxtrotMongoDBCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_System_Usage";
+        String foxtrotMongoDBCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_IO_Wait_Usage";
+        String foxtrotMongoDBLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_Load_Average";
 
         ArrayList<String> list = new ArrayList<String>();
         list.add(foxtrotGCMarkSweepHeapUsageUrl);
@@ -119,6 +134,18 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         list.add(foxtrotAppCpuIOWaitUrl);
         list.add(foxtrotAppRamUrl);
         list.add(foxtrotAppSwapUrl);
+        list.add(foxtrotMspCpuUserUrl);
+        list.add(foxtrotMspCpuSystemUrl);
+        list.add(foxtrotMspCpuWaitUrl);
+        list.add(foxtrotMspLoadAvg);
+        list.add(foxtrotNxGenCpuUserUrl);
+        list.add(foxtrotNxGenCpuSystemUrl);
+        list.add(foxtrotNxGenCpuWaitUrl);
+        list.add(foxtrotNxGenLoadAvg);
+        list.add(foxtrotMongoDBCpuUserUrl);
+        list.add(foxtrotMongoDBCpuSystemUrl);
+        list.add(foxtrotMongoDBCpuWaitUrl);
+        list.add(foxtrotMongoDBLoadAvg);
         return list;
     }
 

@@ -34,8 +34,9 @@ public class GraphiteGraphSettingsBuilderTest {
     private static final String UNSUPPORTED_POOL = "nonsenseserver";
 
 
-    private static final int NORMAL_EXPECTED_NUM_GRAPHS = 9;
-    private static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = 2 * NORMAL_EXPECTED_NUM_GRAPHS;
+    private static final int NORMAL_EXPECTED_NUM_GRAPHS = 21;
+    private static final int NUMBER_DUPLICATE_GRAPHS = 12;
+    private static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = (2 * NORMAL_EXPECTED_NUM_GRAPHS) - NUMBER_DUPLICATE_GRAPHS;
 
     @Test
     public void testGetDefinedSettingsNoSupplementalGraphsAllEnvironments() {
@@ -193,6 +194,103 @@ public class GraphiteGraphSettingsBuilderTest {
         appPoolSwapSetting.setYMax("");
         appPoolSwapSetting.setYMin("");
 
+        GraphiteGraphSettings mspCpuUserSetting= new GraphiteGraphSettings();
+        mspCpuUserSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mspCpuUserSetting.setTarget("sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-idle");
+        mspCpuUserSetting.setTitle("MSP_DATABASE_CPU_User_Usage");
+        mspCpuUserSetting.setVerticalTitle("CPU_Percent_User_Used");
+        mspCpuUserSetting.setYMax("100");
+        mspCpuUserSetting.setYMin("0");
+
+        GraphiteGraphSettings mspCpuSystemSetting= new GraphiteGraphSettings();
+        mspCpuSystemSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mspCpuSystemSetting.setTarget("sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-idle");
+        mspCpuSystemSetting.setTitle("MSP_DATABASE_CPU_System_Usage");
+        mspCpuSystemSetting.setVerticalTitle("CPU_Percent_System_Used");
+        mspCpuSystemSetting.setYMax("100");
+        mspCpuSystemSetting.setYMin("0");
+
+        GraphiteGraphSettings mspCpuWaitSetting= new GraphiteGraphSettings();
+        mspCpuWaitSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mspCpuWaitSetting.setTarget("sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly." + env + ".host.oracle.*.aggregation-cpu-average.cpu-idle");
+        mspCpuWaitSetting.setTitle("MSP_DATABASE_CPU_IO_Wait_Usage");
+        mspCpuWaitSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        mspCpuWaitSetting.setYMax("100");
+        mspCpuWaitSetting.setYMin("0");
+
+        GraphiteGraphSettings mspLoadAvgSetting= new GraphiteGraphSettings();
+        mspLoadAvgSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mspLoadAvgSetting.setTarget("sfly." + env + ".host.oracle.*.load.load.*term");
+        mspLoadAvgSetting.setTitle("MSP_DATABASE_Load_Average");
+        mspLoadAvgSetting.setVerticalTitle("Load_Average");
+        mspLoadAvgSetting.setYMax("100");
+        mspLoadAvgSetting.setYMin("0");
+
+        GraphiteGraphSettings nxGenCpuUserSetting= new GraphiteGraphSettings();
+        nxGenCpuUserSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        nxGenCpuUserSetting.setTarget("sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle");
+        nxGenCpuUserSetting.setTitle("NXGEN_DATABASE_CPU_User_Usage");
+        nxGenCpuUserSetting.setVerticalTitle("CPU_Percent_User_Used");
+        nxGenCpuUserSetting.setYMax("100");
+        nxGenCpuUserSetting.setYMin("0");
+
+        GraphiteGraphSettings nxGenCpuSystemSetting= new GraphiteGraphSettings();
+        nxGenCpuSystemSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        nxGenCpuSystemSetting.setTarget("sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle");
+        nxGenCpuSystemSetting.setTitle("NXGEN_DATABASE_CPU_System_Usage");
+        nxGenCpuSystemSetting.setVerticalTitle("CPU_Percent_System_Used");
+        nxGenCpuSystemSetting.setYMax("100");
+        nxGenCpuSystemSetting.setYMin("0");
+
+        GraphiteGraphSettings nxGenCpuWaitSetting= new GraphiteGraphSettings();
+        nxGenCpuWaitSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        nxGenCpuWaitSetting.setTarget("sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly." + env + ".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle");
+        nxGenCpuWaitSetting.setTitle("NXGEN_DATABASE_CPU_IO_Wait_Usage");
+        nxGenCpuWaitSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        nxGenCpuWaitSetting.setYMax("100");
+        nxGenCpuWaitSetting.setYMin("0");
+
+        GraphiteGraphSettings nxGenLoadAvgSetting= new GraphiteGraphSettings();
+        nxGenLoadAvgSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        nxGenLoadAvgSetting.setTarget("sfly." + env + ".host.oracle-x86_64.*.load.load.*term");
+        nxGenLoadAvgSetting.setTitle("NXGEN_DATABASE_Load_Average");
+        nxGenLoadAvgSetting.setVerticalTitle("Load_Average");
+        nxGenLoadAvgSetting.setYMax("100");
+        nxGenLoadAvgSetting.setYMin("0");
+
+        ///
+        GraphiteGraphSettings mongoDbCpuUserSetting= new GraphiteGraphSettings();
+        mongoDbCpuUserSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mongoDbCpuUserSetting.setTarget("sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-idle");
+        mongoDbCpuUserSetting.setTitle("MongoDB_CPU_User_Usage");
+        mongoDbCpuUserSetting.setVerticalTitle("CPU_Percent_User_Used");
+        mongoDbCpuUserSetting.setYMax("100");
+        mongoDbCpuUserSetting.setYMin("0");
+
+        GraphiteGraphSettings mongoDbCpuSystemSetting= new GraphiteGraphSettings();
+        mongoDbCpuSystemSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mongoDbCpuSystemSetting.setTarget("sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-idle");
+        mongoDbCpuSystemSetting.setTitle("MongoDB_CPU_System_Usage");
+        mongoDbCpuSystemSetting.setVerticalTitle("CPU_Percent_System_Used");
+        mongoDbCpuSystemSetting.setYMax("100");
+        mongoDbCpuSystemSetting.setYMin("0");
+
+        GraphiteGraphSettings mongoDbCpuWaitSetting= new GraphiteGraphSettings();
+        mongoDbCpuWaitSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mongoDbCpuWaitSetting.setTarget("sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly." + env + ".host.mongodb.*.aggregation-cpu-average.cpu-idle");
+        mongoDbCpuWaitSetting.setTitle("MongoDB_CPU_IO_Wait_Usage");
+        mongoDbCpuWaitSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        mongoDbCpuWaitSetting.setYMax("100");
+        mongoDbCpuWaitSetting.setYMin("0");
+
+        GraphiteGraphSettings mongoDbLoadAvgSetting= new GraphiteGraphSettings();
+        mongoDbLoadAvgSetting.setHost("http://graphite.internal.shutterfly.com:443/");
+        mongoDbLoadAvgSetting.setTarget("sfly." + env + ".host.mongodb.*.load.load.*term");
+        mongoDbLoadAvgSetting.setTitle("MongoDB_Load_Average");
+        mongoDbLoadAvgSetting.setVerticalTitle("Load_Average");
+        mongoDbLoadAvgSetting.setYMax("100");
+        mongoDbLoadAvgSetting.setYMin("0");
+
         expectedSettings.add(gcMarkSweepHeapSetting);
         expectedSettings.add(gcMarkSweepTimeSetting);
         expectedSettings.add(gcParNewHeapSetting);
@@ -202,15 +300,32 @@ public class GraphiteGraphSettingsBuilderTest {
         expectedSettings.add(poolCPUIOWaitSetting);
         expectedSettings.add(poolRamSetting);
         expectedSettings.add(appPoolSwapSetting);
+
+        expectedSettings.add(mspCpuUserSetting);
+        expectedSettings.add(mspCpuSystemSetting);
+        expectedSettings.add(mspCpuWaitSetting);
+        expectedSettings.add(mspLoadAvgSetting);
+        expectedSettings.add(nxGenCpuUserSetting);
+        expectedSettings.add(nxGenCpuSystemSetting);
+        expectedSettings.add(nxGenCpuWaitSetting);
+        expectedSettings.add(nxGenLoadAvgSetting);
+
+        expectedSettings.add(mongoDbCpuUserSetting);
+        expectedSettings.add(mongoDbCpuSystemSetting);
+        expectedSettings.add(mongoDbCpuWaitSetting);
+        expectedSettings.add(mongoDbLoadAvgSetting);
+
         return expectedSettings;
     }
 
     private List<GraphiteGraphSettings> mergeAndSortGraphSettings(List<GraphiteGraphSettings> a, List<GraphiteGraphSettings> b ) {
+        ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
         if(a.size() == b.size()) {
-            ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
             for(int i = 0; i < a.size(); i++) {
                 temp.add(a.get(i));
-                temp.add(b.get(i));
+                if(!temp.contains(b.get(i))){
+                    temp.add(b.get(i));
+                }
             }
             return temp;
         } else {

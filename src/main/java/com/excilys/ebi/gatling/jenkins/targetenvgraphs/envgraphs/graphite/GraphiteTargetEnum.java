@@ -36,9 +36,25 @@ public enum GraphiteTargetEnum {
             "collectionTime"),
 
     GC_PAR_NEW_COLLECTION_TIME("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.collectionTime"),
-    GC_PAR_NEW_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+    GC_PAR_NEW_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
 
+    MSP_CPU_USER_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
+    MSP_CPU_SYSTEM_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
+    MSP_CPU_WAIT_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
 
+    MSP_LOAD_AVG("sfly.{$env}.host.oracle.*.load.load.*term"),
+
+    NXGEN_CPU_USER_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+    NXGEN_CPU_SYSTEM_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+    NXGEN_CPU_WAIT_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+
+    NXGEN_LOAD_AVG("sfly.{$env}.host.oracle-x86_64.*.load.load.*term"),
+
+    MONGODB_CPU_USER_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+    MONGODB_CPU_SYSTEM_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+    MONGODB_CPU_WAIT_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+
+    MONGODB_LOAD_AVG("sfly.{$env}.host.mongodb.*.load.load.*term");
 
     private final String target;
 
