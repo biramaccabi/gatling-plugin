@@ -612,21 +612,6 @@ public class GraphiteGraphSettingsBuilderTest {
         return expectedSettings;
     }
 
-    private List<GraphiteGraphSettings> mergeAndSortGraphSettings(List<GraphiteGraphSettings> a, List<GraphiteGraphSettings> b ) {
-        ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
-        if(a.size() == b.size()) {
-            for(int i = 0; i < a.size(); i++) {
-                temp.add(a.get(i));
-                if(!temp.contains(b.get(i))){
-                    temp.add(b.get(i));
-                }
-            }
-            return temp;
-        } else {
-            a.addAll(b);
-            return a;
-        }
-    }
 
     private Calendar getStartTime() {
         Calendar startTime = Calendar.getInstance();
