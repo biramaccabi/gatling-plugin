@@ -75,7 +75,9 @@ public class GraphiteGraphSettingsBuilder {
             ArrayList<GraphiteGraphSettings> temp = new ArrayList<GraphiteGraphSettings>();
             for(int i = 0; i < a.size(); i++) {
                 temp.add(a.get(i));
-                temp.add(b.get(i));
+                if(!temp.contains(b.get(i))){
+                    temp.add(b.get(i));
+                }
             }
             return temp;
         } else {
@@ -174,6 +176,113 @@ public class GraphiteGraphSettingsBuilder {
         madeSetting.setTitle(shortPoolName.toUpperCase() + "_POOL_SWAP_Usage");
         addSetting(env, pool, madeSetting);
 
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MSP_CPU_USER_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
+        madeSetting.setTitle("MSP_DATABASE_CPU_User_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MSP_CPU_SYSTEM_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
+        madeSetting.setTitle("MSP_DATABASE_CPU_System_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MSP_CPU_WAIT_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        madeSetting.setTitle("MSP_DATABASE_CPU_IO_Wait_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MSP_LOAD_AVG.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("Load_Average");
+        madeSetting.setTitle("MSP_DATABASE_Load_Average");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_USER_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
+        madeSetting.setTitle("NXGEN_DATABASE_CPU_User_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_SYSTEM_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
+        madeSetting.setTitle("NXGEN_DATABASE_CPU_System_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_WAIT_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        madeSetting.setTitle("NXGEN_DATABASE_CPU_IO_Wait_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_LOAD_AVG.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("Load_Average");
+        madeSetting.setTitle("NXGEN_DATABASE_Load_Average");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MONGODB_CPU_USER_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
+        madeSetting.setTitle("MongoDB_CPU_User_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MONGODB_CPU_SYSTEM_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
+        madeSetting.setTitle("MongoDB_CPU_System_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MONGODB_CPU_WAIT_USAGE.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
+        madeSetting.setTitle("MongoDB_CPU_IO_Wait_Usage");
+        addSetting(env, pool, madeSetting);
+
+        madeSetting = new GraphiteGraphSettings();
+        madeSetting.setTarget(GraphiteTargetEnum.MONGODB_LOAD_AVG.getTarget(env, pool));
+        madeSetting.setHost(IOPS_HOST);
+        madeSetting.setYMax("100");
+        madeSetting.setYMin("0");
+        madeSetting.setVerticalTitle("Load_Average");
+        madeSetting.setTitle("MongoDB_Load_Average");
+        addSetting(env, pool, madeSetting);
     }
 
     private void addSetting(String env, String pool, GraphiteGraphSettings setting) {
