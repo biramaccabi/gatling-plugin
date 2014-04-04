@@ -94,7 +94,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize_with_space+-+95th+percentile+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -126,7 +126,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+95th+percentile+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -158,7 +158,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=Global_Information+-+95th+percentile+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] {title,
             data, expectedGraphiteUrl } ;
     }
@@ -188,7 +188,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+min+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -219,7 +219,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+max+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -250,7 +250,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+mean+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -281,7 +281,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+standard+deviation+response+time" +
                 "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -312,7 +312,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                 "&from=-1months" +
                 "&title=authorize+-+requests+per+second" +
                 "&vtitle=Requests_per_second&vtitleRight=Percentage_KOs" +
-                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
         return new Object[] { title,
             data, expectedGraphiteUrl } ;
     }
@@ -433,7 +433,7 @@ public class GatlingProjectActionGraphiteUrlTest {
                     "yellow%22)%2C%22Release%20Branch%20Created%22)" +
                 "&width=586&height=308&lineMode=connected&from=" + currentTimeString +
                 "&title=Global_Information+-+requests+per+second&vtitle=Requests_per_second" +
-                "&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+                "&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
 
         prepareWithBuilds(builds, assertionDataList);
 

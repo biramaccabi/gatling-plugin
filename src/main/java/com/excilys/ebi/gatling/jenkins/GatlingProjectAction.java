@@ -88,7 +88,7 @@ public class GatlingProjectAction implements Action {
             "&width=586&height=308&lineMode=connected&from=${fromDateTime}&" +
             "title=${reqName}+-+${assertDescr}" +
             "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs" +
-            "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0";
+            "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
 
 
 	public GatlingProjectAction(AbstractProject<?, ?> project, String gatlingReportUrl) {
