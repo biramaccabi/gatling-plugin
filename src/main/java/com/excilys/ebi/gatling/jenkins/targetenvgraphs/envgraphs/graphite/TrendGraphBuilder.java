@@ -31,8 +31,7 @@ import java.util.regex.Pattern;
 
 public class TrendGraphBuilder {
 
-    private final SimpleDateFormat graphiteFromFormat;
-    private final Date fromDate;
+    private SimpleDateFormat graphiteFromFormat;
     private final Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
     private static final Logger logger = Logger.getLogger(TrendGraphBuilder.class.getName());
 
@@ -66,50 +65,38 @@ public class TrendGraphBuilder {
     }
 
 
-    public TrendGraphBuilder(Date fromDate){
-        this.fromDate = fromDate;
-        graphiteFromFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+    public TrendGraphBuilder(){
     }
 
-    public String getGraphiteUrlForAssertion(AssertionData assertionData) {
+    public String getGraphiteUrlForAssertion(Date fromDate, AssertionData assertionData) {
+        graphiteFromFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
         try{
             Map<String,String> values = new HashMap<String,String>();
             String env = getEnvFromProjectName(assertionData.projectName);
             if(env != null){
-                GRAPHITE_ASSERT_TYPE graphiteAssertionType = convertAssertionTypeFromGatlingToGraphite(
-                        assertionData.assertionType);
+                GRAPHITE_ASSERT_TYPE graphiteAssertionType =
+                        convertAssertionTypeFromGatlingToGraphite(assertionData.assertionType);
                 String performanceMetricLabel = "Response_Time_in_ms";
-                if((graphiteAssertionType != null) && (graphiteAssertionType != GRAPHITE_ASSERT_TYPE.ko)){
+                if(isPerformanceAssert(graphiteAssertionType)){
                     if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput){
                         performanceMetricLabel = "Requests_per_second";
                     }
                     values.put("env", URLEncoder.encode(env, "UTF-8"));
-                    values.put("simName",URLEncoder.encode(graphiteSanitize(assertionData.simulationName),"UTF-8"));
+                    values.put("simName",URLEncoder.encode(
+                            graphiteSanitize(assertionData.simulationName),"UTF-8"));
                     values.put("reqName",URLEncoder.encode(
-                            graphiteSanitize(gatlingRequestNameToGraphiteRequestName(assertionData.requestName)),"UTF-8"));
-                    values.put("assertName",URLEncoder.encode(graphiteAssertionType.name(),"UTF-8"));
-                    values.put("assertDescr",URLEncoder.encode(assertionData.assertionType,"UTF-8"));
-                    values.put("projName", URLEncoder.encode(assertionData.projectName,"UTF-8"));
+                            graphiteSanitize(gatlingRequestNameToGraphiteRequestName(
+                                    assertionData.requestName)),"UTF-8"));
+                    values.put("assertName",
+                            URLEncoder.encode(graphiteAssertionType.name(),"UTF-8"));
+                    values.put("assertDescr",
+                            URLEncoder.encode(assertionData.assertionType,"UTF-8"));
+                    values.put("projName",
+                            URLEncoder.encode(assertionData.projectName,"UTF-8"));
                     values.put("performanceMetricLabel", performanceMetricLabel);
-                    values.put("fromDateTime", convertDateToFromValue(this.fromDate));
+                    values.put("fromDateTime", convertDateToFromValue(fromDate));
                     StrSubstitutor sub = new StrSubstitutor(values);
-                    String urlTemplate = "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&" +
-                            "target=alias(color(secondYAxis(" +
-                            "load.summary.${env}.${simName}.${reqName}.ko.percent" +
-                            ")%2C%22red%22)%2C%22percent%20KOs%22)" +
-                            "&target=alias(" +
-                            "load.summary.${env}.${simName}.${reqName}.all.${assertName}%2C%22${assertDescr}%22" +
-                            ")" +
-                            "&target=alias(" +
-                            "load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22performance+assert+threshold%22" +
-                            ")" +
-                            "&target=alias(color(lineWidth(drawAsInfinite(integral(" +
-                            "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
-                            ")" +
-                            "&width=586&height=308&lineMode=connected&from=${fromDateTime}&" +
-                            "title=${reqName}+-+${assertDescr}" +
-                            "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs" +
-                            "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
+                    String urlTemplate = getUrlTemplate();
                     return sub.replace(urlTemplate);
                 }
             }
@@ -119,16 +106,43 @@ public class TrendGraphBuilder {
         return null;
     }
 
+    private String getUrlTemplate() {
+        return "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&" +
+        "target=alias(color(secondYAxis(" +
+        "load.summary.${env}.${simName}.${reqName}.ko.percent" +
+        ")%2C%22red%22)%2C%22percent%20KOs%22)" +
+        "&target=alias(" +
+        "load.summary.${env}.${simName}.${reqName}.all.${assertName}%2C%22${assertDescr}%22" +
+        ")" +
+        "&target=alias(" +
+        "load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22" +
+                "performance+assert+threshold%22" +
+        ")" +
+        "&target=alias(color(lineWidth(drawAsInfinite(integral(" +
+        "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22" +
+        ")" +
+        "&width=586&height=308&lineMode=connected&from=${fromDateTime}&" +
+        "title=${reqName}+-+${assertDescr}" +
+        "&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs" +
+        "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&" +
+                "uniqueLegend=true";
+    }
+
+    private boolean isPerformanceAssert(GRAPHITE_ASSERT_TYPE graphiteAssertionType) {
+        return (graphiteAssertionType != null) &&
+                (graphiteAssertionType != GRAPHITE_ASSERT_TYPE.ko);
+    }
+
     private String convertDateToFromValue(Date inputDate) {
         try {
             return graphiteFromFormat.format(inputDate);
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Failed to find date/time of oldest build for project.  Defaulting range to -1 month", e);
+            logger.log(Level.WARNING,
+                    "Failed to find date/time of oldest build for project.  " +
+                            "Defaulting range to -1 month", e);
             return "-1months";
         }
     }
-
-
 
     private String getEnvFromProjectName(String projectName) {
         Matcher matcher = envPattern.matcher(projectName);
@@ -156,7 +170,8 @@ public class TrendGraphBuilder {
         try{
             return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
         }catch(Exception ex){
-            logger.log(Level.WARNING, "Failed to convert gatling type " + assertionType + " to graphite type.", ex);
+            logger.log(Level.WARNING, "Failed to convert gatling type " + assertionType +
+                    " to graphite type.", ex);
         }
         return null;
     }

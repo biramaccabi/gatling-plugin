@@ -15,52 +15,50 @@
  */
 
 import com.excilys.ebi.gatling.jenkins.AssertionData;
-import com.excilys.ebi.gatling.jenkins.BuildSimulation;
-import com.excilys.ebi.gatling.jenkins.GatlingBuildAction;
-import com.excilys.ebi.gatling.jenkins.GatlingProjectAction;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.util.RunList;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.TrendGraphBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 
 @RunWith(Parameterized.class)
-public class GatlingProjectActionGraphiteUrlTest {
+public class TrendGraphBuilderTest {
     private final String expectedUrl;
     private final AssertionData assertionData;
 
-    private AbstractProject<?, ?> project;
-    private GatlingProjectAction projectAction;
-
-    private String gatlingReportUrl = "0/charts";
     private static String expectedFromTime;
     private static Calendar expectedFromTimestamp;
+    private TrendGraphBuilder trendGraphBuild;
 
     @SuppressWarnings("UnusedParameters")
-    public GatlingProjectActionGraphiteUrlTest(String paramName, AssertionData assertionData, String expectedUrl){
+    public TrendGraphBuilderTest(String paramName, AssertionData assertionData, String expectedUrl){
         this.assertionData = assertionData;
         this.expectedUrl = expectedUrl;
     }
 
+    @Before
+    public void setup(){
+        trendGraphBuild = new TrendGraphBuilder();
+    }
+
+    @org.junit.Test
+    public void test_build_with_action_and_one_performance_assert(){
+        String graphiteUrl =
+                trendGraphBuild.getGraphiteUrlForAssertion(
+                        expectedFromTimestamp.getTime(),assertionData);
+        Assert.assertEquals(expectedUrl, graphiteUrl);
+    }
+
     @Parameterized.Parameters(name = "{0}")
     public static java.util.Collection<Object[]> data() {
-        if (expectedFromTimestamp == null) {
-            expectedFromTimestamp = Calendar.getInstance();
-            expectedFromTimestamp.add(Calendar.MONTH, -3);
-            SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
-            expectedFromTime = graphiteFormat.format(expectedFromTimestamp.getTime());
-        }
+        expectedFromTimestamp = Calendar.getInstance();
+        expectedFromTimestamp.add(Calendar.MONTH, -3);
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+        expectedFromTime = graphiteFormat.format(expectedFromTimestamp.getTime());
 
         Object[][] params = new Object[][] {
             param_OAuth2ForApi2Simulation_95th(),
@@ -339,8 +337,7 @@ public class GatlingProjectActionGraphiteUrlTest {
         data.scenerioName = "scenerioName";
         data.status = "false";
 
-        return new Object[] { title,
-            data, (String) null} ;
+        return new Object[] { title, data, null} ;
     }
 
     private static Object[] param_OAuth2ForApi2Simulation_unknown(){
@@ -356,52 +353,6 @@ public class GatlingProjectActionGraphiteUrlTest {
         data.scenerioName = "scenerioName";
         data.status = "false";
 
-        String expectedGraphiteUrl = null;
-        return new Object[] { title,
-            data, expectedGraphiteUrl } ;
-    }
-    @Before
-    public void setup(){
-        project = mock(AbstractProject.class);
-        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
-    }
-
-    private void prepareWithOneBuild(List<AssertionData> assertDataList) {
-        List<AbstractBuild> builds = new ArrayList<AbstractBuild>();
-        AbstractBuild build = mock(AbstractBuild.class);
-        stub(build.getTimestamp()).toReturn(expectedFromTimestamp);
-        stub(project.getFirstBuild()).toReturn(build);
-        builds.add(build);
-        prepareWithBuilds(builds, assertDataList);
-    }
-
-    private void prepareWithBuilds(List<AbstractBuild> builds, List<AssertionData> assertDataList){
-        RunList runList = mock(RunList.class);
-        projectAction = new GatlingProjectAction(project, gatlingReportUrl);
-        stub(runList.iterator()).toReturn(builds.iterator());
-        //noinspection unchecked
-        stub(project.getBuilds()).toReturn(runList);
-        if(builds.size() > 0){
-            AbstractBuild build = builds.get(0);
-            
-            GatlingBuildAction buildAction = new GatlingBuildAction(build,new ArrayList<BuildSimulation>(),assertDataList);
-            stub(build.getAction(GatlingBuildAction.class)).toReturn(buildAction);
-        }
-    }
-
-    @org.junit.Test
-    public void test_build_with_action_and_one_performance_assert(){
-        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
-        assertionDataList.add(assertionData);
-        prepareWithOneBuild(assertionDataList);
-
-        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
-        if(expectedUrl == null)
-            Assert.assertEquals(0, graphiteGraphUrls.size());
-        else{
-            Assert.assertEquals(1, graphiteGraphUrls.size());
-            String graphiteUrl = graphiteGraphUrls.get(0);
-            Assert.assertEquals(expectedUrl, graphiteUrl);
-        }
+        return new Object[] { title, data, null} ;
     }
 }

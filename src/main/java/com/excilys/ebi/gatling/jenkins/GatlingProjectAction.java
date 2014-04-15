@@ -30,10 +30,12 @@ public class GatlingProjectAction implements Action {
 
     private String gatlingReportUrl;
 	private final AbstractProject<?, ?> project;
+    protected TrendGraphBuilder trendGraphBuilder;
 
-	public GatlingProjectAction(AbstractProject<?, ?> project, String gatlingReportUrl) {
+    public GatlingProjectAction(AbstractProject<?, ?> project, String gatlingReportUrl) {
 		this.project = project;
         this.gatlingReportUrl = gatlingReportUrl;
+        this.trendGraphBuilder = new TrendGraphBuilder();
 	}
 
 	public String getIconFileName() {
@@ -52,7 +54,8 @@ public class GatlingProjectAction implements Action {
 		return project;
 	}
 
-	public boolean isVisible() {
+	@SuppressWarnings("UnusedDeclaration")
+    public boolean isVisible() {
 		for (AbstractBuild<?, ?> build : getProject().getBuilds()) {
 			GatlingBuildAction gatlingBuildAction = build.getAction(GatlingBuildAction.class);
 			if (gatlingBuildAction != null) {
@@ -62,7 +65,8 @@ public class GatlingProjectAction implements Action {
 		return false;
 	}
 
-	public Graph<Long> getDashboardGraph() {
+	@SuppressWarnings("UnusedDeclaration")
+    public Graph<Long> getDashboardGraph() {
 		return new Graph<Long>(project, MAX_BUILDS_TO_DISPLAY_DASHBOARD) {
 			@Override
 			public Long getValue(RequestReport requestReport) {
@@ -71,6 +75,7 @@ public class GatlingProjectAction implements Action {
 		};
 	}
 
+    @SuppressWarnings("UnusedDeclaration")
 	public Graph<Long> getMeanResponseTimeGraph() {
 		return new Graph<Long>(project, MAX_BUILDS_TO_DISPLAY) {
 			@Override
@@ -80,6 +85,7 @@ public class GatlingProjectAction implements Action {
 		};
 	}
 
+    @SuppressWarnings("UnusedDeclaration")
 	public Graph<Long> getPercentileResponseTimeGraph() {
 		return new Graph<Long>(project, MAX_BUILDS_TO_DISPLAY) {
 			@Override
@@ -89,6 +95,7 @@ public class GatlingProjectAction implements Action {
 		};
 	}
 
+    @SuppressWarnings("UnusedDeclaration")
 	public Graph<Long> getRequestKOPercentageGraph() {
 		return new Graph<Long>(project, MAX_BUILDS_TO_DISPLAY) {
 			@Override
@@ -98,6 +105,7 @@ public class GatlingProjectAction implements Action {
 		};
 	}
 
+    @SuppressWarnings("UnusedDeclaration")
 	public Map<AbstractBuild<?, ?>, List<String>> getReports() {
 		Map<AbstractBuild<?, ?>, List<String>> reports = new LinkedHashMap<AbstractBuild<?, ?>, List<String>>();
 
@@ -116,7 +124,7 @@ public class GatlingProjectAction implements Action {
 	}
 
 	public String getReportURL(int build, String simName) {
-		return new StringBuilder().append(build).append("/").append(URL_NAME).append("/report/").append(simName).toString();
+        return Integer.toString(build) + "/" + URL_NAME + "/report/" + simName;
 	}
 
     public List<String> getGraphiteGraphUrls() {
@@ -140,9 +148,8 @@ public class GatlingProjectAction implements Action {
                }
                Calendar timestamp = firstBuild.getTimestamp();
                Date time = timestamp.getTime();
-               TrendGraphBuilder builder = new TrendGraphBuilder(time);
                for(AssertionData assertionData : assertionDataList){
-                   String url = builder.getGraphiteUrlForAssertion(assertionData);
+                   String url = trendGraphBuilder.getGraphiteUrlForAssertion(time, assertionData);
                    if(url != null){
                        retVal.add(url);
                    }
