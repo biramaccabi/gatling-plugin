@@ -64,14 +64,17 @@ public class TrendGraphBuilderTest {
 
         String expectedRootUrl = "http://tre-stats.internal.shutterfly.com/render?";
         String expectedKOTarget =
-                "target=alias(color(secondYAxis(load.summary.foxtrot.oauth2forapi2simulation." +
-                "authorize.ko.percent)%2C%22red%22)%2C%22percent%20KOs%22)";
-        String expectedPerformanceStatTarget = "target=alias(load.summary.foxtrot." +
-                "oauth2forapi2simulation.authorize.all." +
-                "percentiles95%2C%2295th+percentile+response+time%22)";
+                "target=alias(color(secondYAxis(summarize(load.summary.foxtrot." +
+                        "oauth2forapi2simulation.authorize.ko.percent,%221day%22," +
+                        "%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)";
+        String expectedPerformanceStatTarget =
+                "target=alias(summarize(load.summary.foxtrot.oauth2forapi2simulation." +
+                        "authorize.all.percentiles95,%221day%22,%22max%22)%2C%22" +
+                        "95th+percentile+response+time%22)";
         String expectedPerformanceAssertThresholdTarget =
-                "target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all." +
-                "expected.percentiles95%2C%22performance+assert+threshold%22)";
+                "target=alias(summarize(load.summary.foxtrot.oauth2forapi2simulation.authorize." +
+                        "all.expected.percentiles95,%221day%22,%22max%22)" +
+                        "%2C%22performance+assert+threshold%22)";
         String expectedReleaseBranchTarget =
                 "target=alias(color(lineWidth(drawAsInfinite(integral(" +
                 "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22" +
@@ -263,4 +266,25 @@ public class TrendGraphBuilderTest {
                 trendGraphBuilder.buildValuesForTemplate(null, assertionData);
         assertEquals("-1months", values.get("fromDateTime"));
     }
+
+    @Test
+    public void test_buildValuesForTemplate_performanceStatSummarizeMethod_throughput()
+            throws UnsupportedEncodingException {
+        assertionData.assertionType = "requests per second";
+        final Map<String, String> values =
+                trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData);
+        assertEquals("min",
+                values.get("performanceStatSummarizeMethod"));
+    }
+
+    @Test
+    public void test_buildValuesForTemplate_performanceStatSummarizeMethod_p95()
+            throws UnsupportedEncodingException {
+        assertionData.assertionType = "95th percentile response time";
+        final Map<String, String> values =
+                trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData);
+        assertEquals("max",
+                values.get("performanceStatSummarizeMethod"));
+    }
+
 }

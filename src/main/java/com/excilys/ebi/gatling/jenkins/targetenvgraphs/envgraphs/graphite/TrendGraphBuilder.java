@@ -34,14 +34,15 @@ public class TrendGraphBuilder {
     protected static final String ROOT_GRAPHITE_URL =
             "http://tre-stats.internal.shutterfly.com/render?";
     protected static final String KO_TARGET = "target=alias(color(secondYAxis(" +
-            "load.summary.${env}.${simName}.${reqName}.ko.percent" +
-            ")%2C%22red%22)%2C%22percent%20KOs%22)";
+            "summarize(load.summary.${env}.${simName}.${reqName}.ko.percent" +
+            ",%221day%22,%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)";
     protected static final String PERFORMANCE_STAT_TARGET =
-            "target=alias(load.summary.${env}.${simName}.${reqName}" +
-            ".all.${assertName}%2C%22${assertDescr}%22)";
+            "target=alias(summarize(load.summary.${env}.${simName}.${reqName}" +
+            ".all.${assertName},%221day%22,%22${performanceStatSummarizeMethod}%22)" +
+                    "%2C%22${assertDescr}%22)";
     protected static final String PERFORMANCE_ASSERT_THRESHOLD_TARGET =
-            "target=alias(load.summary.${env}.${simName}.${reqName}." +
-            "all.expected.${assertName}%2C%22" +
+            "target=alias(summarize(load.summary.${env}.${simName}.${reqName}." +
+            "all.expected.${assertName},%221day%22,%22${performanceStatSummarizeMethod}%22)%2C%22" +
             "performance+assert+threshold%22" +
             ")";
     protected static final String RELEASE_BRANCH_TARGET =
@@ -155,6 +156,10 @@ public class TrendGraphBuilder {
                     setUrlEncodedValue(values, "projName", assertionData.projectName);
                     setUrlEncodedValue(values, "performanceMetricLabel", performanceMetricLabel);
                     setUrlEncodedValue(values, "fromDateTime", convertDateToFromValue(fromDate));
+                    if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput)
+                        setUrlEncodedValue(values, "performanceStatSummarizeMethod", "min");
+                    else
+                        setUrlEncodedValue(values, "performanceStatSummarizeMethod", "max");
                     return values;
                 }
             }
