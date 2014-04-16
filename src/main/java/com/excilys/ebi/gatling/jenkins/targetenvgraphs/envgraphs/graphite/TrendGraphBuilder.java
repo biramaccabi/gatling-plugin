@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 public class TrendGraphBuilder {
 
     protected static final String ROOT_GRAPHITE_URL =
-            "http://tre-stats.internal.shutterfly.com/render/?_salt=1384804572.787&";
+            "http://tre-stats.internal.shutterfly.com/render?";
     protected static final String KO_TARGET = "target=alias(color(secondYAxis(" +
             "load.summary.${env}.${simName}.${reqName}.ko.percent" +
             ")%2C%22red%22)%2C%22percent%20KOs%22)";

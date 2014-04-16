@@ -39,6 +39,7 @@ public class TrendGraphBuilderTest {
     private AssertionData assertionData;
     private Date expectedFromDate;
     private String expectedFromTime;
+    private String expectedGraphiteUrl;
 
     @Before
     public void setup() throws UnsupportedEncodingException {
@@ -54,12 +55,44 @@ public class TrendGraphBuilderTest {
         assertionData.assertionType = "95th percentile response time";
         assertionData.expectedValue = "expectedValue";
         assertionData.message = "authorize 95th percentile response time is less than 1000";
-        assertionData.projectName = "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
+        assertionData.projectName =
+                "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
         assertionData.requestName = "authorize";
         assertionData.simulationName = "oauth2forapi2simulation";
         assertionData.scenerioName = "scenerioName";
         assertionData.status = "false";
 
+        String expectedRootUrl = "http://tre-stats.internal.shutterfly.com/render?";
+        String expectedKOTarget =
+                "target=alias(color(secondYAxis(load.summary.foxtrot.oauth2forapi2simulation." +
+                "authorize.ko.percent)%2C%22red%22)%2C%22percent%20KOs%22)";
+        String expectedPerformanceStatTarget = "target=alias(load.summary.foxtrot." +
+                "oauth2forapi2simulation.authorize.all." +
+                "percentiles95%2C%2295th+percentile+response+time%22)";
+        String expectedPerformanceAssertThresholdTarget =
+                "target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize.all." +
+                "expected.percentiles95%2C%22performance+assert+threshold%22)";
+        String expectedReleaseBranchTarget =
+                "target=alias(color(lineWidth(drawAsInfinite(integral(" +
+                "sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22" +
+                "Release%20Branch%20Created%22)";
+        String expectedRenderOptions =
+                "width=586&height=308&lineMode=connected&from=" + expectedFromTime +
+                "&title=authorize+-+95th+percentile+response+time" +
+                "&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs" +
+                "&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100" +
+                "&yMinRight=0&hideLegend=false&uniqueLegend=true";
+        expectedGraphiteUrl = expectedRootUrl + expectedKOTarget + "&" +
+                expectedPerformanceStatTarget + "&" + expectedPerformanceAssertThresholdTarget +
+                "&" + expectedReleaseBranchTarget + "&" + expectedRenderOptions;
+
+
+    }
+
+    @Test
+    public void test_getGraphiteUrlForAssertion_generates_expected_url(){
+        assertEquals(expectedGraphiteUrl,
+                trendGraphBuilder.getGraphiteUrlForAssertion(expectedFromDate, assertionData));
     }
 
     @Test
@@ -94,7 +127,8 @@ public class TrendGraphBuilderTest {
 
     @Test
     public void test_getPerformanceStatTarget(){
-        assertEquals(TrendGraphBuilder.PERFORMANCE_STAT_TARGET, trendGraphBuilder.getPerformanceStatTarget());
+        assertEquals(TrendGraphBuilder.PERFORMANCE_STAT_TARGET,
+                trendGraphBuilder.getPerformanceStatTarget());
     }
 
     @Test
@@ -223,7 +257,8 @@ public class TrendGraphBuilderTest {
     }
 
     @Test
-    public void test_buildValuesForTemplate_fromDateTime_nullDate() throws UnsupportedEncodingException {
+    public void test_buildValuesForTemplate_fromDateTime_nullDate()
+            throws UnsupportedEncodingException {
         final Map<String, String> values =
                 trendGraphBuilder.buildValuesForTemplate(null, assertionData);
         assertEquals("-1months", values.get("fromDateTime"));
