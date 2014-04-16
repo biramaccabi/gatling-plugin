@@ -62,6 +62,23 @@ public class GatlingProjectActionTest{
     }
 
     @Test
+    public void test_with_build_builderThrowsException(){
+        AssertionData assertionData = new AssertionData();
+
+        List<AssertionData> assertionDataList = new ArrayList<AssertionData>();
+        assertionDataList.add(assertionData);
+        prepareWithOneBuild(assertionDataList);
+        stub(mock_builder.getGraphiteUrlForAssertion((Date)anyObject(),
+                (AssertionData)anyObject())).toThrow(new RuntimeException("EX"));
+
+        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
+
+        verify(mock_builder, times(1)).getGraphiteUrlForAssertion(
+                eq(expectedFromTimestamp.getTime()), eq(assertionData));
+        Assert.assertEquals(0, graphiteGraphUrls.size());
+    }
+
+    @Test
     public void test_no_builds(){
         prepareWithBuilds(new ArrayList<AbstractBuild>(), null);
         Assert.assertEquals(0, projectAction.getGraphiteGraphUrls().size());

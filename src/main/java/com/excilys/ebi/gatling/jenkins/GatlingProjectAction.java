@@ -22,6 +22,8 @@ import hudson.model.AbstractProject;
 import hudson.model.Action;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.excilys.ebi.gatling.jenkins.PluginConstants.*;
 
@@ -149,7 +151,7 @@ public class GatlingProjectAction implements Action {
                Calendar timestamp = firstBuild.getTimestamp();
                Date time = timestamp.getTime();
                for(AssertionData assertionData : assertionDataList){
-                   String url = trendGraphBuilder.getGraphiteUrlForAssertion(time, assertionData);
+                   String url = generateGraphiteUrl(time, assertionData);
                    if(url != null){
                        retVal.add(url);
                    }
@@ -159,5 +161,15 @@ public class GatlingProjectAction implements Action {
            }
         }
         return null;
+    }
+
+    private String generateGraphiteUrl(Date time, AssertionData assertionData) {
+        try {
+            return trendGraphBuilder.getGraphiteUrlForAssertion(time, assertionData);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
+                    "Failed to generate graphite url", e);
+            return null;
+        }
     }
 }
