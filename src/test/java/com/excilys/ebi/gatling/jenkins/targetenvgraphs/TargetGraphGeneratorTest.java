@@ -31,42 +31,61 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TargetGraphGeneratorTest {
-    public static final String ENVIRONMENT_NAME = "foxtrot";
+    public static final String SFLY_ENVIRONMENT_NAME = "foxtrot";
+    public static final String TINYPRINTS_ENVIRONMENT_NAME = "lnp";
+    public static final String SFLY_BRAND_NAME = "sfly";
+    public static final String TINYPRINTS_BRAND_NAME = "TP";
     public static final String POOL_NAME = "appserver";
     @Mock
     BuildInfoBasedUrlGenerator buildInfoBasedUrlGenerator;
 
     @Mock
-    AbstractProject mockedProject;
+    AbstractProject mockedSflyProject;
 
     @Mock
-    AbstractBuild mockedBuild;
+    AbstractBuild mockedSflyBuild;
+
+    @Mock
+    AbstractProject mockedTinyPrintsProject;
+
+    @Mock
+    AbstractBuild mockedTinyPrintsBuild;
 
     @Before
     public void setup() {
         buildInfoBasedUrlGenerator = mock(BuildInfoBasedUrlGenerator.class);
 
-        mockedBuild = mock(AbstractBuild.class);
-        mockedProject = mock(AbstractProject.class);
-        when(mockedProject.getName()).thenReturn("Web_Performance_Tests-"
-                + ENVIRONMENT_NAME + "-" + POOL_NAME + "_SomeSimulation");
-        when(mockedBuild.getProject()).thenReturn(mockedProject);
-        when(mockedBuild.getTimestamp()).thenReturn(this.getStartTime());
-        when(mockedBuild.getDuration()).thenReturn(this.getDuration());
+        mockedSflyBuild = mock(AbstractBuild.class);
+        mockedSflyProject = mock(AbstractProject.class);
+        when(mockedSflyProject.getName()).thenReturn("Web_Performance_Tests-"
+                + SFLY_ENVIRONMENT_NAME + "-" + POOL_NAME + "_SomeSimulation");
+        when(mockedSflyBuild.getProject()).thenReturn(mockedSflyProject);
+        when(mockedSflyBuild.getTimestamp()).thenReturn(this.getStartTime());
+        when(mockedSflyBuild.getDuration()).thenReturn(this.getDuration());
+
+
+        mockedTinyPrintsBuild = mock(AbstractBuild.class);
+        mockedTinyPrintsProject = mock(AbstractProject.class);
+        when(mockedTinyPrintsProject.getName()).thenReturn("Web_Performance_Tests-"
+                + TINYPRINTS_BRAND_NAME +"-" +TINYPRINTS_ENVIRONMENT_NAME + "-" + POOL_NAME + "_SomeSimulation");
+        when(mockedTinyPrintsBuild.getProject()).thenReturn(mockedTinyPrintsProject);
+        when(mockedTinyPrintsBuild.getTimestamp()).thenReturn(this.getStartTime());
+        when(mockedTinyPrintsBuild.getDuration()).thenReturn(this.getDuration());
 
     }
 
     @Test
-    public void testGetGraphUrls() {
+    public void testGetSflyGraphUrls() {
         TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
         targetGraphGenerator.envPoolUrlGenerator = buildInfoBasedUrlGenerator;
 
-        targetGraphGenerator.getGraphUrls(mockedBuild);
+        targetGraphGenerator.getGraphUrls(mockedSflyBuild);
 
         BuildInfoForTargetEnvGraph expectedCriteria = new BuildInfoForTargetEnvGraph();
         expectedCriteria.setBuildDuration(this.getDuration());
-        expectedCriteria.setEnvironmentName(ENVIRONMENT_NAME);
+        expectedCriteria.setEnvironmentName(SFLY_ENVIRONMENT_NAME);
         expectedCriteria.setPoolName(POOL_NAME);
+        expectedCriteria.setBrandName(SFLY_BRAND_NAME);
         expectedCriteria.setBuildStartTime(this.getStartTime());
 
         verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
@@ -74,28 +93,66 @@ public class TargetGraphGeneratorTest {
     }
 
     @Test
-    public void testPoolParsing() {
-        //TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
+    public void testGetTinyPrintsGraphUrls() {
+        TargetGraphGenerator targetGraphGenerator = new TargetGraphGenerator();
+        targetGraphGenerator.envPoolUrlGenerator = buildInfoBasedUrlGenerator;
 
-        for (Map.Entry<String, String> stringStringEntry : getProjectToPoolMap().entrySet()) {
+        targetGraphGenerator.getGraphUrls(mockedTinyPrintsBuild);
+
+        BuildInfoForTargetEnvGraph expectedCriteria = new BuildInfoForTargetEnvGraph();
+        expectedCriteria.setBuildDuration(this.getDuration());
+        expectedCriteria.setEnvironmentName(TINYPRINTS_ENVIRONMENT_NAME);
+        expectedCriteria.setPoolName(POOL_NAME);
+        expectedCriteria.setBuildStartTime(this.getStartTime());
+        expectedCriteria.setBrandName(TINYPRINTS_BRAND_NAME.toLowerCase());
+
+        // not called because we are actively blocking TP brand in TargetGraphGenerator
+        // verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
+
+    }
+
+    @Test
+    public void testSflyPoolParsing() {
+
+        for (Map.Entry<String, String> stringStringEntry : getSflyProjectToPoolMap().entrySet()) {
             Map.Entry pairs = (Map.Entry) stringStringEntry;
             String projectName = (String) pairs.getKey();
             String expectedPool = (String) pairs.getValue();
 
-            mockedBuild = mock(AbstractBuild.class);
-            mockedProject = mock(AbstractProject.class);
-            when(mockedProject.getName()).thenReturn(projectName);
-            when(mockedBuild.getProject()).thenReturn(mockedProject);
-            when(mockedBuild.getTimestamp()).thenReturn(this.getStartTime());
-            when(mockedBuild.getDuration()).thenReturn(this.getDuration());
+            mockedSflyBuild = mock(AbstractBuild.class);
+            mockedSflyProject = mock(AbstractProject.class);
+            when(mockedSflyProject.getName()).thenReturn(projectName);
+            when(mockedSflyBuild.getProject()).thenReturn(mockedSflyProject);
+            when(mockedSflyBuild.getTimestamp()).thenReturn(this.getStartTime());
+            when(mockedSflyBuild.getDuration()).thenReturn(this.getDuration());
 
 
-            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedBuild));
+            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedSflyBuild));
 
         }
     }
 
-    private Map<String, String> getProjectToPoolMap() {
+    @Test
+    public void testTPPoolParsing() {
+
+        for (Map.Entry<String, String> stringStringEntry : getTPProjectToPoolMap().entrySet()) {
+            Map.Entry pairs = (Map.Entry) stringStringEntry;
+            String projectName = (String) pairs.getKey();
+            String expectedPool = (String) pairs.getValue();
+
+            mockedTinyPrintsBuild = mock(AbstractBuild.class);
+            mockedTinyPrintsProject = mock(AbstractProject.class);
+            when(mockedTinyPrintsProject.getName()).thenReturn(projectName);
+            when(mockedTinyPrintsBuild.getProject()).thenReturn(mockedTinyPrintsProject);
+            when(mockedTinyPrintsBuild.getTimestamp()).thenReturn(this.getStartTime());
+            when(mockedTinyPrintsBuild.getDuration()).thenReturn(this.getDuration());
+
+            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedTinyPrintsBuild));
+
+        }
+    }
+
+    private Map<String, String> getSflyProjectToPoolMap() {
         /*
         currently our naming convention for load test jobs in tre-jenkins is:
          Web_Performance_Tests-${ENV}-${SIMULATION_PACKAGE_AND_NAME}
@@ -131,6 +188,46 @@ public class TargetGraphGeneratorTest {
         resultMap.put("Web_Performance_Tests-foxtrot-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
         resultMap.put("Web_Performance_Tests-foxtrot-fakeserver_home_SomeSimulation", "fakeserver");
         resultMap.put("Web_Performance_Tests-foxtrot-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
+
+        return resultMap;
+    }
+
+    private Map<String, String> getTPProjectToPoolMap() {
+        /*
+        currently our naming convention for load test jobs in tre-jenkins is:
+         Web_Performance_Tests-${ENV}-${SIMULATION_PACKAGE_AND_NAME}
+
+         We are assuming ( <- bad sign) that the package name begins with the pool name.
+
+         Testing various ways of formatting the package name . _
+         */
+
+        Map<String, String> resultMap = new HashMap<String, String>();
+
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver.home.Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver_home_Some_Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver-home-Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver.home_Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver_home-Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-appserver-home.Some_Simulation", "appserver");
+
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver.home.Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver_home_Some_Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver-home-Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver.home_Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver_home-Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver-home.Some_Simulation", "apiserver");
+
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver.home.Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver_home_Some_Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver-home-Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver.home_Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver_home-Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver-home.Some_Simulation", "wsserver");
+
+        resultMap.put("Web_Performance_Tests-TP-lnp-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
+        resultMap.put("Web_Performance_Tests-TP-lnp-fakeserver_home_SomeSimulation", "fakeserver");
+        resultMap.put("Web_Performance_Tests-TP-lnp-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
 
         return resultMap;
     }

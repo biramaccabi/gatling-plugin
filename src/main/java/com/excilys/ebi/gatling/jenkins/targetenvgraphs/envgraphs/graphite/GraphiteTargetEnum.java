@@ -19,42 +19,42 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ServerPool;
 
 public enum GraphiteTargetEnum {
-    POOL_CPU_USER_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}." +
+    POOL_CPU_USER_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}." +
             "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_CPU_SYSTEM_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}." +
+    POOL_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}." +
             "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_CPU_IOWAIT_USAGE("sfly.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}." +
+    POOL_CPU_IOWAIT_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}." +
             "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_RAM_USAGE("sfly.{$env}.host.{$pool}.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.{$env}.host.{$pool}.*." +
+    POOL_RAM_USAGE("{$brand}.{$env}.host.{$pool}.*.memory.memory-{used%2C}.value%2Ccolor%28{$brand}.{$env}.host.{$pool}.*." +
             "memory.memory-buffered"),
-    POOL_SWAP_USAGE("sfly.{$env}.host.{$pool}.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.{$env}.host.{$pool}.*." +
+    POOL_SWAP_USAGE("{$brand}.{$env}.host.{$pool}.*.swap.swap-{used%2C}.value%2Ccolor%28{$brand}.{$env}.host.{$pool}.*." +
             "swap.swap-used"),
 
-    GC_MARK_SWEEP_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+    GC_MARK_SWEEP_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
             "heapUsagePercentage"),
-    GC_MARK_SWEEP_COLLECTION_TIME("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+    GC_MARK_SWEEP_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
             "collectionTime"),
 
-    GC_PAR_NEW_COLLECTION_TIME("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.collectionTime"),
-    GC_PAR_NEW_HEAP_USAGE("sfly.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
+    GC_PAR_NEW_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.collectionTime"),
+    GC_PAR_NEW_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
 
-    MSP_CPU_USER_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
-    MSP_CPU_SYSTEM_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
-    MSP_CPU_WAIT_USAGE("sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
+    MSP_CPU_USER_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
+    MSP_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
+    MSP_CPU_WAIT_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
 
-    MSP_LOAD_AVG("sfly.{$env}.host.oracle.*.load.load.*term"),
+    MSP_LOAD_AVG("{$brand}.{$env}.host.oracle.*.load.load.*term"),
 
-    NXGEN_CPU_USER_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
-    NXGEN_CPU_SYSTEM_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
-    NXGEN_CPU_WAIT_USAGE("sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+    NXGEN_CPU_USER_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+    NXGEN_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
+    NXGEN_CPU_WAIT_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
 
-    NXGEN_LOAD_AVG("sfly.{$env}.host.oracle-x86_64.*.load.load.*term"),
+    NXGEN_LOAD_AVG("{$brand}.{$env}.host.oracle-x86_64.*.load.load.*term"),
 
-    MONGODB_CPU_USER_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
-    MONGODB_CPU_SYSTEM_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
-    MONGODB_CPU_WAIT_USAGE("sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+    MONGODB_CPU_USER_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+    MONGODB_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
+    MONGODB_CPU_WAIT_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
 
-    MONGODB_LOAD_AVG("sfly.{$env}.host.mongodb.*.load.load.*term");
+    MONGODB_LOAD_AVG("{$brand}.{$env}.host.mongodb.*.load.load.*term");
 
     private final String target;
 
@@ -62,8 +62,8 @@ public enum GraphiteTargetEnum {
         this.target = target;
     }
 
-    public String getTarget(String env, String pool) {
-        return target.replace("{$env}", env).replace("{$pool}", getPoolShortNameFromPoolLongName(pool));
+    public String getTarget(String brand, String env, String pool) {
+        return target.replace("{$env}", env).replace("{$pool}", getPoolShortNameFromPoolLongName(pool)).replace("{$brand}",brand);
     }
 
     private String getPoolShortNameFromPoolLongName(String bigPool) {

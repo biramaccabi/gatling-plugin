@@ -20,17 +20,16 @@ import hudson.model.AbstractBuild;
 
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class TargetGraphGenerator {
 
-    private static final String PROJECT_NAME_REGEX = "^[^-]+-([^-]+)-+([^{\\-|_|\\.}]+).*?$";
-    private static final Pattern PROJECT_NAME_PATTERN = Pattern.compile(PROJECT_NAME_REGEX);
+    private static final int env_name_location_sfly = 1;
+    private static final int env_name_location_tinyprints = 2;
+    private static final int pool_name_location_sfly = 2;
+    private static final int pool_name_location_tinyprints = 3;
 
     BuildInfoBasedUrlGenerator envPoolUrlGenerator;
-
 
     public TargetGraphGenerator() {
         envPoolUrlGenerator =  new BuildInfoBasedUrlGenerator();
@@ -38,7 +37,12 @@ public class TargetGraphGenerator {
 
     public ArrayList<String> getGraphUrls(AbstractBuild<?, ?> build){
         BuildInfoForTargetEnvGraph criteria = getCriteriaFromBuild(build);
-        return envPoolUrlGenerator.getUrlsForCriteria(criteria);
+        // right here, we will block all calls for TP
+        if(criteria.getBrandName().equals(Brand.TINYPRINTS.name)){
+            return  new ArrayList<String>();
+        }else{
+            return envPoolUrlGenerator.getUrlsForCriteria(criteria);
+        }
     }
 
     private BuildInfoForTargetEnvGraph getCriteriaFromBuild(AbstractBuild build){
@@ -48,27 +52,75 @@ public class TargetGraphGenerator {
         result.setPoolName(getPoolFromBuild(build));
         result.setBuildStartTime(build.getTimestamp());
         result.setBuildDuration(build.getDuration());
+        result.setBrandName(getBrandFromBuild(build));
 
         return result;
     }
 
-
     static String getEnvFromBuild(AbstractBuild build) {
-        String projectName = build.getProject().getName();
-        Matcher matcher = PROJECT_NAME_PATTERN.matcher(projectName);
-        if(matcher.find()){
-            return matcher.group(1).toLowerCase();
+        if (isShutterflyProject(build)){
+            return getEnvFromShutterflyBuild(build);
+        } else {
+            return getEnvFromTinyPrintsBuild(build);
         }
-        return "";
     }
 
     static String getPoolFromBuild(AbstractBuild build) {
-        String projectName = build.getProject().getName();
-        Matcher matcher = PROJECT_NAME_PATTERN.matcher(projectName);
-        if(matcher.find()){
-            return matcher.group(2).toLowerCase();
+        if (isShutterflyProject(build)){
+            return getPoolFromShutterflyBuild(build);
+        } else {
+            return getPoolFromTinyPrintsBuild(build);
         }
-        return "";
+    }
+
+    static String getBrandFromBuild(AbstractBuild build) {
+        if(isShutterflyProject(build)){
+            return "sfly";
+        } else {
+            return "tp";
+        }
+
+    }
+
+    private static String getEnvFromShutterflyBuild(AbstractBuild build) {
+        String[] splices = spliceProjectNameByDash(build);
+        return splices[env_name_location_sfly];
+    }
+
+    private static String getEnvFromTinyPrintsBuild(AbstractBuild build) {
+        String[] splices = spliceProjectNameByDash(build);
+        return splices[env_name_location_tinyprints];
+    }
+
+    private static String getPoolFromShutterflyBuild(AbstractBuild build) {
+        return getPoolFromBuildByLocation(build, pool_name_location_sfly);
+    }
+
+    private static String getPoolFromTinyPrintsBuild(AbstractBuild build) {
+        return getPoolFromBuildByLocation(build, pool_name_location_tinyprints);
+    }
+
+    private static String getPoolFromBuildByLocation(AbstractBuild build, int location) {
+        String[] splices = spliceProjectNameByDash(build);
+        String longPoolName = splices[location];
+        return extractPoolShortNameFromLongName(longPoolName);
+    }
+
+    private static String extractPoolShortNameFromLongName(String longPoolName) {
+        String shortPoolName;
+        String[] splices = longPoolName.split("\\-|_|\\.");
+        shortPoolName = splices[0];
+        return shortPoolName.toLowerCase();
+    }
+
+    private static String[] spliceProjectNameByDash(AbstractBuild build) {
+        String projectName = build.getProject().getName();
+        return projectName.split("-");
+    }
+
+    private static boolean isShutterflyProject(AbstractBuild build) {
+        String projectName = getEnvFromShutterflyBuild(build);
+        return !projectName.equalsIgnoreCase("TP");
     }
 
 }

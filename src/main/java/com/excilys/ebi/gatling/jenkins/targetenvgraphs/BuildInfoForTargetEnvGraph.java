@@ -23,6 +23,7 @@ import java.util.Calendar;
 public class BuildInfoForTargetEnvGraph {
     private String envName;
     private String poolName;
+    private String brandName;
 
     private long buildDuration;
     private Calendar buildStartTime;
@@ -44,6 +45,14 @@ public class BuildInfoForTargetEnvGraph {
 
     public void setPoolName(String poolName) {
         this.poolName = poolName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getBrandName() {
+        return brandName;
     }
 
     public void setBuildDuration(Long duration) {
@@ -81,6 +90,7 @@ public class BuildInfoForTargetEnvGraph {
                     .append(buildStartTime,other.buildStartTime)
                     .append(envName, other.envName)
                     .append(poolName, other.poolName)
+                    .append(brandName, other.brandName)
                     .isEquals();
         } else {
             return false;
@@ -94,6 +104,7 @@ public class BuildInfoForTargetEnvGraph {
                 .append(poolName)
                 .append(buildDuration)
                 .append(buildStartTime)
+                .append(brandName)
                 .toHashCode();
     }
 

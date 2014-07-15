@@ -32,38 +32,58 @@ import static org.mockito.Mockito.when;
 public class GraphCriteriaBasedUrlGeneratorTest {
 
     @Mock
-    BuildInfoForTargetEnvGraph supportedEnvPoolCriteria;
+    BuildInfoForTargetEnvGraph supportedSflyEnvPoolCriteria;
+    @Mock
+    BuildInfoForTargetEnvGraph supportedTPEnvPoolCriteria;
 
     @Mock
-    BuildInfoForTargetEnvGraph unsupportedEnvPoolCriteria;
+    BuildInfoForTargetEnvGraph unsupportedSflyEnvPoolCriteria;
+    @Mock
+    BuildInfoForTargetEnvGraph unsupportedTPEnvPoolCriteria;
 
     @Before
     public void setup() {
-        supportedEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
-        when(supportedEnvPoolCriteria.getEnvironmentName()).thenReturn("foxtrot");
-        when(supportedEnvPoolCriteria.getPoolName()).thenReturn("appserver");
+        supportedSflyEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(supportedSflyEnvPoolCriteria.getEnvironmentName()).thenReturn("foxtrot");
+        when(supportedSflyEnvPoolCriteria.getPoolName()).thenReturn("appserver");
+        when(supportedSflyEnvPoolCriteria.getBrandName()).thenReturn("sfly");
+        when(supportedSflyEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(supportedSflyEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
 
-        when(supportedEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
-        when(supportedEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
+        supportedTPEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(supportedTPEnvPoolCriteria.getEnvironmentName()).thenReturn("lnp");
+        when(supportedTPEnvPoolCriteria.getPoolName()).thenReturn("appserver");
+        when(supportedTPEnvPoolCriteria.getBrandName()).thenReturn("tp");
+        when(supportedTPEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(supportedTPEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
 
-        unsupportedEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
-        when(unsupportedEnvPoolCriteria.getEnvironmentName()).thenReturn("fakeenv");
-        when(unsupportedEnvPoolCriteria.getPoolName()).thenReturn("fakeserver");
 
-        when(unsupportedEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
-        when(unsupportedEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
+        unsupportedSflyEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(unsupportedSflyEnvPoolCriteria.getEnvironmentName()).thenReturn("fakeenv");
+        when(unsupportedSflyEnvPoolCriteria.getPoolName()).thenReturn("fakeserver");
+        when(unsupportedSflyEnvPoolCriteria.getBrandName()).thenReturn("sfly");
+        when(unsupportedSflyEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(unsupportedSflyEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
+
+        unsupportedTPEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
+        when(unsupportedTPEnvPoolCriteria.getEnvironmentName()).thenReturn("fakeenv");
+        when(unsupportedTPEnvPoolCriteria.getPoolName()).thenReturn("fakeserver");
+        when(unsupportedTPEnvPoolCriteria.getBrandName()).thenReturn("tp");
+        when(unsupportedTPEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
+        when(unsupportedTPEnvPoolCriteria.getGraphStartTime()).thenReturn(getStartTime());
     }
 
     @org.junit.Test
-    public void testGetGraphUrlsForSupportedEnvPool() {
+    public void testGetGraphUrlsForSupportedSflyEnvPool() {
         BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
-        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedEnvPoolCriteria);
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedSflyEnvPoolCriteria);
 
-        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4.  21 Total.";
-        Assert.assertEquals(sizeAssertString, 21, graphUrls.size());
+        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4. 21 Total.";
+        int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
+        Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
-        ArrayList<String> expectedUrls = getListFoxtrotAppUrls();
+        ArrayList<String> expectedUrls = getListFoxtrotAppUrls("sfly","foxtrot","app");
 
         for(String url: graphUrls) {
             Assert.assertTrue(expectedUrls.contains(url));
@@ -75,14 +95,43 @@ public class GraphCriteriaBasedUrlGeneratorTest {
     }
 
     @org.junit.Test
-    public void testGetGraphUrlsForUnsupportedEnvPool() {
+    public void testGetGraphUrlsForSupportedTPEnvPool() {
         BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
 
-        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(unsupportedEnvPoolCriteria);
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedTPEnvPoolCriteria);
+
+        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4. 21 Total.";
+        int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
+        Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
+
+        ArrayList<String> expectedUrls = getListFoxtrotAppUrls("tp", "lnp", "app");
+
+        for(String url: graphUrls) {
+            Assert.assertTrue(expectedUrls.contains(url));
+        }
+
+        for(String expectedURl: expectedUrls) {
+            Assert.assertTrue(graphUrls.contains(expectedURl));
+        }
+    }
+
+    @org.junit.Test
+    public void testGetGraphUrlsForUnsupportedSflyEnvPool() {
+        BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
+
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(unsupportedSflyEnvPoolCriteria);
 
         Assert.assertEquals("should come back with 0, when looking for an unsupported env/pool combo", 0, graphUrls.size());
     }
 
+    @org.junit.Test
+    public void testGetGraphUrlsForUnsupportedTPEnvPool() {
+        BuildInfoBasedUrlGenerator testGenerator = new BuildInfoBasedUrlGenerator();
+
+        ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(unsupportedSflyEnvPoolCriteria);
+
+        Assert.assertEquals("should come back with 0, when looking for an unsupported env/pool combo", 0, graphUrls.size());
+    }
     private Calendar getStartTime() {
         Calendar startTime = Calendar.getInstance();
         // set date to Jan 1, 2000 at 8:00 am
@@ -99,53 +148,53 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         return endTime;
     }
 
-    private ArrayList<String> getListFoxtrotAppUrls() {
-        String foxtrotGCMarkSweepHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
-        String foxtrotGCMarkSweepCollectionUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime&vtitle=collection_time_in_ms&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime";
-        String foxtrotGCParNewHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
-        String foxtrotGCParNewCollectionTimeUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.collectionTime&vtitle=collection_time_in_ms&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.collectionTime";
-        String foxtrotAppCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
-        String foxtrotAppCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_System_Usage";
-        String foxtrotAppCpuIOWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_IO_Wait_Usage";
-        String foxtrotAppRamUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.memory.memory-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.memory.memory-buffered&vtitle=Amount_RAM_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_RAM_Usage";
-        String foxtrotAppSwapUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.swap.swap-{used%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.swap.swap-used&vtitle=Amount_SWAP_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_SWAP_Usage";
-        String foxtrotMspCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_User_Usage";
-        String foxtrotMspCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_System_Usage";
-        String foxtrotMspCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_IO_Wait_Usage";
-        String foxtrotMspLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_Load_Average";
+    private ArrayList<String> getListFoxtrotAppUrls(String brand, String env, String pool) {
+        String gcMarkSweepHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        String gcMarkSweepCollectionUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime&vtitle=collection_time_in_ms&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime";
+        String gcParNewHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
+        String gcParNewCollectionTimeUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.collectionTime&vtitle=collection_time_in_ms&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.collectionTime";
+        String poolCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
+        String poolCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_System_Usage";
+        String poolCpuIOWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host."+pool+".*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=APP_POOL_CPU_IO_Wait_Usage";
+        String poolRamUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.memory.memory-{used%2C}.value%2Ccolor%28"+brand+"."+env+".host."+pool+".*.memory.memory-buffered&vtitle=Amount_RAM_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_RAM_Usage";
+        String poolSwapUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.swap.swap-{used%2C}.value%2Ccolor%28"+brand+"."+env+".host."+pool+".*.swap.swap-used&vtitle=Amount_SWAP_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_SWAP_Usage";
+        String mspCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_User_Usage";
+        String mspCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_System_Usage";
+        String mspCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_IO_Wait_Usage";
+        String mspLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_Load_Average";
 
-        String foxtrotNxGenCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_User_Usage";
-        String foxtrotNxGenCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_System_Usage";
-        String foxtrotNxGenCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_IO_Wait_Usage";
-        String foxtrotNxGenLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.oracle-x86_64.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_Load_Average";
+        String nxgenCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_User_Usage";
+        String nxgenCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_System_Usage";
+        String nxgenCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_IO_Wait_Usage";
+        String nxgenLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_Load_Average";
 
-        String foxtrotMongoDBCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_User_Usage";
-        String foxtrotMongoDBCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_System_Usage";
-        String foxtrotMongoDBCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28sfly.foxtrot.host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_IO_Wait_Usage";
-        String foxtrotMongoDBLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target=sfly.foxtrot.host.mongodb.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_Load_Average";
+        String mongoDBCpuUserUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_User_Usage";
+        String mongoDBCpuSystemUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_System_Usage";
+        String mongoDBCpuWaitUrl = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_IO_Wait_Usage";
+        String mongoDBLoadAvg = "http://graphite.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_Load_Average";
 
         ArrayList<String> list = new ArrayList<String>();
-        list.add(foxtrotGCMarkSweepHeapUsageUrl);
-        list.add(foxtrotGCMarkSweepCollectionUrl);
-        list.add(foxtrotGCParNewCollectionTimeUrl);
-        list.add(foxtrotGCParNewHeapUsageUrl);
-        list.add(foxtrotAppCpuUserUrl);
-        list.add(foxtrotAppCpuSystemUrl);
-        list.add(foxtrotAppCpuIOWaitUrl);
-        list.add(foxtrotAppRamUrl);
-        list.add(foxtrotAppSwapUrl);
-        list.add(foxtrotMspCpuUserUrl);
-        list.add(foxtrotMspCpuSystemUrl);
-        list.add(foxtrotMspCpuWaitUrl);
-        list.add(foxtrotMspLoadAvg);
-        list.add(foxtrotNxGenCpuUserUrl);
-        list.add(foxtrotNxGenCpuSystemUrl);
-        list.add(foxtrotNxGenCpuWaitUrl);
-        list.add(foxtrotNxGenLoadAvg);
-        list.add(foxtrotMongoDBCpuUserUrl);
-        list.add(foxtrotMongoDBCpuSystemUrl);
-        list.add(foxtrotMongoDBCpuWaitUrl);
-        list.add(foxtrotMongoDBLoadAvg);
+        list.add(gcMarkSweepHeapUsageUrl);
+        list.add(gcMarkSweepCollectionUrl);
+        list.add(gcParNewCollectionTimeUrl);
+        list.add(gcParNewHeapUsageUrl);
+        list.add(poolCpuUserUrl);
+        list.add(poolCpuSystemUrl);
+        list.add(poolCpuIOWaitUrl);
+        list.add(poolRamUrl);
+        list.add(poolSwapUrl);
+        list.add(mspCpuUserUrl);
+        list.add(mspCpuSystemUrl);
+        list.add(mspCpuWaitUrl);
+        list.add(mspLoadAvg);
+        list.add(nxgenCpuUserUrl);
+        list.add(nxgenCpuSystemUrl);
+        list.add(nxgenCpuWaitUrl);
+        list.add(nxgenLoadAvg);
+        list.add(mongoDBCpuUserUrl);
+        list.add(mongoDBCpuSystemUrl);
+        list.add(mongoDBCpuWaitUrl);
+        list.add(mongoDBLoadAvg);
         return list;
     }
 

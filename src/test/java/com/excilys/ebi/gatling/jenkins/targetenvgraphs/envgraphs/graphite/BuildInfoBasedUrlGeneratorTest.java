@@ -107,8 +107,7 @@ public class BuildInfoBasedUrlGeneratorTest {
 
 
     private Calendar getBuildStartTime() {
-        Calendar startTime = (Calendar) testStartTime.clone();
-        return startTime;
+        return (Calendar) testStartTime.clone();
     }
 
     private Calendar getBuildEndTime() {
@@ -133,8 +132,7 @@ public class BuildInfoBasedUrlGeneratorTest {
 
     private String buildDateTimeStringFromDate(Date date) {
         SimpleDateFormat graphiteFormat = new SimpleDateFormat(URL_DATE_FORMAT);
-        String result = graphiteFormat.format(date);
-        return result;
+        return graphiteFormat.format(date);
     }
 
     private long getDuration() {
@@ -144,7 +142,7 @@ public class BuildInfoBasedUrlGeneratorTest {
     private GraphiteGraphSettings getSettingWithoutYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
         appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
-        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("foxtrot","app"));
+        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("sfly","foxtrot","app"));
         appCpu.setYMax("");
         appCpu.setYMin("");
         appCpu.setTitle("APP_POOL_CPU_User_Usage");
@@ -154,14 +152,9 @@ public class BuildInfoBasedUrlGeneratorTest {
     }
 
     private GraphiteGraphSettings getSettingWithYMinYMax() {
-        GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
-        appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
-        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("foxtrot","app"));
+        GraphiteGraphSettings appCpu = getSettingWithoutYMinYMax();
         appCpu.setYMax("100");
         appCpu.setYMin("0");
-        appCpu.setTitle("APP_POOL_CPU_User_Usage");
-        appCpu.setVerticalTitle("CPU_Percent_User_Used");
-
         return appCpu;
     }
 
