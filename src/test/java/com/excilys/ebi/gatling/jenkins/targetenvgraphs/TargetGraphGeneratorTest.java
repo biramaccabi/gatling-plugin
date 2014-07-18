@@ -33,7 +33,6 @@ import static org.mockito.Mockito.*;
 public class TargetGraphGeneratorTest {
     public static final String SFLY_ENVIRONMENT_NAME = "foxtrot";
     public static final String TINYPRINTS_ENVIRONMENT_NAME = "lnp";
-    public static final String SFLY_BRAND_NAME = "sfly";
     public static final String TINYPRINTS_BRAND_NAME = "TP";
     public static final String POOL_NAME = "appserver";
     @Mock
@@ -85,7 +84,7 @@ public class TargetGraphGeneratorTest {
         expectedCriteria.setBuildDuration(this.getDuration());
         expectedCriteria.setEnvironmentName(SFLY_ENVIRONMENT_NAME);
         expectedCriteria.setPoolName(POOL_NAME);
-        expectedCriteria.setBrandName(SFLY_BRAND_NAME);
+        expectedCriteria.setBrand(Brand.SHUTTERFLY);
         expectedCriteria.setBuildStartTime(this.getStartTime());
 
         verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
@@ -104,132 +103,11 @@ public class TargetGraphGeneratorTest {
         expectedCriteria.setEnvironmentName(TINYPRINTS_ENVIRONMENT_NAME);
         expectedCriteria.setPoolName(POOL_NAME);
         expectedCriteria.setBuildStartTime(this.getStartTime());
-        expectedCriteria.setBrandName(TINYPRINTS_BRAND_NAME.toLowerCase());
+        expectedCriteria.setBrand(Brand.TINYPRINTS);
 
         // not called because we are actively blocking TP brand in TargetGraphGenerator
         // verify(buildInfoBasedUrlGenerator, times(1)).getUrlsForCriteria(expectedCriteria);
 
-    }
-
-    @Test
-    public void testSflyPoolParsing() {
-
-        for (Map.Entry<String, String> stringStringEntry : getSflyProjectToPoolMap().entrySet()) {
-            Map.Entry pairs = (Map.Entry) stringStringEntry;
-            String projectName = (String) pairs.getKey();
-            String expectedPool = (String) pairs.getValue();
-
-            mockedSflyBuild = mock(AbstractBuild.class);
-            mockedSflyProject = mock(AbstractProject.class);
-            when(mockedSflyProject.getName()).thenReturn(projectName);
-            when(mockedSflyBuild.getProject()).thenReturn(mockedSflyProject);
-            when(mockedSflyBuild.getTimestamp()).thenReturn(this.getStartTime());
-            when(mockedSflyBuild.getDuration()).thenReturn(this.getDuration());
-
-
-            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedSflyBuild));
-
-        }
-    }
-
-    @Test
-    public void testTPPoolParsing() {
-
-        for (Map.Entry<String, String> stringStringEntry : getTPProjectToPoolMap().entrySet()) {
-            Map.Entry pairs = (Map.Entry) stringStringEntry;
-            String projectName = (String) pairs.getKey();
-            String expectedPool = (String) pairs.getValue();
-
-            mockedTinyPrintsBuild = mock(AbstractBuild.class);
-            mockedTinyPrintsProject = mock(AbstractProject.class);
-            when(mockedTinyPrintsProject.getName()).thenReturn(projectName);
-            when(mockedTinyPrintsBuild.getProject()).thenReturn(mockedTinyPrintsProject);
-            when(mockedTinyPrintsBuild.getTimestamp()).thenReturn(this.getStartTime());
-            when(mockedTinyPrintsBuild.getDuration()).thenReturn(this.getDuration());
-
-            Assert.assertEquals(expectedPool, TargetGraphGenerator.getPoolFromBuild(mockedTinyPrintsBuild));
-
-        }
-    }
-
-    private Map<String, String> getSflyProjectToPoolMap() {
-        /*
-        currently our naming convention for load test jobs in tre-jenkins is:
-         Web_Performance_Tests-${ENV}-${SIMULATION_PACKAGE_AND_NAME}
-
-         We are assuming ( <- bad sign) that the package name begins with the pool name.
-
-         Testing various ways of formatting the package name . _
-         */
-
-        Map<String, String> resultMap = new HashMap<String, String>();
-
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home.Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home_Some_Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home-Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home_Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home-Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home.Some_Simulation", "appserver");
-
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home.Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home_Some_Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home-Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home_Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home-Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home.Some_Simulation", "apiserver");
-
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home.Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home_Some_Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home-Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home_Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home-Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home.Some_Simulation", "wsserver");
-
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
-        resultMap.put("Web_Performance_Tests-foxtrot-fakeserver_home_SomeSimulation", "fakeserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
-
-        return resultMap;
-    }
-
-    private Map<String, String> getTPProjectToPoolMap() {
-        /*
-        currently our naming convention for load test jobs in tre-jenkins is:
-         Web_Performance_Tests-${ENV}-${SIMULATION_PACKAGE_AND_NAME}
-
-         We are assuming ( <- bad sign) that the package name begins with the pool name.
-
-         Testing various ways of formatting the package name . _
-         */
-
-        Map<String, String> resultMap = new HashMap<String, String>();
-
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver.home.Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver_home_Some_Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver-home-Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver.home_Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver_home-Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-appserver-home.Some_Simulation", "appserver");
-
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver.home.Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver_home_Some_Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver-home-Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver.home_Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver_home-Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-apiserver-home.Some_Simulation", "apiserver");
-
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver.home.Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver_home_Some_Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver-home-Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver.home_Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver_home-Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserver-home.Some_Simulation", "wsserver");
-
-        resultMap.put("Web_Performance_Tests-TP-lnp-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
-        resultMap.put("Web_Performance_Tests-TP-lnp-fakeserver_home_SomeSimulation", "fakeserver");
-        resultMap.put("Web_Performance_Tests-TP-lnp-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
-
-        return resultMap;
     }
 
     private Calendar getStartTime() {

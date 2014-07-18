@@ -67,26 +67,27 @@ public class GraphiteGraphSettingsBuilder {
 
     private List<GraphiteGraphSettings> getGraphiteGraphSettings(String brand, String env, String pool) {
         Map<String, Map<String, List<GraphiteGraphSettings>>> environmentsForBrand = brandEnvPoolSettings.get(brand);
-        if(null != environmentsForBrand) {
+        if (null != environmentsForBrand) {
             Map<String, List<GraphiteGraphSettings>> poolsForEnvironments = environmentsForBrand.get(env);
-            if(null != poolsForEnvironments) {
+            if (null != poolsForEnvironments) {
                 List<GraphiteGraphSettings> result = poolsForEnvironments.get(pool);
-
-                if(shouldAlsoIncludeWSPool(pool)) {
-                    List<GraphiteGraphSettings> supplementalResults = poolsForEnvironments.get(ServerPool.WSSERVER.longName);
-                    if(null != result) {
-                        result = mergeAndSortGraphSettings(result, supplementalResults);
-                    } else {
-                        result = supplementalResults;
-                    }
-                }
-
-                if(null != result) {
-                    return result;
-                }
+                result = getSupplementalGraphsIfNeeded(pool, poolsForEnvironments, result);
+                return result;
             }
         }
         return null;
+    }
+
+    private List<GraphiteGraphSettings> getSupplementalGraphsIfNeeded(String pool, Map<String, List<GraphiteGraphSettings>> poolsForEnvironments, List<GraphiteGraphSettings> result) {
+        if(shouldAlsoIncludeWSPool(pool)) {
+            List<GraphiteGraphSettings> supplementalResults = poolsForEnvironments.get(ServerPool.WSSERVER.longName);
+            if(null != result) {
+                result = mergeAndSortGraphSettings(result, supplementalResults);
+            } else {
+                result = supplementalResults;
+            }
+        }
+        return result;
     }
 
     private List<GraphiteGraphSettings> mergeAndSortGraphSettings(List<GraphiteGraphSettings> a, List<GraphiteGraphSettings> b ) {

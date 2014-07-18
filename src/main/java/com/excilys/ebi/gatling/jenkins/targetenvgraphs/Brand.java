@@ -24,4 +24,15 @@ public enum Brand {
     private Brand(String name) {
         this.name = name;
     }
+
+    public static Brand getBrandFromName(String brandName) {
+        if(null != brandName && brandName.trim().length() > 0) {
+            for(Brand brand: Brand.values()) {
+                if(brandName.trim().equalsIgnoreCase(brand.name)) {
+                    return brand;
+                }
+            }
+        }
+        return null;
+    }
 }

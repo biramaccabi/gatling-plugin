@@ -66,14 +66,14 @@ public class BuildInfoForTargetEnvGraphTest {
         testCriteria.setBuildStartTime(startTime);
         testCriteria.setEnvironmentName("TestEnv");
         testCriteria.setPoolName("SwimmingPool");
-        testCriteria.setBrandName("sfly");
+        testCriteria.setBrand(Brand.SHUTTERFLY);
 
         BuildInfoForTargetEnvGraph expectedCriteria = new BuildInfoForTargetEnvGraph();
         expectedCriteria.setBuildDuration(duration);
         expectedCriteria.setBuildStartTime(startTime);
         expectedCriteria.setEnvironmentName("TestEnv");
         expectedCriteria.setPoolName("SwimmingPool");
-        expectedCriteria.setBrandName("sfly");
+        expectedCriteria.setBrand(Brand.SHUTTERFLY);
 
         Assert.assertTrue(expectedCriteria.equals(testCriteria));
         Assert.assertEquals(expectedCriteria.hashCode(), testCriteria.hashCode());

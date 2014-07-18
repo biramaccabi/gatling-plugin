@@ -15,18 +15,20 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Brand;
+
 public enum Environment {
-    FOXTROT("foxtrot", true),
-    STAGE("stage", true),
-    PROD("prod", true),
-    BETA("beta", true),
-    TPLNP("lnp", false);
+    FOXTROT("foxtrot", Brand.SHUTTERFLY),
+    STAGE("stage", Brand.SHUTTERFLY),
+    PROD("prod", Brand.SHUTTERFLY),
+    BETA("beta", Brand.SHUTTERFLY),
+    TPLNP("lnp", Brand.TINYPRINTS);
 
     public final String name;
-    public final boolean isSflyEnv;
+    public final Brand brand;
 
-    private Environment(String name, boolean isSflyEnv) {
+    private Environment(String name, Brand brand) {
         this.name = name;
-        this.isSflyEnv = isSflyEnv;
+        this.brand = brand;
     }
 }

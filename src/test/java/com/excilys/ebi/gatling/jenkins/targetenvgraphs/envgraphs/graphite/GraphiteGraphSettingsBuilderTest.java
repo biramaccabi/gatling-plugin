@@ -16,6 +16,7 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Brand;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Environment;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ServerPool;
@@ -45,10 +46,10 @@ public class GraphiteGraphSettingsBuilderTest {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
         for (Environment env : Environment.values()) {
-            if (env.isSflyEnv) {
+            if (env.brand.equals(Brand.SHUTTERFLY)) {
                 String envName = env.name;
 
-                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(SFLY, envName, SUPPORTED_POOL);
+                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(Brand.SHUTTERFLY, envName, SUPPORTED_POOL);
 
                 List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
@@ -69,10 +70,10 @@ public class GraphiteGraphSettingsBuilderTest {
     public void testGetDefinedSettingsWithSupplementalGraphsAllSflyEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
         for (Environment env : Environment.values()) {
-            if (env.isSflyEnv) {
+            if (env.brand.equals(Brand.SHUTTERFLY)) {
                 String envName = env.name;
 
-                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(SFLY, envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(Brand.SHUTTERFLY, envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
 
                 List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
@@ -94,10 +95,10 @@ public class GraphiteGraphSettingsBuilderTest {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
 
         for (Environment env : Environment.values()) {
-            if (!env.isSflyEnv) {
+            if (env.brand.equals(Brand.TINYPRINTS)) {
                 String envName = env.name;
 
-                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(TP, envName, SUPPORTED_POOL);
+                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(Brand.TINYPRINTS, envName, SUPPORTED_POOL);
 
                 List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
@@ -118,10 +119,10 @@ public class GraphiteGraphSettingsBuilderTest {
     public void testGetDefinedSettingsWithSupplementalGraphsAllTPEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
         for (Environment env : Environment.values()) {
-            if (!env.isSflyEnv) {
+            if (env.brand.equals(Brand.TINYPRINTS)) {
                 String envName = env.name;
 
-                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(TP, envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
+                BuildInfoForTargetEnvGraph inputCriteria = getBuildInfoForEnvPool(Brand.TINYPRINTS, envName, SUPPORTED_POOL_WITH_SUPPLEMENTAL);
 
                 List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
@@ -150,6 +151,7 @@ public class GraphiteGraphSettingsBuilderTest {
             inputCriteria.setPoolName(pool);
             inputCriteria.setBuildStartTime(getStartTime());
             inputCriteria.setBuildDuration(getDuration());
+            inputCriteria.setBrand(Brand.SHUTTERFLY);
 
             List<GraphiteGraphSettings> generatedSettings = testBuilder.getGraphiteGraphSettings(inputCriteria);
 
@@ -157,9 +159,9 @@ public class GraphiteGraphSettingsBuilderTest {
         }
     }
 
-    private BuildInfoForTargetEnvGraph getBuildInfoForEnvPool(String brand, String env, String pool) {
+    private BuildInfoForTargetEnvGraph getBuildInfoForEnvPool(Brand brand, String env, String pool) {
         BuildInfoForTargetEnvGraph inputCriteria = new BuildInfoForTargetEnvGraph();
-        inputCriteria.setBrandName(brand);
+        inputCriteria.setBrand(brand);
         inputCriteria.setEnvironmentName(env);
         inputCriteria.setPoolName(pool);
         inputCriteria.setBuildStartTime(getStartTime());
