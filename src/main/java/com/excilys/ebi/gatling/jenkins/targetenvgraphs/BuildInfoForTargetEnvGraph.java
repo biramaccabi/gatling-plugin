@@ -51,6 +51,10 @@ public class BuildInfoForTargetEnvGraph {
         this.brand = brand;
     }
 
+    public Brand getBrand() {
+        return this.brand;
+    }
+
     public String getBrandName() {
         return brand.name;
     }

@@ -32,7 +32,7 @@ public class TargetGraphGenerator {
     public ArrayList<String> getGraphUrls(AbstractBuild<?, ?> build){
         BuildInfoForTargetEnvGraph criteria = getCriteriaFromBuild(build);
         // right here, we will block all calls for TP
-        if(Brand.getBrandFromName(criteria.getBrandName()).equals(Brand.TINYPRINTS)){
+        if(criteria.getBrand().equals(Brand.TINYPRINTS)){
             return  new ArrayList<String>();
         }else{
             return envPoolUrlGenerator.getUrlsForCriteria(criteria);
