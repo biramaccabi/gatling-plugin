@@ -42,13 +42,13 @@ public class TargetGraphGenerator {
     private BuildInfoForTargetEnvGraph getCriteriaFromBuild(AbstractBuild build){
         BuildInfoForTargetEnvGraph result = new BuildInfoForTargetEnvGraph();
 
-        ProjectNameParser projectNameParser = new ProjectNameParser();
+        ProjectNameParser projectNameParser = new ProjectNameParser(build.getProject().getName());
 
-        result.setEnvironmentName(projectNameParser.getEnvFromBuild(build));
-        result.setPoolName(projectNameParser.getPoolFromBuild(build));
+        result.setEnvironmentName(projectNameParser.getEnv());
+        result.setPoolName(projectNameParser.getPool());
         result.setBuildStartTime(build.getTimestamp());
         result.setBuildDuration(build.getDuration());
-        result.setBrand(projectNameParser.getBrandFromBuild(build));
+        result.setBrand(projectNameParser.getBrand());
 
         return result;
     }

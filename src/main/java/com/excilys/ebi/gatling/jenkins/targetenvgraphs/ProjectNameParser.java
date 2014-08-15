@@ -15,33 +15,36 @@
  */
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 
-import hudson.model.AbstractBuild;
-
 public class ProjectNameParser {
 
     private static final int ENV_NAME_LOCATION_SFLY = 1;
     private static final int ENV_NAME_LOCATION_TINYPRINTS = 2;
     private static final int POOL_NAME_LOCATION_SFLY = 2;
     private static final int POOL_NAME_LOCATION_TINYPRINTS = 3;
+    private final String projectName;
 
-    public String getEnvFromBuild(AbstractBuild build) {
-        if (isShutterflyProject(build)) {
-            return getEnvFromShutterflyBuild(build);
+    public ProjectNameParser(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getEnv() {
+        if (isShutterflyProject()) {
+            return getEnvFromShutterflyBuild();
         } else {
-            return getEnvFromTinyPrintsBuild(build);
+            return getEnvFromTinyPrintsBuild();
         }
     }
 
-    public String getPoolFromBuild(AbstractBuild build) {
-        if (isShutterflyProject(build)) {
-            return getPoolFromShutterflyBuild(build);
+    public String getPool() {
+        if (isShutterflyProject()) {
+            return getPoolFromShutterflyBuild();
         } else {
-            return getPoolFromTinyPrintsBuild(build);
+            return getPoolFromTinyPrintsBuild();
         }
     }
 
-    public Brand getBrandFromBuild(AbstractBuild build) {
-        if (isShutterflyProject(build)) {
+    public Brand getBrand() {
+        if (isShutterflyProject()) {
             return Brand.SHUTTERFLY;
         } else {
             return Brand.TINYPRINTS;
@@ -49,26 +52,26 @@ public class ProjectNameParser {
 
     }
 
-    private static String getEnvFromShutterflyBuild(AbstractBuild build) {
-        String[] splices = spliceProjectNameByDash(build);
+    private String getEnvFromShutterflyBuild() {
+        String[] splices = getProjectNameSplitByDash();
         return splices[ENV_NAME_LOCATION_SFLY];
     }
 
-    private static String getEnvFromTinyPrintsBuild(AbstractBuild build) {
-        String[] splices = spliceProjectNameByDash(build);
+    private String getEnvFromTinyPrintsBuild() {
+        String[] splices = getProjectNameSplitByDash();
         return splices[ENV_NAME_LOCATION_TINYPRINTS];
     }
 
-    private static String getPoolFromShutterflyBuild(AbstractBuild build) {
-        return getPoolFromBuildByLocation(build, POOL_NAME_LOCATION_SFLY);
+    private String getPoolFromShutterflyBuild() {
+        return getPoolFromBuildByLocation(POOL_NAME_LOCATION_SFLY);
     }
 
-    private static String getPoolFromTinyPrintsBuild(AbstractBuild build) {
-        return getPoolFromBuildByLocation(build, POOL_NAME_LOCATION_TINYPRINTS);
+    private String getPoolFromTinyPrintsBuild() {
+        return getPoolFromBuildByLocation(POOL_NAME_LOCATION_TINYPRINTS);
     }
 
-    private static String getPoolFromBuildByLocation(AbstractBuild build, int location) {
-        String[] splices = spliceProjectNameByDash(build);
+    private  String getPoolFromBuildByLocation(int location) {
+        String[] splices = getProjectNameSplitByDash();
         String longPoolName = splices[location];
         return extractPoolShortNameFromLongName(longPoolName);
     }
@@ -80,13 +83,13 @@ public class ProjectNameParser {
         return shortPoolName.toLowerCase();
     }
 
-    private static String[] spliceProjectNameByDash(AbstractBuild build) {
-        String projectName = build.getProject().getName();
+    private String[] getProjectNameSplitByDash() {
+        String projectName = this.projectName;
         return projectName.split("-");
     }
 
-    private static boolean isShutterflyProject(AbstractBuild build) {
-        String projectName = getEnvFromShutterflyBuild(build);
+    private boolean isShutterflyProject() {
+        String projectName = getEnvFromShutterflyBuild();
         return !projectName.equalsIgnoreCase("TP");
     }
 }
