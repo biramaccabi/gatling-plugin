@@ -153,12 +153,6 @@ public class TrendGraphBuilderTest {
     }
 
     @Test
-    public void test_buildValuesForTemplate_malformed_project_name(){
-        assertionData.projectName = "malformed";
-        assertNull(trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData));
-    }
-
-    @Test
     public void test_buildValuesForTemplate_not_performance_assert(){
         assertionData.assertionType = "percentage of requests KO";
         assertNull(trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData));

@@ -16,6 +16,8 @@
 package com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 import com.excilys.ebi.gatling.jenkins.AssertionData;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Brand;
+import com.excilys.ebi.gatling.jenkins.targetenvgraphs.ProjectNameParser;
 import org.apache.commons.lang.text.StrSubstitutor;
 
 import java.io.UnsupportedEncodingException;
@@ -26,8 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TrendGraphBuilder {
 
@@ -58,7 +58,6 @@ public class TrendGraphBuilder {
     protected static final String PERFORMANCE_METRIC_LABEL_THROUGHPUT = "Requests_per_second";
     public static final String PERFORMANCE_METRIC_LABEL_RESPONSE_TIME = "Response_Time_in_ms";
     private SimpleDateFormat graphiteFromFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
-    private final Pattern envPattern = Pattern.compile("^[^-]+-([^-]+)-.*?$");
     private static final Logger logger = Logger.getLogger(TrendGraphBuilder.class.getName());
 
     public enum GRAPHITE_ASSERT_TYPE {
@@ -192,11 +191,12 @@ public class TrendGraphBuilder {
     }
 
     private String getEnvFromProjectName(String projectName) {
-        Matcher matcher = envPattern.matcher(projectName);
-        if(matcher.find()){
-            return matcher.group(1).toLowerCase();
+        ProjectNameParser projectNameParser = new ProjectNameParser(projectName);
+        if(projectNameParser.getBrand() == Brand.SHUTTERFLY){
+            return projectNameParser.getEnv();
+        } else {
+            return projectNameParser.getBrand().name + "-" + projectNameParser.getEnv();
         }
-        return null;
     }
 
 
