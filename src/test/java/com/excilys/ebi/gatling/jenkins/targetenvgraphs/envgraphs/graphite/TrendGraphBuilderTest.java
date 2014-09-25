@@ -64,16 +64,16 @@ public class TrendGraphBuilderTest {
 
         String expectedRootUrl = "http://tre-stats.internal.shutterfly.com/render?";
         String expectedKOTarget =
-                "target=alias(color(secondYAxis(summarize(load.summary.foxtrot." +
-                        "oauth2forapi2simulation.authorize.ko.percent,%221day%22," +
-                        "%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)";
+                "target=alias(color(secondYAxis(load.summary.foxtrot." +
+                        "oauth2forapi2simulation.authorize.ko.percent)" +
+                        "%2C%22red%22)%2C%22percent%20KOs%22)";
         String expectedPerformanceStatTarget =
-                "target=alias(summarize(load.summary.foxtrot.oauth2forapi2simulation." +
-                        "authorize.all.percentiles95,%221day%22,%22max%22)%2C%22" +
+                "target=alias(load.summary.foxtrot.oauth2forapi2simulation." +
+                        "authorize.all.percentiles95%2C%22" +
                         "95th+percentile+response+time%22)";
         String expectedPerformanceAssertThresholdTarget =
-                "target=alias(summarize(load.summary.foxtrot.oauth2forapi2simulation.authorize." +
-                        "all.expected.percentiles95,%221day%22,%22max%22)" +
+                "target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize." +
+                        "all.expected.percentiles95" +
                         "%2C%22performance+assert+threshold%22)";
         String expectedReleaseBranchTarget =
                 "target=alias(color(lineWidth(drawAsInfinite(integral(" +
