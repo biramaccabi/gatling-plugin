@@ -34,15 +34,20 @@ public class TrendGraphBuilder {
     protected static final String ROOT_GRAPHITE_URL =
             "http://tre-stats.internal.shutterfly.com/render?";
     protected static final String KO_TARGET =
-            "target=alias(color(secondYAxis(load.summary.${env}.${simName}.${reqName}.ko.percent)%2C%22red%22)%2C%22percent%20KOs%22)";
+            "target=alias(color(secondYAxis(load.summary.${env}.${simName}.${reqName}.ko.percent)%2C%22red%22)" +
+                    "%2C%22percent%20KOs%22)";
     protected static final String PERFORMANCE_STAT_TARGET =
             "target=alias(load.summary.${env}.${simName}.${reqName}.all.${assertName}%2C%22${assertDescr}%22)";
     protected static final String PERFORMANCE_ASSERT_THRESHOLD_TARGET =
-            "target=alias(load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22performance+assert+threshold%22)";
+            "target=alias(load.summary.${env}.${simName}.${reqName}.all.expected.${assertName}%2C%22performance+assert+" +
+                    "threshold%22)";
     protected static final String RELEASE_BRANCH_TARGET =
-            "target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22)";
+            "target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22" +
+                    "Release%20Branch%20Created%22)";
     protected static final String RENDER_OPTIONS =
-            "width=586&height=308&lineMode=connected&from=${fromDateTime}&title=${reqName}+-+${assertDescr}&vtitle=${performanceMetricLabel}&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
+            "width=586&height=308&lineMode=connected&from=${fromDateTime}&title=${reqName}+-+${assertDescr}&vtitle=" +
+                    "${performanceMetricLabel}&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100" +
+                    "&yMinRight=0&hideLegend=false&uniqueLegend=true";
     protected static final String PERFORMANCE_METRIC_LABEL_THROUGHPUT = "Requests_per_second";
     public static final String PERFORMANCE_METRIC_LABEL_RESPONSE_TIME = "Response_Time_in_ms";
     private SimpleDateFormat graphiteFromFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
