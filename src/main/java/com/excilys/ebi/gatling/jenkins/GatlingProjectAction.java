@@ -172,4 +172,18 @@ public class GatlingProjectAction implements Action {
             return null;
         }
     }
+
+    public String modifyGraphiteUrlForPastDays(String url, String days) {
+        int numDays = Integer.parseInt(days);
+
+        Date today = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, numDays*-1);
+
+        String result = trendGraphBuilder.modifyGraphiteUrlWithFromUntilDates(url, cal.getTime(), today);
+
+        System.out.println("daschu result: " + result);
+
+        return result;
+    }
 }

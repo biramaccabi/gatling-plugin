@@ -92,6 +92,28 @@ public class TrendGraphBuilder {
                 "&" + getRenderOptions(), values);
     }
 
+    public String modifyGraphiteUrlWithFromUntilDates(String url, Date fromDate, Date untilDate) {
+        String formattedFromDate = this.convertDateToFromValue(fromDate);
+        String formattedUntilDate = this.convertDateToFromValue(untilDate);
+
+        return replaceAndAppendDates(url, formattedFromDate, formattedUntilDate);
+    }
+
+    private String replaceAndAppendDates(String url, String fromDate, String untilDate) {
+        int substringStart = url.indexOf("&from=");
+        int substringEnd = url.indexOf("&", substringStart+1);
+
+        String firstPart = url.substring(0, substringStart);
+
+        String lastPart = url.substring(substringEnd);
+
+        try {
+            return firstPart + "&from=" + URLEncoder.encode(fromDate, "UTF-8") + "&until=" + URLEncoder.encode(untilDate, "UTF-8") + lastPart;
+        } catch (UnsupportedEncodingException e) {
+            return url;
+        }
+    }
+
     protected String getRootUrl() {
         return ROOT_GRAPHITE_URL;
     }

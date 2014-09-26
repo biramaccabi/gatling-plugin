@@ -281,4 +281,17 @@ public class TrendGraphBuilderTest {
                 values.get("performanceStatSummarizeMethod"));
     }
 
+    @Test
+    public void test_modifyGraphiteUrlWithFromUntilDates() {
+        String initalURL = "http://tre-stats.internal.shutterfly.com/render?target=alias(color(secondYAxis(summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.ko.percent,%221day%22,%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)&target=alias(summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.percentiles95,%221day%22,%22max%22)%2C%2295th+percentile+response+time%22)&target=alias(summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.expected.percentiles95,%221day%22,%22max%22)%2C%22performance+assert+threshold%22)&target=alias(color(lineWidth(drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20Created%22)&width=586&height=308&lineMode=connected&from=11%3A33_20140718&title=foxtrot_Benchmarks_fup01+-+95th+percentile+response+time&vtitle=Response_Time_in_ms&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100&yMinRight=0&hideLegend=false&uniqueLegend=true";
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -5);
+
+        Date testFromDate = new Date();
+        Date testUntilDate = cal.getTime();
+        String modifiedURL = trendGraphBuilder.modifyGraphiteUrlWithFromUntilDates(initalURL, testFromDate, testUntilDate);
+
+//        assertEquals("",modifiedURL);
+    }
 }

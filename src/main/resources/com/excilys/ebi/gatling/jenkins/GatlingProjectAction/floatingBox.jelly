@@ -2,8 +2,23 @@
     <!-- note: Something in the <g:import/> was breaking the "more history" link in jenkins
        I removed the import since we don't need it anymore - VITO -->
     <div class="test-trend-caption">
+    <table>
+        <j:set var="oneWeek" value="7"/>
+        <j:set var="oneMonth" value="30"/>
         <j:forEach items="${action.getGraphiteGraphUrls()}" var="graphiteUrl">
-            <img src="${graphiteUrl}"/>
+
+            <tr>
+                <td>
+                    <img src="${graphiteUrl}"/>
+                 </td>
+                <td>
+                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneWeek)}" target="_blank">Past Week</a>
+                    <br/>
+                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneMonth)}" target="_blank">Past Month</a>
+                 </td>
+            </tr>
+
         </j:forEach>
+        </table>
     </div>
 </j:jelly>
