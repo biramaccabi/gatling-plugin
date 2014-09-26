@@ -15,6 +15,8 @@
                     <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneWeek)}" target="_blank">Past Week</a>
                     <br/>
                     <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneMonth)}" target="_blank">Past Month</a>
+                    <br/>
+                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneMonth)}" target="_blank">All Available</a>
                  </td>
             </tr>
 

@@ -50,7 +50,7 @@ public class TrendGraphBuilder {
                     "&yMinRight=0&hideLegend=false&uniqueLegend=true";
     protected static final String PERFORMANCE_METRIC_LABEL_THROUGHPUT = "Requests_per_second";
     public static final String PERFORMANCE_METRIC_LABEL_RESPONSE_TIME = "Response_Time_in_ms";
-    private SimpleDateFormat graphiteFromFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+    private SimpleDateFormat graphiteDateFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
     private static final Logger logger = Logger.getLogger(TrendGraphBuilder.class.getName());
 
     public enum GRAPHITE_ASSERT_TYPE {
@@ -93,8 +93,8 @@ public class TrendGraphBuilder {
     }
 
     public String modifyGraphiteUrlWithFromUntilDates(String url, Date fromDate, Date untilDate) {
-        String formattedFromDate = this.convertDateToFromValue(fromDate);
-        String formattedUntilDate = this.convertDateToFromValue(untilDate);
+        String formattedFromDate = this.convertDateToGraphiteFormat(fromDate);
+        String formattedUntilDate = this.convertDateToGraphiteFormat(untilDate);
 
         return replaceAndAppendDates(url, formattedFromDate, formattedUntilDate);
     }
@@ -169,7 +169,7 @@ public class TrendGraphBuilder {
                     setUrlEncodedValue(values, "assertDescr", assertionData.assertionType);
                     setUrlEncodedValue(values, "projName", assertionData.projectName);
                     setUrlEncodedValue(values, "performanceMetricLabel", performanceMetricLabel);
-                    setUrlEncodedValue(values, "fromDateTime", convertDateToFromValue(fromDate));
+                    setUrlEncodedValue(values, "fromDateTime", getDefaultTrendFromValue());
                     if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput)
                         setUrlEncodedValue(values, "performanceStatSummarizeMethod", "min");
                     else
@@ -194,9 +194,13 @@ public class TrendGraphBuilder {
                 (graphiteAssertionType != GRAPHITE_ASSERT_TYPE.ko);
     }
 
-    private String convertDateToFromValue(Date inputDate) {
+    private String getDefaultTrendFromValue() {
+        return "-1months";
+    }
+
+    private String convertDateToGraphiteFormat(Date inputDate) {
         try {
-            return graphiteFromFormat.format(inputDate);
+            return graphiteDateFormat.format(inputDate);
         } catch (Exception e) {
             logger.log(Level.WARNING,
                     "Failed to find date/time of oldest build for project.  " +
