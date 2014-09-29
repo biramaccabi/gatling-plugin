@@ -129,7 +129,7 @@ public class GatlingProjectAction implements Action {
         return Integer.toString(build) + "/" + URL_NAME + "/report/" + simName;
 	}
 
-    public List<String> getGraphiteGraphUrls() {
+    public List<String> getTrendGraphiteGraphUrlsForBuildHistory() {
         for (AbstractBuild<?, ?> build : getProject().getBuilds()) {
             List<String> retVal = getGraphiteUrlsForBuild(build);
             if (retVal != null)

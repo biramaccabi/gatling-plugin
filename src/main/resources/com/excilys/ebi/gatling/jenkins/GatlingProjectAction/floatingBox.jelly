@@ -3,20 +3,17 @@
        I removed the import since we don't need it anymore - VITO -->
     <div class="test-trend-caption">
     <table>
-        <j:set var="oneWeek" value="7"/>
-        <j:set var="oneMonth" value="30"/>
-        <j:forEach items="${action.getGraphiteGraphUrls()}" var="graphiteUrl">
-
+        <j:set var="sevenDays" value="7"/>
+        <j:set var="thirtyDays" value="30"/>
+        <j:forEach items="${action.getTrendGraphiteGraphUrlsForBuildHistory()}" var="graphiteUrl">
             <tr>
                 <td>
-                    <img src="${graphiteUrl}"/>
+                    <img src="${action.modifyGraphiteUrlForPastDays(graphiteUrl, thirtyDays)}"/>
                  </td>
                 <td>
-                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneWeek)}" target="_blank">Past Week</a>
+                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, sevenDays)}" target="_blank">Past 7 Days</a>
                     <br/>
-                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneMonth)}" target="_blank">Past Month</a>
-                    <br/>
-                    <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, oneMonth)}" target="_blank">All Available</a>
+                    <a href="${graphiteUrl}" target="_blank">All Available</a>
                  </td>
             </tr>
 

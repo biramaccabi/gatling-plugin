@@ -169,7 +169,7 @@ public class TrendGraphBuilder {
                     setUrlEncodedValue(values, "assertDescr", assertionData.assertionType);
                     setUrlEncodedValue(values, "projName", assertionData.projectName);
                     setUrlEncodedValue(values, "performanceMetricLabel", performanceMetricLabel);
-                    setUrlEncodedValue(values, "fromDateTime", getDefaultTrendFromValue());
+                    setUrlEncodedValue(values, "fromDateTime", convertDateToGraphiteFormat(fromDate));
                     if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput)
                         setUrlEncodedValue(values, "performanceStatSummarizeMethod", "min");
                     else
@@ -192,10 +192,6 @@ public class TrendGraphBuilder {
     private boolean isPerformanceAssert(GRAPHITE_ASSERT_TYPE graphiteAssertionType) {
         return (graphiteAssertionType != null) &&
                 (graphiteAssertionType != GRAPHITE_ASSERT_TYPE.ko);
-    }
-
-    private String getDefaultTrendFromValue() {
-        return "-1months";
     }
 
     private String convertDateToGraphiteFormat(Date inputDate) {

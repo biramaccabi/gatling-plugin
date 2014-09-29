@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class TrendGraphBuilderTest {
     private TrendGraphBuilder trendGraphBuilder;
     private AssertionData assertionData;
     private Date expectedFromDate;
-    private String expectedFromTime = "-1months";
+    private String expectedFromTime;
     private String expectedGraphiteUrl;
 
     @Before
@@ -46,6 +47,8 @@ public class TrendGraphBuilderTest {
         Calendar expectedFromCalendar = Calendar.getInstance();
         expectedFromCalendar.add(Calendar.MONTH, -3);
         expectedFromDate = expectedFromCalendar.getTime();
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+        expectedFromTime = URLEncoder.encode(graphiteFormat.format(expectedFromDate), "UTF-8");
 
         assertionData = new AssertionData();
         assertionData.actualValue = "actualValue";

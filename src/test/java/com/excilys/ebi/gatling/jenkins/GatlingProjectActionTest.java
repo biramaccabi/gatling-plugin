@@ -53,7 +53,7 @@ public class GatlingProjectActionTest{
         stub(mock_builder.getGraphiteUrlForAssertion((Date)anyObject(),
                 (AssertionData)anyObject())).toReturn(expected_url);
 
-        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
+        List<String> graphiteGraphUrls = projectAction.getTrendGraphiteGraphUrlsForBuildHistory();
 
         verify(mock_builder, times(1)).getGraphiteUrlForAssertion(
                 eq(expectedFromTimestamp.getTime()), eq(assertionData));
@@ -71,7 +71,7 @@ public class GatlingProjectActionTest{
         stub(mock_builder.getGraphiteUrlForAssertion((Date)anyObject(),
                 (AssertionData)anyObject())).toThrow(new RuntimeException("EX"));
 
-        List<String> graphiteGraphUrls = projectAction.getGraphiteGraphUrls();
+        List<String> graphiteGraphUrls = projectAction.getTrendGraphiteGraphUrlsForBuildHistory();
 
         verify(mock_builder, times(1)).getGraphiteUrlForAssertion(
                 eq(expectedFromTimestamp.getTime()), eq(assertionData));
@@ -81,19 +81,19 @@ public class GatlingProjectActionTest{
     @Test
     public void test_no_builds(){
         prepareWithBuilds(new ArrayList<AbstractBuild>(), null);
-        Assert.assertEquals(0, projectAction.getGraphiteGraphUrls().size());
+        Assert.assertEquals(0, projectAction.getTrendGraphiteGraphUrlsForBuildHistory().size());
     }
 
     @Test
     public void test_build_with_action_but_null_assert_list(){
         prepareWithOneBuild(null);
-        Assert.assertEquals(0, projectAction.getGraphiteGraphUrls().size());
+        Assert.assertEquals(0, projectAction.getTrendGraphiteGraphUrlsForBuildHistory().size());
     }
 
     @Test
     public void test_build_with_action_but_empty_assert_list(){
         prepareWithOneBuild(new ArrayList<AssertionData>());
-        Assert.assertEquals(0, projectAction.getGraphiteGraphUrls().size());
+        Assert.assertEquals(0, projectAction.getTrendGraphiteGraphUrlsForBuildHistory().size());
     }
 
     @Test
