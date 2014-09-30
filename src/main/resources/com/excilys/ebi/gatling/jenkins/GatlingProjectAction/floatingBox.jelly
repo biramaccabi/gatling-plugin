@@ -2,22 +2,20 @@
     <!-- note: Something in the <g:import/> was breaking the "more history" link in jenkins
        I removed the import since we don't need it anymore - VITO -->
     <div class="test-trend-caption">
-    <table>
         <j:set var="sevenDays" value="7"/>
         <j:set var="thirtyDays" value="30"/>
         <j:forEach items="${action.getTrendGraphiteGraphUrlsForBuildHistory()}" var="graphiteUrl">
-            <tr>
-                <td>
+            <dl>
+                <dt>
                     <img src="${action.modifyGraphiteUrlForPastDays(graphiteUrl, thirtyDays)}"/>
-                 </td>
-                <td>
+                </dt>
+                <dd>
                     <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, sevenDays)}" target="_blank">Past 7 Days</a>
-                    <br/>
+                </dd>
+                <dd>
                     <a href="${graphiteUrl}" target="_blank">All Available</a>
-                 </td>
-            </tr>
-
+                </dd>
+            </dl>
         </j:forEach>
-        </table>
     </div>
 </j:jelly>
