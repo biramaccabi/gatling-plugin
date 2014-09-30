@@ -287,14 +287,10 @@ public class TrendGraphBuilderTest {
         String invalidOffset = "A";
         String modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
         assertEquals(inputUrl, modifiedUrl);
-
-        invalidOffset = null;
-        modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
-        assertEquals(inputUrl, modifiedUrl);
     }
 
     @Test
-    public void test_modifyGraphiteUrlToSpanNDays_NullReturnOriginalUrl() {
+    public void test_modifyGraphiteUrlToSpanNDays_NullOffsetReturnOriginalUrl() {
         String inputUrl = expectedGraphiteUrl;
         String invalidOffset = null;
         String modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
