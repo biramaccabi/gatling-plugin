@@ -282,10 +282,60 @@ public class TrendGraphBuilderTest {
     }
 
     @Test
-    public void test_modifyGraphiteUrlWithFromUntilDates() {
-        int numDaysToAdd = 5;
-        int testYear = 2010;
+    public void test_modifyGraphiteUrlToSpanNDays_InvalidOffsetsReturnOriginalUrl() {
+        String inputUrl = expectedGraphiteUrl;
+        String invalidOffset = "A";
+        String modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
+        assertEquals(inputUrl, modifiedUrl);
 
+        invalidOffset = null;
+        modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
+        assertEquals(inputUrl, modifiedUrl);
+    }
+
+    @Test
+    public void test_modifyGraphiteUrlToSpanNDays_NullReturnOriginalUrl() {
+        String inputUrl = expectedGraphiteUrl;
+        String invalidOffset = null;
+        String modifiedUrl = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputUrl, invalidOffset);
+        assertEquals(inputUrl, modifiedUrl);
+    }
+
+    @Test
+    public void test_modifyGraphiteUrlForPastDays() throws Exception {
+        String urlPartOne = "http://tre-stats.internal.shutterfly.com/render?target=alias(color(secondYAxis(" +
+                "summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.ko." +
+                "percent,%221day%22,%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)&target=alias(summarize(load." +
+                "summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.percentiles95," +
+                "%221day%22,%22max%22)%2C%2295th+percentile+response+time%22)&target=alias(summarize(load.summary." +
+                "foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.expected.percentiles95," +
+                "%221day%22,%22max%22)%2C%22performance+assert+threshold%22)&target=alias(color(lineWidth(" +
+                "drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20" +
+                "Created%22)&width=586&height=308&lineMode=connected";
+        String urlPartTwo = "&title=foxtrot_Benchmarks_fup01+-+95th+percentile+response+time&vtitle=" +
+                "Response_Time_in_ms&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100" +
+                "&yMinRight=0&hideLegend=false&uniqueLegend=true";
+
+        String testOffset = "5";
+
+        Date today = new Date();
+        today.setTime(today.getTime() - 5 * 24 * 60 * 60 * 1000);
+        SimpleDateFormat graphiteDateFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+        String encodedUrlDate = URLEncoder.encode(graphiteDateFormat.format(today), "UTF-8");
+
+        String originalUrlFromUntil = "&from=00%3A00_20140101";
+        String expectedUrlFromParam = "&from=" + encodedUrlDate;
+
+        String inputURL = urlPartOne + originalUrlFromUntil + urlPartTwo;
+        String expectedURL = urlPartOne + expectedUrlFromParam + urlPartTwo;
+
+        String modifiedURL = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputURL, testOffset);
+
+        assertEquals(expectedURL, modifiedURL);
+    }
+
+    @Test
+    public void test_modifyGraphiteUrlWithFromUntilDate_nullDate() throws Exception {
         String urlPartOne = "http://tre-stats.internal.shutterfly.com/render?target=alias(color(secondYAxis(" +
                 "summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.ko." +
                 "percent,%221day%22,%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)&target=alias(summarize(load." +
@@ -299,21 +349,12 @@ public class TrendGraphBuilderTest {
                 "Response_Time_in_ms&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100" +
                 "&yMinRight=0&hideLegend=false&uniqueLegend=true";
 
-        String originalUrlFromUntil = "from=00%3A00_20100101";
-        String modifiedUrlFromUntil = "from=00%3A00_20100101&until=00%3A00_20100106";
+        String originalUrlFromUntil = "from=00%3A00_20140101";
 
         String inputURL = urlPartOne + originalUrlFromUntil + urlPartTwo;
-        String urlWithFromUntil = urlPartOne + modifiedUrlFromUntil + urlPartTwo;
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(testYear, Calendar.JANUARY, 1, 0,0);
-        Date testFromDate = cal.getTime();
+        String modifiedURL = trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(inputURL, null);
 
-        cal.add(Calendar.DATE, numDaysToAdd);
-        Date testUntilDate = cal.getTime();
-
-        String modifiedURL = trendGraphBuilder.modifyGraphiteUrlWithFromUntilDates(inputURL, testFromDate, testUntilDate);
-
-        assertEquals(urlWithFromUntil,modifiedURL);
+        assertEquals(inputURL, modifiedURL);
     }
 }

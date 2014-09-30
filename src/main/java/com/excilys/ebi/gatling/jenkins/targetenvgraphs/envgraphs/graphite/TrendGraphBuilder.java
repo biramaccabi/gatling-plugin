@@ -23,6 +23,7 @@ import org.apache.commons.lang.text.StrSubstitutor;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,24 +93,24 @@ public class TrendGraphBuilder {
                 "&" + getRenderOptions(), values);
     }
 
-    public String modifyGraphiteUrlWithFromUntilDates(String url, Date fromDate, Date untilDate) {
-        String formattedFromDate = this.convertDateToGraphiteFormat(fromDate);
-        String formattedUntilDate = this.convertDateToGraphiteFormat(untilDate);
-
-        return replaceAndAppendDates(url, formattedFromDate, formattedUntilDate);
-    }
-
-    private String replaceAndAppendDates(String url, String fromDate, String untilDate) {
-        int substringStart = url.indexOf("&from=");
-        int substringEnd = url.indexOf("&", substringStart+1);
-
-        String firstPart = url.substring(0, substringStart);
-
-        String lastPart = url.substring(substringEnd);
-
+    public String modifyGraphiteUrlToSpanPreviousDays(String url, String dayOffset) {
         try {
-            return firstPart + "&from=" + URLEncoder.encode(fromDate, "UTF-8") + "&until=" + URLEncoder.encode(untilDate, "UTF-8") + lastPart;
-        } catch (UnsupportedEncodingException e) {
+            int numDays = Integer.parseInt(dayOffset);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, numDays*-1);
+            Date fromDate =  cal.getTime();
+
+            String formattedFromDate = URLEncoder.encode(convertDateToGraphiteFormat(fromDate), "UTF-8");
+
+            int fromParamIndex = url.indexOf("&from=");
+            int firstParamAfterFromIndex = url.indexOf("&", fromParamIndex+1);
+
+            String urlBeforeFromParam = url.substring(0, fromParamIndex);
+            String urlAfterFromParam = url.substring(firstParamAfterFromIndex);
+
+            return urlBeforeFromParam + "&from=" + formattedFromDate + urlAfterFromParam;
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Failed to modify graphite URL with from and until dates. Return default url");
             return url;
         }
     }

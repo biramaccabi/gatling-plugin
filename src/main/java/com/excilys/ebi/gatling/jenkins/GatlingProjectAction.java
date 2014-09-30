@@ -129,7 +129,7 @@ public class GatlingProjectAction implements Action {
         return Integer.toString(build) + "/" + URL_NAME + "/report/" + simName;
 	}
 
-    public List<String> getTrendGraphiteGraphUrlsForBuildHistory() {
+    public List<String> getGraphiteGraphUrlsForBuildHistory() {
         for (AbstractBuild<?, ?> build : getProject().getBuilds()) {
             List<String> retVal = getGraphiteUrlsForBuild(build);
             if (retVal != null)
@@ -173,17 +173,13 @@ public class GatlingProjectAction implements Action {
         }
     }
 
-    public String modifyGraphiteUrlForPastDays(String url, String days) {
-        int numDays = Integer.parseInt(days);
-
-        Date today = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, numDays*-1);
-
-        String result = trendGraphBuilder.modifyGraphiteUrlWithFromUntilDates(url, cal.getTime(), today);
-
-        System.out.println("daschu result: " + result);
-
-        return result;
+    public String modifyGraphiteUrlForPastDays(String url, String daysOffset) {
+        try {
+            return trendGraphBuilder.modifyGraphiteUrlToSpanPreviousDays(url, daysOffset);
+        } catch(Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
+                    "Failed to modify graphite url with from/until dates.  URL: " + url + "\nOffset: " + daysOffset, e);
+            return url;
+        }
     }
 }

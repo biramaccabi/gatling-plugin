@@ -4,7 +4,7 @@
     <div class="test-trend-caption">
         <j:set var="sevenDays" value="7"/>
         <j:set var="thirtyDays" value="30"/>
-        <j:forEach items="${action.getTrendGraphiteGraphUrlsForBuildHistory()}" var="graphiteUrl">
+        <j:forEach items="${action.getGraphiteGraphUrlsForBuildHistory()}" var="graphiteUrl">
             <dl>
                 <dt>
                     <img src="${action.modifyGraphiteUrlForPastDays(graphiteUrl, thirtyDays)}"/>
