@@ -110,7 +110,7 @@ public class TrendGraphBuilder {
 
             return urlBeforeFromParam + "&from=" + formattedFromDate + urlAfterFromParam;
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Failed to modify graphite URL with from and until dates. Return default url");
+            logger.log(Level.WARNING, "Failed to modify graphite URL with from and until dates. Return default url", e);
             return url;
         }
     }
