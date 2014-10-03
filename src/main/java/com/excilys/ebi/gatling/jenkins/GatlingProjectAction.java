@@ -20,6 +20,7 @@ import com.excilys.ebi.gatling.jenkins.targetenvgraphs.envgraphs.graphite.TrendG
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class GatlingProjectAction implements Action {
     private String gatlingReportUrl;
 	private final AbstractProject<?, ?> project;
     protected TrendGraphBuilder trendGraphBuilder;
+    private static final Logger logger = Logger.getLogger(GatlingProjectAction.class.getName());
 
     public GatlingProjectAction(AbstractProject<?, ?> project, String gatlingReportUrl) {
 		this.project = project;
@@ -151,10 +153,7 @@ public class GatlingProjectAction implements Action {
                Calendar timestamp = firstBuild.getTimestamp();
                Date time = timestamp.getTime();
                for(AssertionData assertionData : assertionDataList){
-                   String url = generateGraphiteUrl(time, assertionData);
-                   if(url != null){
-                       retVal.add(url);
-                   }
+                   appendAssertUrl(retVal, time, assertionData);
                }
                // only build urls from the most recent build that has assertions -Vito
                return retVal;
@@ -163,14 +162,29 @@ public class GatlingProjectAction implements Action {
         return null;
     }
 
-    private String generateGraphiteUrl(Date time, AssertionData assertionData) {
+    private void appendAssertUrl(List<String> retVal, Date time, AssertionData assertionData) {
         try {
-            return trendGraphBuilder.getGraphiteUrlForAssertion(time, assertionData);
-        } catch (Exception e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
-                    "Failed to generate graphite url", e);
-            return null;
+            String url = generateGraphiteUrl(time, assertionData);
+            if (url != null) {
+                retVal.add(url);
+            }
+        }catch(Exception ex){
+            String projectName = "Unknown";
+            if(project != null)
+                projectName = project.getName();
+            final String assertionDataString =
+                    ToStringBuilder.reflectionToString(assertionData);
+            logger.log(
+                    Level.WARNING,
+                    "Failed to generate url for assertion data\n" +
+                        "Project Name: " +  projectName + "\n" +
+                        assertionDataString,
+                    ex);
         }
+    }
+
+    private String generateGraphiteUrl(Date time, AssertionData assertionData) {
+        return trendGraphBuilder.getGraphiteUrlForAssertion(time, assertionData);
     }
 
     public String modifyGraphiteUrlForPastDays(String url, String daysOffset) {

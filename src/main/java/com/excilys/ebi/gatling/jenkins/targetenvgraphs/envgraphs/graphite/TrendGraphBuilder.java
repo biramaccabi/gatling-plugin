@@ -229,14 +229,8 @@ public class TrendGraphBuilder {
 
     private GRAPHITE_ASSERT_TYPE convertAssertionTypeFromGatlingToGraphite(String assertionType) {
         if(assertionType == null)
-            return null;
-        try{
-            return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
-        }catch(Exception ex){
-            logger.log(Level.WARNING, "Failed to convert gatling type " + assertionType +
-                    " to graphite type.", ex);
-        }
-        return null;
+            throw new RuntimeException("Invalid input assertType is null");
+        return GRAPHITE_ASSERT_TYPE.fromGatlingAssertType(assertionType);
     }
 
 }

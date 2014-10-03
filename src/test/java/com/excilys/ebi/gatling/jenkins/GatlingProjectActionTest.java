@@ -110,6 +110,7 @@ public class GatlingProjectActionTest{
         stub(runList.iterator()).toReturn(builds.iterator());
         //noinspection unchecked
         stub(project.getBuilds()).toReturn(runList);
+        stub(project.getName()).toReturn("somename");
         if(builds.size() > 0){
             AbstractBuild build = builds.get(0);
             GatlingBuildAction buildAction = new GatlingBuildAction(build,
