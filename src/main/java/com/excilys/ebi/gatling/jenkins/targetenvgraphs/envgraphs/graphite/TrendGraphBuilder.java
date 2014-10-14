@@ -56,6 +56,7 @@ public class TrendGraphBuilder {
 
     public enum GRAPHITE_ASSERT_TYPE {
         percentiles95,
+        percentiles99,
         mean,
         min,
         max,
@@ -66,6 +67,8 @@ public class TrendGraphBuilder {
         public static GRAPHITE_ASSERT_TYPE fromGatlingAssertType(String assertionType){
             if(assertionType.contains("95th")){
                 return percentiles95;
+            } else if(assertionType.contains("99th")){
+                return percentiles99;
             } else if(assertionType.contains("mean")){
                 return mean;
             } else if(assertionType.contains("KO")){

@@ -51,6 +51,7 @@ public class GraphiteAssertTypeTest {
                 {GRAPHITE_ASSERT_TYPE.mean, "mean response time"},
                 {GRAPHITE_ASSERT_TYPE.min, "min response time"},
                 {GRAPHITE_ASSERT_TYPE.percentiles95, "95th percentile response time"},
+                {GRAPHITE_ASSERT_TYPE.percentiles99, "99th percentile response time"},
                 {GRAPHITE_ASSERT_TYPE.stddev, "standard deviation response time"},
                 {GRAPHITE_ASSERT_TYPE.throughput, "requests per second"},
         };

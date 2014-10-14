@@ -222,10 +222,21 @@ public class TrendGraphBuilderTest {
     }
 
     @Test
-    public void test_buildValuesForTemplate_assertName(){
+    public void test_buildValuesForTemplate_assertName_p95(){
         final Map<String, String> values =
                 trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData);
         assertEquals(TrendGraphBuilder.GRAPHITE_ASSERT_TYPE.percentiles95.name(),
+                values.get("assertName"));
+    }
+
+    @Test
+    public void test_buildValuesForTemplate_assertName_p99(){
+        AssertionData assertionData_p99 = assertionData;
+        assertionData_p99.assertionType = "99th percentile response time";
+        assertionData_p99.message = "authorize 99th percentile response time is less than 1000";
+        final Map<String, String> values =
+                trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData_p99);
+        assertEquals(TrendGraphBuilder.GRAPHITE_ASSERT_TYPE.percentiles99.name(),
                 values.get("assertName"));
     }
 
@@ -277,6 +288,18 @@ public class TrendGraphBuilderTest {
         assertionData.assertionType = "95th percentile response time";
         final Map<String, String> values =
                 trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData);
+        assertEquals("max",
+                values.get("performanceStatSummarizeMethod"));
+    }
+
+    @Test
+    public void test_buildValuesForTemplate_performanceStatSummarizeMethod_p99()
+            throws UnsupportedEncodingException {
+        AssertionData assertionData_p99 = assertionData;
+        assertionData_p99.assertionType = "95th percentile response time";
+        assertionData_p99.message = "authorize 95th percentile response time is less than 1000";
+        final Map<String, String> values =
+                trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData_p99);
         assertEquals("max",
                 values.get("performanceStatSummarizeMethod"));
     }
