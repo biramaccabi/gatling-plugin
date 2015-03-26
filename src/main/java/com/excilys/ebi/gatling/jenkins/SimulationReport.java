@@ -16,6 +16,7 @@
 package com.excilys.ebi.gatling.jenkins;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.FilePath;
 
@@ -40,6 +41,7 @@ public class SimulationReport {
 
 	public void readStatsFile() throws IOException, InterruptedException {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		File jsonFile = locateStatsFile();
 		globalReport = mapper.readValue(jsonFile, new TypeReference<RequestReport>() {
 		});

@@ -15,14 +15,41 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
+
 public class AssertionData {
+
+    @JsonIgnore
     public String projectName;
+
+    @JsonIgnore
     public String simulationName;
+
+    @JsonIgnore
     public String scenerioName;
+
+    @JsonProperty("path")
     public String requestName;
+
     public String message;
+
+    @JsonProperty("target")
     public String assertionType;
-    public String actualValue;
+
+    @JsonIgnore
     public String expectedValue;
+
+    @JsonIgnore
+    public String actualValue;
+
+    @JsonProperty("result")
     public String status;
+
+    public ArrayList<Integer> conditionValues;
+
+    public ArrayList<Integer> values;
+
 }

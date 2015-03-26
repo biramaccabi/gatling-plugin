@@ -16,7 +16,6 @@
 package com.excilys.ebi.gatling.jenkins;
 
 import hudson.FilePath;
-import hudson.XmlFile;
 import hudson.model.DirectoryBrowserSupport;
 import org.kohsuke.stapler.ForwardToView;
 import org.kohsuke.stapler.StaplerRequest;
@@ -26,10 +25,7 @@ import javax.servlet.ServletException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class is used by the {@link GatlingBuildAction} to handle the rendering
