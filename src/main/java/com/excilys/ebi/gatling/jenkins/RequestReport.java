@@ -15,8 +15,6 @@
  */
 package com.excilys.ebi.gatling.jenkins;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class RequestReport {
 
 	private String name;
@@ -25,10 +23,10 @@ public class RequestReport {
 	private Statistics maxResponseTime;
 	private Statistics meanResponseTime;
 	private Statistics standardDeviation;
-	@JsonProperty("percentiles1")
-	private Statistics percentiles95;
-	@JsonProperty("percentiles2")
-	private Statistics percentiles99;
+	private Statistics percentiles1;
+	private Statistics percentiles2;
+	private Statistics percentiles3;
+	private Statistics percentiles4;
 	private Statistics meanNumberOfRequestsPerSecond;
 	private ResponseTimeGroup group1;
 	private ResponseTimeGroup group2;
@@ -84,19 +82,51 @@ public class RequestReport {
 	}
 
 	public Statistics getPercentiles95() {
-		return percentiles95;
+		return percentiles3;
 	}
 
 	public void setPercentiles95(Statistics percentiles95) {
-		this.percentiles95 = percentiles95;
+		this.percentiles3 = percentiles95;
 	}
 
 	public Statistics getPercentiles99() {
-		return percentiles99;
+		return percentiles4;
 	}
 
 	public void setPercentiles99(Statistics percentiles99) {
-		this.percentiles99 = percentiles99;
+		this.percentiles4 = percentiles99;
+	}
+
+	public Statistics getPercentiles1() {
+		return percentiles1;
+	}
+
+	public void setPercentiles1(Statistics percentiles1) {
+		this.percentiles1 = percentiles1;
+	}
+
+	public Statistics getPercentiles2() {
+		return percentiles2;
+	}
+
+	public void setPercentiles2(Statistics percentiles2) {
+		this.percentiles2 = percentiles2;
+	}
+
+	public Statistics getPercentiles3() {
+		return percentiles3;
+	}
+
+	public void setPercentiles3(Statistics percentiles3) {
+		this.percentiles3 = percentiles3;
+	}
+
+	public Statistics getPercentiles4() {
+		return percentiles4;
+	}
+
+	public void setPercentiles4(Statistics percentiles4) {
+		this.percentiles4 = percentiles4;
 	}
 
 	public Statistics getMeanNumberOfRequestsPerSecond() {

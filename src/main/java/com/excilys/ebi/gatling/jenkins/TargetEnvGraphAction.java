@@ -57,10 +57,8 @@ public class TargetEnvGraphAction implements Action {
     }
 
     public String getTargetEnvGraphMessage() {
-        if(getGraphiteUrls().size() < 1) {
-            return "No Graphs available for this simulation.";
-        } else {
-            return "";
-        }
+        return getGraphiteUrls().isEmpty()
+                ? "No Graphs available for this simulation."
+                : "";
     }
 }

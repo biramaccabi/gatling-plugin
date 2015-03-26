@@ -49,10 +49,8 @@ public class SerieName implements JsonSerializable, Comparable<SerieName> {
 
 		SerieName serieName = (SerieName) o;
 
-		if (name != null ? !name.equals(serieName.name) : serieName.name != null)
-			return false;
+		return !(name != null ? !name.equals(serieName.name) : serieName.name != null);
 
-		return true;
 	}
 
 	@Override
