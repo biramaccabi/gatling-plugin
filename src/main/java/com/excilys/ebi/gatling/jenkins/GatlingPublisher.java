@@ -254,7 +254,7 @@ public class GatlingPublisher extends Recorder {
 
         for (BuildSimulation sim : sims) {
             FilePath workspace = sim.getSimulationDirectory();
-            FilePath[] files = workspace.list("**/assertion.json");
+            FilePath[] files = workspace.list("**/assertions.json");
 
             if (files.length == 0) {
                 throw new IllegalArgumentException("Could not find a Gatling report in results folder.");
