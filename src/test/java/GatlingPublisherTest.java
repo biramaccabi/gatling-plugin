@@ -16,7 +16,6 @@
 
 import com.excilys.ebi.gatling.jenkins.AssertionData;
 import com.excilys.ebi.gatling.jenkins.GatlingPublisher;
-import hudson.model.Result;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,43 +40,43 @@ public class GatlingPublisherTest {
 		koassertiondata = new AssertionData();
 		koassertiondata.projectName = "unittest mock project KO";
 		koassertiondata.simulationName = "unittest mock simulation KO";
-		koassertiondata.scenerioName = "unittest mock scenario KO";
+		koassertiondata.scenarioName = "unittest mock scenario KO";
 		koassertiondata.requestName = "Global";
 		koassertiondata.message = "Global percentage of requests KO is less than 1";
 		koassertiondata.assertionType = "percentage of requests KO";
 		koassertiondata.actualValue = "100";
 		koassertiondata.expectedValue = "1";
-		koassertiondata.status = "false";
+		koassertiondata.status = false;
 		performanceassertiondata = new AssertionData();
 		performanceassertiondata.projectName = "unittest mock project performance";
 		performanceassertiondata.simulationName = "unittest mock simulation performance";
-		performanceassertiondata.scenerioName = "unittest mock scenario performance";
+		performanceassertiondata.scenarioName = "unittest mock scenario performance";
 		performanceassertiondata.requestName = "Get Catalog Pricing";
 		performanceassertiondata.message = "Get Catalog Pricing requests per second is greater than 2000";
 		performanceassertiondata.assertionType = "requests per second";
 		performanceassertiondata.actualValue = "200";
 		performanceassertiondata.expectedValue = "2000";
-		performanceassertiondata.status = "false";
+		performanceassertiondata.status = false;
 		unrecognizeassertiondata = new AssertionData();
 		unrecognizeassertiondata.projectName = "unittest mock project unrecognize";
 		unrecognizeassertiondata.simulationName = "unittest mock simulation unrecognize";
-		unrecognizeassertiondata.scenerioName = "unittest mock scenario unrecognize";
+		unrecognizeassertiondata.scenarioName = "unittest mock scenario unrecognize";
 		unrecognizeassertiondata.requestName = "Get Catalog Pricing unrecognize";
 		unrecognizeassertiondata.message = "Get Catalog Pricing requests unrecognize per second is equal to 2000";
 		unrecognizeassertiondata.assertionType = "requests per second";
 		unrecognizeassertiondata.actualValue = "200";
 		unrecognizeassertiondata.expectedValue = "2000";
-		unrecognizeassertiondata.status = "false";
+		unrecognizeassertiondata.status = false;
 		trueassertiondata = new AssertionData();
 		trueassertiondata.projectName = "unittest mock project true";
 		trueassertiondata.simulationName = "unittest mock simulation true";
-		trueassertiondata.scenerioName = "unittest mock scenario true";
+		trueassertiondata.scenarioName = "unittest mock scenario true";
 		trueassertiondata.requestName = "Get Catalog Pricing";
 		trueassertiondata.message = "Get Catalog Pricing requests per second is greater than 200";
 		trueassertiondata.assertionType = "requests per second";
 		trueassertiondata.actualValue = "300";
 		trueassertiondata.expectedValue = "200";
-		trueassertiondata.status = "true";
+		trueassertiondata.status = true;
 
 	}
 

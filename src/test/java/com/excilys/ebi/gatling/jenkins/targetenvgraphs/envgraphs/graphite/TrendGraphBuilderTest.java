@@ -59,8 +59,8 @@ public class TrendGraphBuilderTest {
                 "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
         assertionData.requestName = "authorize";
         assertionData.simulationName = "oauth2forapi2simulation";
-        assertionData.scenerioName = "scenerioName";
-        assertionData.status = "false";
+        assertionData.scenarioName = "scenarioName";
+        assertionData.status = false;
 
         String expectedRootUrl = "http://tre-stats.internal.shutterfly.com/render?";
         String expectedKOTarget =

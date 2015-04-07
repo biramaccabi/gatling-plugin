@@ -96,7 +96,7 @@ public class GatlingPublisher extends Recorder {
         try {
             build.setDescription(this.generateBuildDescriptionFromAssertionData(assertionDataList));
         } catch (Exception e) {
-            logger.println("ERROR in Setting Build Description" + e);
+            logger.println("ERROR in Setting Build Description " + e);
         }
 
         return true;
@@ -221,7 +221,7 @@ public class GatlingPublisher extends Recorder {
         Integer falsecount = 0;
 
         for (AssertionData assertionData : assertionDataList) {
-            if (assertionData.status.contains("false")) {
+            if (!assertionData.status) {
                 falsecount = falsecount + 1;
                 if (assertionData.assertionType.contains("KO")) {
                     kocount = kocount + 1;
@@ -262,13 +262,15 @@ public class GatlingPublisher extends Recorder {
 
             for (FilePath filepath : files) {
                 File file = new File(filepath.getRemote());
-                AssertionData assertionData = objectMapper.readValue(file, new TypeReference<AssertionData>() {
+                AssertionsData assertionsData = objectMapper.readValue(file, new TypeReference<AssertionsData>() {
                 });
-                assertionData.projectName = project.getName();
-                assertionData.simulationName = file.getParentFile().getName().split("-")[0];
-                assertionData.expectedValue= StringUtils.join(assertionData.conditionValues, ",");
-                assertionData.actualValue = StringUtils.join(assertionData.values, ",");
-                assertionList.add(assertionData);
+                for (AssertionData assertionData : assertionsData.assertions) {
+                	assertionData.projectName = project.getName();
+                	assertionData.simulationName = assertionsData.simulation;
+                	assertionData.expectedValue= StringUtils.join(assertionData.conditionValues, ",");
+                	assertionData.actualValue = StringUtils.join(assertionData.values, ",");
+                	assertionList.add(assertionData);
+                }
             }
         }
 

@@ -29,7 +29,7 @@ public class AssertionData {
     public String simulationName;
 
     @JsonIgnore
-    public String scenerioName;
+    public String scenarioName;
 
     @JsonProperty("path")
     public String requestName;
@@ -46,7 +46,7 @@ public class AssertionData {
     public String actualValue;
 
     @JsonProperty("result")
-    public String status;
+    public boolean status;
 
     public ArrayList<Integer> conditionValues;
 
