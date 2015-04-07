@@ -204,7 +204,7 @@ public class GatlingPublisher extends Recorder {
         for (AssertionData assertionData : assertionDataList) {
             if (!assertionData.status) {
                 falsecount = falsecount + 1;
-                if (assertionData.assertionType.contains("KO")) {
+                if (assertionData.assertionType.contains("failed")) {
                     kocount = kocount + 1;
                 }
                 description.append(getShortBuildDescription(assertionData));
