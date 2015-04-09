@@ -163,9 +163,11 @@ public class TrendGraphBuilder {
                     if(graphiteAssertionType == GRAPHITE_ASSERT_TYPE.throughput){
                         performanceMetricLabel = PERFORMANCE_METRIC_LABEL_THROUGHPUT;
                     }
+					String[] sim_split = assertionData.simulationName.split("\\.");
+					String simulationTrimName = sim_split[sim_split.length - 1];
                     setUrlEncodedValue(values, "env", env);
                     setUrlEncodedValue(values, "simName",
-                            graphiteSanitize(assertionData.simulationName));
+                            graphiteSanitize(simulationTrimName.toLowerCase()));
                     setUrlEncodedValue(values, "reqName",
                             graphiteSanitize(gatlingRequestNameToGraphiteRequestName(
                             assertionData.requestName)));
