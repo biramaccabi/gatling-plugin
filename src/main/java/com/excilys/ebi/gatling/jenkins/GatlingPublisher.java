@@ -175,24 +175,52 @@ public class GatlingPublisher extends Recorder {
 
     public String getShortBuildDescription(AssertionData assertionData) {
 
-    	String shortMessage = assertionData.message
-    			.replace("percentage", "%")
-		    	.replace("standard deviation", "stdDev")
-		    	.replace("percentile", "perc.")
-		    	.replace("mean requests per second", "mean req/s")
-		    	.replace("is less than", "<")
-		    	.replace("is greater than", ">")
-		    	.replace("is in", "in")
-		    	.replace(" is ", " = ")
-		    	.replace(" ", "&nbsp;");
+		StringBuilder description = new StringBuilder();
+		String originalAssertionType = assertionData.assertionType;
+		String convertAssertionType = "";
+		String comparionSymbol = "";
+		if (originalAssertionType.contains("50th")) {
+			convertAssertionType = "50th";
+		}else if (originalAssertionType.contains("90th")) {
+			convertAssertionType = "90th";
+		}else if (originalAssertionType.contains("95th")) {
+			convertAssertionType = "95th";
+		}else if (originalAssertionType.contains("99th")) {
+			convertAssertionType = "99th";
+		}else if (originalAssertionType.contains("requests per second")) {
+			convertAssertionType = "req/s";
+		}else if (originalAssertionType.contains("mean")) {
+			convertAssertionType = "mean";
+		}else if (originalAssertionType.contains("percentage of failed requests")) {
+			convertAssertionType = "KO%"; // not a performance assert
+		}else if (originalAssertionType.contains("min")) {
+			convertAssertionType = "min";
+		}else if (originalAssertionType.contains("max")) {
+			convertAssertionType = "max";
+		}else if (originalAssertionType.contains("standard deviation")) {
+			convertAssertionType = "stddev";
+		}
 
-        return new StringBuilder()
-        	.append(shortMessage)
-        	.append(":")
-        	.append(assertionData.status)
-        	.append("-Actual&nbsp;Value:")
-        	.append(assertionData.actualValue)
-        	.append(";<br>").toString();
+		if (assertionData.message.contains("is greater than")) {
+			comparionSymbol = ">";
+		}else if (assertionData.message.contains("is less than")) {
+			comparionSymbol = "<";
+		}else if (assertionData.message.contains("is in")){
+			comparionSymbol = "in";
+		}else if (assertionData.message.contains("is equal to")) {
+			comparionSymbol = "=";
+		}
+
+		if (!convertAssertionType.isEmpty() && !comparionSymbol.isEmpty()) {
+			String requestNameWithNonBreakingSpace = assertionData.requestName.replace(" ", "&nbsp;");
+			description.append(requestNameWithNonBreakingSpace + "&nbsp;" + convertAssertionType + "=" + assertionData.actualValue + ",&nbsp;expect" + comparionSymbol + assertionData.expectedValue + ";<br>");
+		} else {
+			String messageWithNonBreakingSpace = assertionData.message.replace(" ", "&nbsp;");
+			description.append(messageWithNonBreakingSpace + ":" + assertionData.status + "-Actual&nbsp;Value:" + assertionData.actualValue + ";<br>");
+		}
+
+		System.out.println(description.toString());
+		return description.toString();
     }
 
     public String generateBuildDescriptionFromAssertionData(List<AssertionData> assertionDataList) {
