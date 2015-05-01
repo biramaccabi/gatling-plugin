@@ -55,6 +55,8 @@ public class TrendGraphBuilder {
     private static final Logger logger = Logger.getLogger(TrendGraphBuilder.class.getName());
 
     public enum GRAPHITE_ASSERT_TYPE {
+		percentile50,
+		percentile80,
         percentiles95,
         percentiles99,
         mean,
@@ -65,11 +67,17 @@ public class TrendGraphBuilder {
         ko;
 
         public static GRAPHITE_ASSERT_TYPE fromGatlingAssertType(String assertionType){
-            if(assertionType.contains("95th")){
-                return percentiles95;
-            } else if(assertionType.contains("99th")){
+            if(assertionType.contains("50th")){
+                return percentile50;
+            } else if(assertionType.contains("80th")){
+				return percentile80;
+			} else if(assertionType.contains("95th")){
+				return percentiles99;
+			} else if(assertionType.contains("99th")){
                 return percentiles99;
-            } else if(assertionType.contains("mean")){
+            } else if(assertionType.contains("requests per second")){
+				return throughput;
+			} else if(assertionType.contains("mean")){
                 return mean;
             } else if(assertionType.contains("KO")){
                 return ko;
@@ -79,9 +87,7 @@ public class TrendGraphBuilder {
                 return max;
             } else if(assertionType.contains("standard deviation")){
                 return stddev;
-            } else if(assertionType.contains("requests per second")){
-                return throughput;
-            }
+			}
             throw new IllegalArgumentException("Unexpected gatling type: " + assertionType);
         }
     }
