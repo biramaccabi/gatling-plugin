@@ -72,7 +72,7 @@ public class TrendGraphBuilder {
             } else if(assertionType.contains("80th")){
 				return percentile80;
 			} else if(assertionType.contains("95th")){
-				return percentiles99;
+				return percentiles95;
 			} else if(assertionType.contains("99th")){
                 return percentiles99;
             } else if(assertionType.contains("requests per second")){
