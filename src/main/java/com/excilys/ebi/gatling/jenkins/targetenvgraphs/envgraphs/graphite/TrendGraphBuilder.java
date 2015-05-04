@@ -55,8 +55,8 @@ public class TrendGraphBuilder {
     private static final Logger logger = Logger.getLogger(TrendGraphBuilder.class.getName());
 
     public enum GRAPHITE_ASSERT_TYPE {
-		percentile50,
-		percentile80,
+		percentiles50,
+		percentiles80,
         percentiles95,
         percentiles99,
         mean,
@@ -68,9 +68,9 @@ public class TrendGraphBuilder {
 
         public static GRAPHITE_ASSERT_TYPE fromGatlingAssertType(String assertionType){
             if(assertionType.contains("50th")){
-                return percentile50;
+                return percentiles50;
             } else if(assertionType.contains("80th")){
-				return percentile80;
+				return percentiles80;
 			} else if(assertionType.contains("95th")){
 				return percentiles95;
 			} else if(assertionType.contains("99th")){
