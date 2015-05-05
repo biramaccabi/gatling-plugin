@@ -51,8 +51,8 @@ public class GraphiteGraphSettingsTest {
     @org.junit.Test
     public void testEquals() {
         String host = "http://tre-stats.internal.shutterfly.com";
-        String target = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
-        String title = "sfly.foxtrot.host.app.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
+        String target = "sfly.foxtrot.host.app.*.app.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
+        String title = "sfly.foxtrot.host.app.*.app.GarbageCollectorSentinel.ParNew.heapUsagePercentage";
         String percent_heap_used = "percent_heap_used";
         String yMax = "100";
         String yMin = "0";
