@@ -4,6 +4,7 @@
     <div class="test-trend-caption">
         <j:set var="sevenDays" value="7"/>
         <j:set var="thirtyDays" value="30"/>
+        <j:set var="sixMonths" value="180"/>
         <j:forEach items="${action.getGraphiteGraphUrlsForBuildHistory()}" var="graphiteUrl">
             <div style="display:inline-block;">
                 <div style="display:inline-block;">
@@ -14,7 +15,7 @@
                     <br/>
                             <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, sevenDays)}" target="_blank">Past 7 Days</a>
                     <br/>
-                            <a href="${graphiteUrl}" target="_blank">Complete History</a>
+                            <a href="${action.modifyGraphiteUrlForPastDays(graphiteUrl, sixMonths)}" target="_blank">Complete History</a>
                 </div>
             </div>
         </j:forEach>
