@@ -28,7 +28,7 @@ import java.util.Map;
 public class GraphiteGraphSettingsBuilder {
 
     private final String TRE_HOST = "http://tre-stats.internal.shutterfly.com";
-    private final String IOPS_HOST = "http://graphite.internal.shutterfly.com:443/";
+    private final String IOPS_HOST = "http://graphite-web.internal.shutterfly.com:443/";
 
     Map<String, Map<String, Map<String, List<GraphiteGraphSettings>>>> brandEnvPoolSettings;
 

@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BuildInfoBasedUrlGeneratorTest {
 
-    public static final String TARGET_HOST_NAME = "http://graphite.internal.shutterfly.com:443/";
+    public static final String TARGET_HOST_NAME = "http://graphite-web.internal.shutterfly.com:443/";
     public static final String URL_DATE_FORMAT = "HH:mm_yyyyMMdd";
     @Mock
     GraphiteGraphSettingsBuilder mockedSettingsBuilder;
@@ -141,7 +141,7 @@ public class BuildInfoBasedUrlGeneratorTest {
 
     private GraphiteGraphSettings getSettingWithoutYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
-        appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
+        appCpu.setHost("http://graphite-web.internal.shutterfly.com:443/");
         appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("sfly","kappa","app"));
         appCpu.setYMax("");
         appCpu.setYMin("");
