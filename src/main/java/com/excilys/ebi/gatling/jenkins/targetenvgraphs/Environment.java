@@ -18,7 +18,7 @@ package com.excilys.ebi.gatling.jenkins.targetenvgraphs;
 import com.excilys.ebi.gatling.jenkins.targetenvgraphs.Brand;
 
 public enum Environment {
-    FOXTROT("foxtrot", Brand.SHUTTERFLY),
+    KAPPA ("kappa", Brand.SHUTTERFLY),
     STAGE("stage", Brand.SHUTTERFLY),
     PROD("prod", Brand.SHUTTERFLY),
     BETA("beta", Brand.SHUTTERFLY),

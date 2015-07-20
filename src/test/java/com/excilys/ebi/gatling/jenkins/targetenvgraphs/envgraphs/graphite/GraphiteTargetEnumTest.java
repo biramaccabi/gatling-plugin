@@ -20,7 +20,7 @@ import org.junit.Test;
 
 public class GraphiteTargetEnumTest {
 
-    public static final String SFLYENV = "foxtrot";
+    public static final String SFLYENV = "kappa";
     public static final String TPENV = "lnp";
     public static final String LONG_POOL_FULLNAME = "appserver";
     public static final String LONG_POOL_SHORTNAME = "app";

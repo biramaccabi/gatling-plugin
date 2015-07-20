@@ -47,7 +47,7 @@ public class GraphiteGraphSettingsBuilder {
 
     private boolean brandHasEnv(Brand brand, Environment env) {
         if (brand.equals(Brand.SHUTTERFLY)) {
-            return env.equals(Environment.FOXTROT)
+            return env.equals(Environment.KAPPA)
                     || env.equals(Environment.BETA)
                     || env.equals(Environment.STAGE)
                     || env.equals(Environment.PROD);

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProjectNameParserTest {
-    public static final String SFLY_ENVIRONMENT_NAME = "foxtrot";
+    public static final String SFLY_ENVIRONMENT_NAME = "kappa";
     public static final String TINYPRINTS_ENVIRONMENT_NAME = "lnp";
 
     @Test
@@ -68,30 +68,30 @@ public class ProjectNameParserTest {
 
         Map<String, String> resultMap = new HashMap<String, String>();
 
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home.Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home_Some_Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home-Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver.home_Some-Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver_home-Some.Simulation", "appserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-appserver-home.Some_Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver.home.Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver_home_Some_Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver-home-Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver.home_Some-Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver_home-Some.Simulation", "appserver");
+        resultMap.put("Web_Performance_Tests-kappa-appserver-home.Some_Simulation", "appserver");
 
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home.Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home_Some_Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home-Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver.home_Some-Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver_home-Some.Simulation", "apiserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-apiserver-home.Some_Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver.home.Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver_home_Some_Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver-home-Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver.home_Some-Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver_home-Some.Simulation", "apiserver");
+        resultMap.put("Web_Performance_Tests-kappa-apiserver-home.Some_Simulation", "apiserver");
 
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home.Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home_Some_Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home-Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver.home_Some-Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver_home-Some.Simulation", "wsserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserver-home.Some_Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver.home.Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver_home_Some_Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver-home-Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver.home_Some-Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver_home-Some.Simulation", "wsserver");
+        resultMap.put("Web_Performance_Tests-kappa-wsserver-home.Some_Simulation", "wsserver");
 
-        resultMap.put("Web_Performance_Tests-foxtrot-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
-        resultMap.put("Web_Performance_Tests-foxtrot-fakeserver_home_SomeSimulation", "fakeserver");
-        resultMap.put("Web_Performance_Tests-foxtrot-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
+        resultMap.put("Web_Performance_Tests-kappa-wsserverHomeSomeSimulation", "wsserverhomesomesimulation");
+        resultMap.put("Web_Performance_Tests-kappa-fakeserver_home_SomeSimulation", "fakeserver");
+        resultMap.put("Web_Performance_Tests-kappa-fakestserverhomeSomeSimulation", "fakestserverhomesomesimulation");
 
         return resultMap;
     }

@@ -58,8 +58,8 @@ public class BuildInfoBasedUrlGeneratorTest {
         List<String> generatedUrls = getUrlsForGraphiteGraphSetting(getSettingWithoutYMinYMax());
 
         String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=${fromTime}&until=${untilTime}" +
-                "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
-                "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
+                "&height=400&lineMode=connected&target=sfly.kappa.host.app.*.aggregation-cpu-" +
+                "average.cpu-{user%2C}.value%2Ccolor%28sfly.kappa.host.app.*.aggregation-cpu-average.cpu-idle" +
                 "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
 
         expectedURL = expectedURL.replace("${fromTime}", getStartTimeString());
@@ -76,8 +76,8 @@ public class BuildInfoBasedUrlGeneratorTest {
 
 
         String expectedURL = TARGET_HOST_NAME + "/render?width=600&from=${fromTime}&until=${untilTime}" +
-                "&height=400&lineMode=connected&target=sfly.foxtrot.host.app.*.aggregation-cpu-" +
-                "average.cpu-{user%2C}.value%2Ccolor%28sfly.foxtrot.host.app.*.aggregation-cpu-average.cpu-idle" +
+                "&height=400&lineMode=connected&target=sfly.kappa.host.app.*.aggregation-cpu-" +
+                "average.cpu-{user%2C}.value%2Ccolor%28sfly.kappa.host.app.*.aggregation-cpu-average.cpu-idle" +
                 "&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100" +
                 "&_uniq=0.06565146492917762&title=APP_POOL_CPU_User_Usage";
 
@@ -92,7 +92,7 @@ public class BuildInfoBasedUrlGeneratorTest {
         BuildInfoForTargetEnvGraph testBuildInfoForTargetEnvGraph = new BuildInfoForTargetEnvGraph();
         testBuildInfoForTargetEnvGraph.setBuildDuration(getDuration());
         testBuildInfoForTargetEnvGraph.setBuildStartTime(getBuildStartTime());
-        testBuildInfoForTargetEnvGraph.setEnvironmentName("foxtrot");
+        testBuildInfoForTargetEnvGraph.setEnvironmentName("kappa");
         testBuildInfoForTargetEnvGraph.setPoolName("appserver");
 
         List<GraphiteGraphSettings> settingsList = new ArrayList<GraphiteGraphSettings>();
@@ -142,7 +142,7 @@ public class BuildInfoBasedUrlGeneratorTest {
     private GraphiteGraphSettings getSettingWithoutYMinYMax() {
         GraphiteGraphSettings appCpu = new GraphiteGraphSettings();
         appCpu.setHost("http://graphite.internal.shutterfly.com:443/");
-        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("sfly","foxtrot","app"));
+        appCpu.setTarget(GraphiteTargetEnum.POOL_CPU_USER_USAGE.getTarget("sfly","kappa","app"));
         appCpu.setYMax("");
         appCpu.setYMin("");
         appCpu.setTitle("APP_POOL_CPU_User_Usage");

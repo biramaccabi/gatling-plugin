@@ -44,7 +44,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
     @Before
     public void setup() {
         supportedSflyEnvPoolCriteria = mock(BuildInfoForTargetEnvGraph.class);
-        when(supportedSflyEnvPoolCriteria.getEnvironmentName()).thenReturn("foxtrot");
+        when(supportedSflyEnvPoolCriteria.getEnvironmentName()).thenReturn("kappa");
         when(supportedSflyEnvPoolCriteria.getPoolName()).thenReturn("appserver");
         when(supportedSflyEnvPoolCriteria.getBrandName()).thenReturn("sfly");
         when(supportedSflyEnvPoolCriteria.getGraphEndTime()).thenReturn(getEndTime());
@@ -83,7 +83,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
         Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
-        ArrayList<String> expectedUrls = getListFoxtrotAppUrls("sfly","foxtrot","app");
+        ArrayList<String> expectedUrls = getListAppUrls("sfly","kappa","app");
 
         for(String url: graphUrls) {
             Assert.assertTrue(expectedUrls.contains(url));
@@ -104,7 +104,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
         Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
-        ArrayList<String> expectedUrls = getListFoxtrotAppUrls("tp", "lnp", "app");
+        ArrayList<String> expectedUrls = getListAppUrls("tp", "lnp", "app");
 
         for(String url: graphUrls) {
             Assert.assertTrue(expectedUrls.contains(url));
@@ -148,7 +148,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         return endTime;
     }
 
-    private ArrayList<String> getListFoxtrotAppUrls(String brand, String env, String pool) {
+    private ArrayList<String> getListAppUrls(String brand, String env, String pool) {
         String gcMarkSweepHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         String gcMarkSweepCollectionUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime&vtitle=collection_time_in_ms&fgcolor=000000&bgcolor=FFFFFF&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime";
         String gcParNewHeapUsageUrl = "http://tre-stats.internal.shutterfly.com/render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage&vtitle=percent_heap_used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title="+brand+"."+env+".host."+pool+".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage";

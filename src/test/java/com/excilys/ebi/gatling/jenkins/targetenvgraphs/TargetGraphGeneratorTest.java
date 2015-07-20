@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TargetGraphGeneratorTest {
-    public static final String SFLY_ENVIRONMENT_NAME = "foxtrot";
+    public static final String SFLY_ENVIRONMENT_NAME = "kappa";
     public static final String TINYPRINTS_ENVIRONMENT_NAME = "lnp";
     public static final String TINYPRINTS_BRAND_NAME = "TP";
     public static final String POOL_NAME = "appserver";

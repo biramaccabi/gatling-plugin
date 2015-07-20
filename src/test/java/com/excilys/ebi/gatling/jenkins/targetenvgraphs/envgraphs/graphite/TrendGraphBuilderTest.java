@@ -56,7 +56,7 @@ public class TrendGraphBuilderTest {
         assertionData.expectedValue = "expectedValue";
         assertionData.message = "authorize 95th percentile response time is less than 1000";
         assertionData.projectName =
-                "Web_Performance_Tests-foxtrot-apiserver_OAuth2ForApi2Simulation";
+                "Web_Performance_Tests-kappa-apiserver_OAuth2ForApi2Simulation";
         assertionData.requestName = "authorize";
         assertionData.simulationName = "oauth2forapi2simulation";
         assertionData.scenarioName = "scenarioName";
@@ -64,15 +64,15 @@ public class TrendGraphBuilderTest {
 
         String expectedRootUrl = "http://tre-stats.internal.shutterfly.com/render?";
         String expectedKOTarget =
-                "target=alias(color(secondYAxis(load.summary.foxtrot." +
+                "target=alias(color(secondYAxis(load.summary.kappa." +
                         "oauth2forapi2simulation.authorize.ko.percent)" +
                         "%2C%22red%22)%2C%22percent%20KOs%22)";
         String expectedPerformanceStatTarget =
-                "target=alias(load.summary.foxtrot.oauth2forapi2simulation." +
+                "target=alias(load.summary.kappa.oauth2forapi2simulation." +
                         "authorize.all.percentiles95%2C%22" +
                         "95th+percentile+response+time%22)";
         String expectedPerformanceAssertThresholdTarget =
-                "target=alias(load.summary.foxtrot.oauth2forapi2simulation.authorize." +
+                "target=alias(load.summary.kappa.oauth2forapi2simulation.authorize." +
                         "all.expected.percentiles95" +
                         "%2C%22performance+assert+threshold%22)";
         String expectedReleaseBranchTarget =
@@ -180,7 +180,7 @@ public class TrendGraphBuilderTest {
     public void test_buildValuesForTemplate_env(){
         final Map<String, String> values =
                 trendGraphBuilder.buildValuesForTemplate(expectedFromDate, assertionData);
-        assertEquals("foxtrot", values.get("env"));
+        assertEquals("kappa", values.get("env"));
     }
 
     @Test
@@ -323,15 +323,15 @@ public class TrendGraphBuilderTest {
     @Test
     public void test_modifyGraphiteUrlForPastDays() throws Exception {
         String urlPartOne = "http://tre-stats.internal.shutterfly.com/render?target=alias(color(secondYAxis(" +
-                "summarize(load.summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.ko." +
+                "summarize(load.summary.kappa.individualserverbenchmarksimulation.kappa_Benchmarks_kup01.ko." +
                 "percent,%221day%22,%22max%22))%2C%22red%22)%2C%22percent%20KOs%22)&target=alias(summarize(load." +
-                "summary.foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.percentiles95," +
+                "summary.kappa.individualserverbenchmarksimulation.kappa_Benchmarks_kup01.all.percentiles95," +
                 "%221day%22,%22max%22)%2C%2295th+percentile+response+time%22)&target=alias(summarize(load.summary." +
-                "foxtrot.individualserverbenchmarksimulation.foxtrot_Benchmarks_fup01.all.expected.percentiles95," +
+                "kappa.individualserverbenchmarksimulation.kappa_Benchmarks_kup01.all.expected.percentiles95," +
                 "%221day%22,%22max%22)%2C%22performance+assert+threshold%22)&target=alias(color(lineWidth(" +
                 "drawAsInfinite(integral(sfly.releng.branch.*))%2C1)%2C%22yellow%22)%2C%22Release%20Branch%20" +
                 "Created%22)&width=586&height=308&lineMode=connected";
-        String urlPartTwo = "&title=foxtrot_Benchmarks_fup01+-+95th+percentile+response+time&vtitle=" +
+        String urlPartTwo = "&title=kappa_Benchmarks_kup01+-+95th+percentile+response+time&vtitle=" +
                 "Response_Time_in_ms&vtitleRight=Percentage_KOs&bgcolor=FFFFFF&fgcolor=000000&yMaxRight=100" +
                 "&yMinRight=0&hideLegend=false&uniqueLegend=true";
 
