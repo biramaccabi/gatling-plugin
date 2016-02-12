@@ -35,6 +35,7 @@ public class GraphiteGraphSettingsBuilderTest {
     private static final String UNSUPPORTED_POOL = "nonsenseserver";
     private static final String SFLY = "sfly";
     private static final String TP = "tp";
+    private static final String KAPPA= "kappa";
 
 
     private static final int NORMAL_EXPECTED_NUM_GRAPHS = 21;
@@ -173,19 +174,25 @@ public class GraphiteGraphSettingsBuilderTest {
         ArrayList<GraphiteGraphSettings> expectedSettings = new ArrayList<GraphiteGraphSettings>();
 
         String poolShortName = ServerPool.getEnumForPoolName(pool).shortName;
+        String treStatsPoolName = poolShortName;
+
+        if (env == KAPPA)
+        {
+            treStatsPoolName = "k" + poolShortName;
+        }
 
         GraphiteGraphSettings gcMarkSweepHeapSetting = new GraphiteGraphSettings();
         gcMarkSweepHeapSetting.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepHeapSetting.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
-        gcMarkSweepHeapSetting.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSetting.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSetting.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
         gcMarkSweepHeapSetting.setVerticalTitle("percent_heap_used");
         gcMarkSweepHeapSetting.setYMax("100");
         gcMarkSweepHeapSetting.setYMin("0");
 
         GraphiteGraphSettings gcMarkSweepTimeSetting = new GraphiteGraphSettings();
         gcMarkSweepTimeSetting.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepTimeSetting.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
-        gcMarkSweepTimeSetting.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSetting.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSetting.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
         gcMarkSweepTimeSetting.setVerticalTitle("collection_time_in_ms");
         gcMarkSweepTimeSetting.setYMax("");
         gcMarkSweepTimeSetting.setYMin("");
@@ -193,16 +200,16 @@ public class GraphiteGraphSettingsBuilderTest {
 
         GraphiteGraphSettings gcParNewHeapSetting= new GraphiteGraphSettings();
         gcParNewHeapSetting.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewHeapSetting.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
-        gcParNewHeapSetting.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSetting.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSetting.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
         gcParNewHeapSetting.setVerticalTitle("percent_heap_used");
         gcParNewHeapSetting.setYMax("100");
         gcParNewHeapSetting.setYMin("0");
 
         GraphiteGraphSettings gcParNewTimeSetting= new GraphiteGraphSettings();
         gcParNewTimeSetting.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewTimeSetting.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
-        gcParNewTimeSetting.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSetting.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSetting.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
         gcParNewTimeSetting.setVerticalTitle("collection_time_in_ms");
         gcParNewTimeSetting.setYMax("");
         gcParNewTimeSetting.setYMin("");
@@ -376,34 +383,43 @@ public class GraphiteGraphSettingsBuilderTest {
         String poolShortName = ServerPool.getEnumForPoolName(pool).shortName;
         String supplemntalPoolShortName = ServerPool.getEnumForPoolName(SUPPLMENTAL_POOL).shortName;
 
+        String treStatsPoolName = poolShortName;
+        String treStatsSuppPoolShotName = supplemntalPoolShortName;
+
+        if (env == KAPPA)
+        {
+            treStatsPoolName = "k" + poolShortName;
+            treStatsSuppPoolShotName = "k" + supplemntalPoolShortName;
+        }
+
         GraphiteGraphSettings gcMarkSweepHeapSettingNormal = new GraphiteGraphSettings();
         gcMarkSweepHeapSettingNormal.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepHeapSettingNormal.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
-        gcMarkSweepHeapSettingNormal.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSettingNormal.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSettingNormal.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
         gcMarkSweepHeapSettingNormal.setVerticalTitle("percent_heap_used");
         gcMarkSweepHeapSettingNormal.setYMax("100");
         gcMarkSweepHeapSettingNormal.setYMin("0");
 
         GraphiteGraphSettings gcMarkSweepHeapSettingSupplemental = new GraphiteGraphSettings();
         gcMarkSweepHeapSettingSupplemental.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepHeapSettingSupplemental.setTarget(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
-        gcMarkSweepHeapSettingSupplemental.setTitle(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSettingSupplemental.setTarget(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
+        gcMarkSweepHeapSettingSupplemental.setTitle(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
         gcMarkSweepHeapSettingSupplemental.setVerticalTitle("percent_heap_used");
         gcMarkSweepHeapSettingSupplemental.setYMax("100");
         gcMarkSweepHeapSettingSupplemental.setYMin("0");
 
         GraphiteGraphSettings gcMarkSweepTimeSettingNormal = new GraphiteGraphSettings();
         gcMarkSweepTimeSettingNormal.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepTimeSettingNormal.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
-        gcMarkSweepTimeSettingNormal.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSettingNormal.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSettingNormal.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
         gcMarkSweepTimeSettingNormal.setVerticalTitle("collection_time_in_ms");
         gcMarkSweepTimeSettingNormal.setYMax("");
         gcMarkSweepTimeSettingNormal.setYMin("");
 
         GraphiteGraphSettings gcMarkSweepTimeSettingSupplemental = new GraphiteGraphSettings();
         gcMarkSweepTimeSettingSupplemental.setHost("http://tre-stats.internal.shutterfly.com");
-        gcMarkSweepTimeSettingSupplemental.setTarget(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
-        gcMarkSweepTimeSettingSupplemental.setTitle(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSettingSupplemental.setTarget(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
+        gcMarkSweepTimeSettingSupplemental.setTitle(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.collectionTime");
         gcMarkSweepTimeSettingSupplemental.setVerticalTitle("collection_time_in_ms");
         gcMarkSweepTimeSettingSupplemental.setYMax("");
         gcMarkSweepTimeSettingSupplemental.setYMin("");
@@ -411,32 +427,32 @@ public class GraphiteGraphSettingsBuilderTest {
 
         GraphiteGraphSettings gcParNewHeapSettingNormal= new GraphiteGraphSettings();
         gcParNewHeapSettingNormal.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewHeapSettingNormal.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
-        gcParNewHeapSettingNormal.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSettingNormal.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSettingNormal.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
         gcParNewHeapSettingNormal.setVerticalTitle("percent_heap_used");
         gcParNewHeapSettingNormal.setYMax("100");
         gcParNewHeapSettingNormal.setYMin("0");
 
         GraphiteGraphSettings gcParNewHeapSettingSupplemental= new GraphiteGraphSettings();
         gcParNewHeapSettingSupplemental.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewHeapSettingSupplemental.setTarget(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
-        gcParNewHeapSettingSupplemental.setTitle(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSettingSupplemental.setTarget(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
+        gcParNewHeapSettingSupplemental.setTitle(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ParNew.heapUsagePercentage");
         gcParNewHeapSettingSupplemental.setVerticalTitle("percent_heap_used");
         gcParNewHeapSettingSupplemental.setYMax("100");
         gcParNewHeapSettingSupplemental.setYMin("0");
 
         GraphiteGraphSettings gcParNewTimeSettingNormal= new GraphiteGraphSettings();
         gcParNewTimeSettingNormal.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewTimeSettingNormal.setTarget(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
-        gcParNewTimeSettingNormal.setTitle(brand + "." + env + ".host." + poolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSettingNormal.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSettingNormal.setTitle(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
         gcParNewTimeSettingNormal.setVerticalTitle("collection_time_in_ms");
         gcParNewTimeSettingNormal.setYMax("");
         gcParNewTimeSettingNormal.setYMin("");
 
         GraphiteGraphSettings gcParNewTimeSettingSupplemental= new GraphiteGraphSettings();
         gcParNewTimeSettingSupplemental.setHost("http://tre-stats.internal.shutterfly.com");
-        gcParNewTimeSettingSupplemental.setTarget(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
-        gcParNewTimeSettingSupplemental.setTitle(brand + "." + env + ".host." + supplemntalPoolShortName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSettingSupplemental.setTarget(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
+        gcParNewTimeSettingSupplemental.setTitle(brand + "." + env + ".host." + treStatsSuppPoolShotName + ".*.GarbageCollectorSentinel.ParNew.collectionTime");
         gcParNewTimeSettingSupplemental.setVerticalTitle("collection_time_in_ms");
         gcParNewTimeSettingSupplemental.setYMax("");
         gcParNewTimeSettingSupplemental.setYMin("");

@@ -26,7 +26,27 @@ public enum ServerPool {
     OMS("oms", "oms"),
     SHARE("shareserver", "share"),
     UPLOADSERVER("upload", "up"),
-    WSSERVER("wsserver", "ws");
+    WSSERVER("wsserver", "ws"),
+    ADMINSERVER("admin", "admin"),
+    CCSERVER("cc","cc"),
+    CMSERVER("cm","cm"),
+    CSSERVER("cs","cs"),
+    DOWNLOADSERVER("download","download"),
+    EPINDEXSERVER("epindex","epindex"),
+    EPSEARCHSERVER("epsearch","epsearch"),
+    ESSEARCHSERVER("essearch","essearch"),
+    FIREHOSESERVER("firehose","firehose"),
+    MONGODBSERVER("mongodb","mongodb"),
+    ORACLESERVER("oracle","oracle"),
+    ORDERSERVER("order","order"),
+    ORDERAPISERVER("orderapi","orderapi"),
+    ORDERCONSSERVER("ordercons","ordercons"),
+    POSTALSERVER("postal","postal"),
+    SSAPISERVER("sharedservices","ssapi"),
+    UNIFIEDUPLOADSERVER("uniup","uniup"),
+    WEBSERVER("web","web"),
+    WSLABSERVER("wslab","ws-lab");
+
 
     public final String longName;
     public final String shortName;

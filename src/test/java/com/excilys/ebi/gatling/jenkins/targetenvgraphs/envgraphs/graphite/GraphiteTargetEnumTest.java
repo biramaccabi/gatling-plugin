@@ -41,8 +41,8 @@ public class GraphiteTargetEnumTest {
 
     @Test
     public void testGetTargetWithShortPoolShortNameSFLY() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(BRAND_SFLY, SFLYENV, LONG_POOL_SHORTNAME);
-        String expectedTarget = BRAND_SFLY + "." + SFLYENV +".host."+ LONG_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(BRAND_SFLY, SFLYENV, "k" + LONG_POOL_SHORTNAME);
+        String expectedTarget = BRAND_SFLY + "." + SFLYENV +".host.k"+ LONG_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
 
     }
@@ -56,8 +56,8 @@ public class GraphiteTargetEnumTest {
 
     @Test
     public void testGetTargetWithShortestPoolShortNameSFLY() {
-        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(BRAND_SFLY, SFLYENV, SHORT_POOL_SHORTNAME);
-        String expectedTarget = BRAND_SFLY + "." + SFLYENV +".host."+ SHORT_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
+        String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(BRAND_SFLY, SFLYENV, "k" + SHORT_POOL_SHORTNAME);
+        String expectedTarget = BRAND_SFLY + "." + SFLYENV +".host.k"+ SHORT_POOL_SHORTNAME +".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
     }
 

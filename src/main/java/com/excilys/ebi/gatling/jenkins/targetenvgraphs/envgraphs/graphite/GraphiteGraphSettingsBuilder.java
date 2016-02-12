@@ -115,9 +115,14 @@ public class GraphiteGraphSettingsBuilder {
         String env = environment.name;
         String pool = serverPool.longName;
         String shortPoolName = serverPool.shortName;
+        String poolName_treStats=pool;
+        if (env == Environment.KAPPA.name)
+        {
+            poolName_treStats="k" + pool;
+        }
 
         GraphiteGraphSettings madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(brandName,env, pool));
+        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(brandName,env, poolName_treStats));
         madeSetting.setHost(TRE_HOST);
         madeSetting.setYMax("100");
         madeSetting.setYMin("0");
@@ -126,7 +131,7 @@ public class GraphiteGraphSettingsBuilder {
         addSetting(brandName, env, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_COLLECTION_TIME.getTarget(brandName,env, pool));
+        madeSetting.setTarget(GraphiteTargetEnum.GC_MARK_SWEEP_COLLECTION_TIME.getTarget(brandName,env, poolName_treStats));
         madeSetting.setHost(TRE_HOST);
         madeSetting.setYMax("");
         madeSetting.setYMin("");
@@ -135,7 +140,7 @@ public class GraphiteGraphSettingsBuilder {
         addSetting(brandName, env, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_HEAP_USAGE.getTarget(brandName,env, pool));
+        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_HEAP_USAGE.getTarget(brandName,env, poolName_treStats));
         madeSetting.setHost(TRE_HOST);
         madeSetting.setYMax("100");
         madeSetting.setYMin("0");
@@ -144,7 +149,7 @@ public class GraphiteGraphSettingsBuilder {
         addSetting(brandName, env, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_COLLECTION_TIME.getTarget(brandName,env, pool));
+        madeSetting.setTarget(GraphiteTargetEnum.GC_PAR_NEW_COLLECTION_TIME.getTarget(brandName,env, poolName_treStats));
         madeSetting.setHost(TRE_HOST);
         madeSetting.setYMax("");
         madeSetting.setYMin("");
