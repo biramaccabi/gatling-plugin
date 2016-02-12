@@ -83,7 +83,7 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
         Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
-        ArrayList<String> expectedUrls = getListAppUrls("sfly","kappa","kapp");
+        ArrayList<String> expectedUrls = getListAppUrls("sfly","kappa","app");
 
         for(String url: graphUrls) {
             Assert.assertTrue(expectedUrls.contains(url));

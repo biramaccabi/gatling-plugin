@@ -176,11 +176,6 @@ public class GraphiteGraphSettingsBuilderTest {
         String poolShortName = ServerPool.getEnumForPoolName(pool).shortName;
         String treStatsPoolName = poolShortName;
 
-        if (env == KAPPA)
-        {
-            treStatsPoolName = "k" + poolShortName;
-        }
-
         GraphiteGraphSettings gcMarkSweepHeapSetting = new GraphiteGraphSettings();
         gcMarkSweepHeapSetting.setHost("http://tre-stats.internal.shutterfly.com");
         gcMarkSweepHeapSetting.setTarget(brand + "." + env + ".host." + treStatsPoolName + ".*.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage");
@@ -386,11 +381,6 @@ public class GraphiteGraphSettingsBuilderTest {
         String treStatsPoolName = poolShortName;
         String treStatsSuppPoolShotName = supplemntalPoolShortName;
 
-        if (env == KAPPA)
-        {
-            treStatsPoolName = "k" + poolShortName;
-            treStatsSuppPoolShotName = "k" + supplemntalPoolShortName;
-        }
 
         GraphiteGraphSettings gcMarkSweepHeapSettingNormal = new GraphiteGraphSettings();
         gcMarkSweepHeapSettingNormal.setHost("http://tre-stats.internal.shutterfly.com");
