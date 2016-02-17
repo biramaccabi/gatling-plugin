@@ -43,6 +43,7 @@ public enum ServerPool {
     ORDERCONSSERVER("ordercons","ordercons"),
     POSTALSERVER("postal","postal"),
     SSAPISERVER("sharedservices","ssapi"),
+    SSPROMOSERVER("sspromo","sspromo"),
     UNIFIEDUPLOADSERVER("uniup","uniup"),
     WEBSERVER("web","web"),
     WSLABSERVER("wslab","ws-lab");
