@@ -44,12 +44,6 @@ public enum GraphiteTargetEnum {
 
     MSP_LOAD_AVG("{$brand}.{$env}.host.oracle.*.load.load.*term"),
 
-    NXGEN_CPU_USER_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
-    NXGEN_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
-    NXGEN_CPU_WAIT_USAGE("{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle"),
-
-    NXGEN_LOAD_AVG("{$brand}.{$env}.host.oracle-x86_64.*.load.load.*term"),
-
     MONGODB_CPU_USER_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
     MONGODB_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
     MONGODB_CPU_WAIT_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),

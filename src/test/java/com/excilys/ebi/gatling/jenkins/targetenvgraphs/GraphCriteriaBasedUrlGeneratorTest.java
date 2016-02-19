@@ -79,8 +79,8 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedSflyEnvPoolCriteria);
 
-        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4. 21 Total.";
-        int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
+        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, Mongo 4. 17 Total.";
+        int expectedGraphUrlCount = 4 + 5 + 4 + 4;
         Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
         ArrayList<String> expectedUrls = getListAppUrls("sfly","kappa","app");
@@ -100,8 +100,8 @@ public class GraphCriteriaBasedUrlGeneratorTest {
 
         ArrayList<String> graphUrls = testGenerator.getUrlsForCriteria(supportedTPEnvPoolCriteria);
 
-        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, NXGEN 4, Mongo 4. 21 Total.";
-        int expectedGraphUrlCount = 4 + 5 + 4 + 4 + 4;
+        String sizeAssertString = "should come back with: GC 4, Pool 5, MSP 4, Mongo 4. 17 Total.";
+        int expectedGraphUrlCount = 4 + 5 + 4 + 4;
         Assert.assertEquals(sizeAssertString, expectedGraphUrlCount, graphUrls.size());
 
         ArrayList<String> expectedUrls = getListAppUrls("tp", "lnp", "app");
@@ -163,11 +163,6 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         String mspCpuWaitUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_CPU_IO_Wait_Usage";
         String mspLoadAvg = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MSP_DATABASE_Load_Average";
 
-        String nxgenCpuUserUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_User_Usage";
-        String nxgenCpuSystemUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_System_Usage";
-        String nxgenCpuWaitUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.oracle-x86_64.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_CPU_IO_Wait_Usage";
-        String nxgenLoadAvg = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.oracle-x86_64.*.load.load.*term&vtitle=Load_Average&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=NXGEN_DATABASE_Load_Average";
-
         String mongoDBCpuUserUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_User_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_User_Usage";
         String mongoDBCpuSystemUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_System_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_System_Usage";
         String mongoDBCpuWaitUrl = "http://graphite-web.internal.shutterfly.com:443//render?width=600&from=08:00_20000101&until=08:45_20000101&height=400&lineMode=connected&target="+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28"+brand+"."+env+".host.mongodb.*.aggregation-cpu-average.cpu-idle&vtitle=CPU_Percent_IO_Wait_Used&fgcolor=000000&bgcolor=FFFFFF&yMin=0&yMax=100&_uniq=0.06565146492917762&title=MongoDB_CPU_IO_Wait_Usage";
@@ -187,10 +182,6 @@ public class GraphCriteriaBasedUrlGeneratorTest {
         list.add(mspCpuSystemUrl);
         list.add(mspCpuWaitUrl);
         list.add(mspLoadAvg);
-        list.add(nxgenCpuUserUrl);
-        list.add(nxgenCpuSystemUrl);
-        list.add(nxgenCpuWaitUrl);
-        list.add(nxgenLoadAvg);
         list.add(mongoDBCpuUserUrl);
         list.add(mongoDBCpuSystemUrl);
         list.add(mongoDBCpuWaitUrl);

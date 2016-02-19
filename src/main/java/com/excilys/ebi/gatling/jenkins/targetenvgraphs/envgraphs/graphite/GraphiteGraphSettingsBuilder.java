@@ -234,42 +234,6 @@ public class GraphiteGraphSettingsBuilder {
         addSetting(brandName, env, pool, madeSetting);
 
         madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_USER_USAGE.getTarget(brandName,env, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_User_Used");
-        madeSetting.setTitle("NXGEN_DATABASE_CPU_User_Usage");
-        addSetting(brandName, env, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_SYSTEM_USAGE.getTarget(brandName,env, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_System_Used");
-        madeSetting.setTitle("NXGEN_DATABASE_CPU_System_Usage");
-        addSetting(brandName, env, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_CPU_WAIT_USAGE.getTarget(brandName,env, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("CPU_Percent_IO_Wait_Used");
-        madeSetting.setTitle("NXGEN_DATABASE_CPU_IO_Wait_Usage");
-        addSetting(brandName, env, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
-        madeSetting.setTarget(GraphiteTargetEnum.NXGEN_LOAD_AVG.getTarget(brandName,env, pool));
-        madeSetting.setHost(IOPS_HOST);
-        madeSetting.setYMax("100");
-        madeSetting.setYMin("0");
-        madeSetting.setVerticalTitle("Load_Average");
-        madeSetting.setTitle("NXGEN_DATABASE_Load_Average");
-        addSetting(brandName, env, pool, madeSetting);
-
-        madeSetting = new GraphiteGraphSettings();
         madeSetting.setTarget(GraphiteTargetEnum.MONGODB_CPU_USER_USAGE.getTarget(brandName,env, pool));
         madeSetting.setHost(IOPS_HOST);
         madeSetting.setYMax("100");
