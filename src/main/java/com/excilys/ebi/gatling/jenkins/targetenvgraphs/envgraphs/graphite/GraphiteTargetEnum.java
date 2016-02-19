@@ -30,13 +30,13 @@ public enum GraphiteTargetEnum {
     POOL_SWAP_USAGE("{$brand}.{$env}.host.{$pool}.*.swap.swap-{used%2C}.value%2Ccolor%28{$brand}.{$env}.host.{$pool}.*." +
             "swap.swap-used"),
 
-    GC_MARK_SWEEP_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+    GC_MARK_SWEEP_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ConcurrentMarkSweep." +
             "heapUsagePercentage"),
-    GC_MARK_SWEEP_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ConcurrentMarkSweep." +
+    GC_MARK_SWEEP_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ConcurrentMarkSweep." +
             "collectionTime"),
 
-    GC_PAR_NEW_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.collectionTime"),
-    GC_PAR_NEW_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
+    GC_PAR_NEW_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ParNew.collectionTime"),
+    GC_PAR_NEW_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
 
     MSP_CPU_USER_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
     MSP_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
