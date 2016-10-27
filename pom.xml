@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>1.494</version>
+		<version>2.3</version>
 	</parent>
 
 	<artifactId>gatling</artifactId>
-	<version>1.0.4.42</version>
+	<version>1.2.1.00</version>
 	<packaging>hpi</packaging>
 	<name>Gatling Jenkins Plugin</name>
 	<url>https://wiki.jenkins-ci.org/display/JENKINS/Gatling+Plugin</url>
@@ -21,43 +21,51 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git@github.com:jenkinsci/gatling-plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:jenkinsci/gatling-plugin.git</developerConnection>
-		<url>https://github.com/jenkinsci/gatling-plugin</url>
+		<connection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+		<url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
 		<developer>
-			<id>slandelle@excilys.com</id>
+			<id>slandelle</id>
 			<name>Stephane Landelle</name>
-			<organization>eBusiness Information, Excilys Group</organization>
+			<organization>GatlingCorp</organization>
 		</developer>
 		<developer>
 			<id>pdalpra</id>
-			<email>pdalpra@excilys.com</email>
 			<name>Pierre Dal-Pra</name>
-			<organization>eBusiness Information, Excilys Group</organization>
 		</developer>
 		<developer>
-			<id>blemale@excilys.com&gt;</id>
+			<id>blemale;</id>
 			<name>Bastien Lemale</name>
-			<organization>eBusiness Information, Excilys Group</organization>
 		</developer>
 		<developer>
-			<id>gcoutant@excilys.com&gt;</id>
+			<id>gcoutant</id>
 			<name>Gregory Coutant</name>
-			<organization>eBusiness Information, Excilys Group</organization>
 		</developer>
 	</developers>
 
 	<properties>
-		<jackson.version>2.1.1</jackson.version>
+		<!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
+		<jenkins.version>1.651.2</jenkins.version>
+		<!-- Java Level to use. Java 7 required when using core >= 1.612 -->
+		<java.level>7</java.level>
+		<!-- Jenkins Test Harness version you use to test the plugin. -->
+		<!-- For Jenkins version >= 1.580.1 use JTH 2.x or higher. -->
+		<jenkins-test-harness.version>2.1</jenkins-test-harness.version>
+		<!-- Other properties you may want to use:
+             ~ hpi-plugin.version: The HPI Maven Plugin version used by the plugin..
+             ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
+        -->
+
+		<jackson.version>2.4.4</jackson.version>
 
 		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
 		<maven-source-plugin.version>2.2</maven-source-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
+		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
 		<mycila-maven-license-plugin.version>1.10.b1</mycila-maven-license-plugin.version>
 
 		<header.basedir>${project.basedir}</header.basedir>
@@ -82,6 +90,29 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		<!-- dependencies on Jenkins Pipeline plugins -->
+		<dependency>
+			<groupId>org.jenkins-ci.plugins.workflow</groupId>
+			<artifactId>workflow-job</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jenkins-ci.plugins.workflow</groupId>
+			<artifactId>workflow-cps</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jenkins-ci.plugins.workflow</groupId>
+			<artifactId>workflow-step-api</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<!-- writeFile is useful for test -->
+		<dependency>
+			<groupId>org.jenkins-ci.plugins.workflow</groupId>
+			<artifactId>workflow-basic-steps</artifactId>
+			<version>1.14</version>
+			<scope>test</scope>
 		</dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -131,6 +162,13 @@
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<tagNameFormat>@{project.version}</tagNameFormat>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->

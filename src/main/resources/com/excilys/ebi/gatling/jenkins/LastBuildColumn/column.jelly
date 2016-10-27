@@ -1,4 +1,0 @@
-<j:jelly xmlns:j="jelly:core">
-  <j:set var="shortName" value="${it.getShortName(job)}"/>
-  <td data="${shortName}">${shortName}</td>
-</j:jelly>

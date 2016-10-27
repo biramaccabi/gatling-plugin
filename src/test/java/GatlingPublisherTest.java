@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import com.excilys.ebi.gatling.jenkins.AssertionData;
-import com.excilys.ebi.gatling.jenkins.GatlingPublisher;
+import io.gatling.jenkins.AssertionData;
+import io.gatling.jenkins.GatlingPublisher;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,0 +1,23 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+         xmlns:st="jelly:stapler"
+         xmlns:l="/lib/layout">
+	<l:layout title="Build #${it.build.number} : ${simName}">
+		<l:breadcrumb title="${simName}" href="."/>
+		<l:side-panel>
+			<st:include it="${it.run}" page="sidepanel.jelly"/>
+		</l:side-panel>
+		<l:main-panel>
+			<h1>System Information Graphs</h1>
+            <h2>
+                <a href="https://ignite.shutterfly.com/docs/DOC-6185">Learn more about the System Information Graphs</a>
+            </h2>
+			<h2>${it.getTargetEnvGraphMessage()}</h2>
+            <div class="test-trend-caption">
+                 <j:forEach items="${it.getTargetEnvGraphUrls()}" var="graphUrls">
+                     <img src="${graphUrls}"/>
+                 </j:forEach>
+            </div>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

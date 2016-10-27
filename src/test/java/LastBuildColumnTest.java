@@ -17,7 +17,7 @@
 import org.junit.Before;
 import org.junit.Test;
 import hudson.model.Result;
-import com.excilys.ebi.gatling.jenkins.LastBuildColumn;
+import io.gatling.jenkins.LastBuildColumn;
 import static org.junit.Assert.assertEquals;
 
 public class LastBuildColumnTest {

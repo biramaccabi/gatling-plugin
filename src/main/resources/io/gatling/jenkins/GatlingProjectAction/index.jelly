@@ -1,0 +1,77 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:fmt="jelly:fmt" xmlns:l="/lib/layout"
+         xmlns:g="/io/gatling/jenkins/tags">
+	<l:layout title="${it.job.name} - ${%ProjectPageTitle}">
+		<l:header>
+			<g:import/>
+		</l:header>
+		<l:side-panel>
+			<st:include it="${it.job}" page="sidepanel.jelly"/>
+		</l:side-panel>
+		<l:main-panel>
+			<h1>${it.job.name} - ${%ProjectPageTitle}</h1>
+			<h2>${%AvailableReports} :</h2>
+            <ul>
+            	<j:forEach items="${it.reports.entrySet()}" var="build">
+                    <j:forEach items="${build.value}" var="simname">
+                        <li>
+                            Build # ${build.key.number} (<fmt:formatDate value="${build.key.time}" type="both"/>) : <a href="../${it.getReportURL(build.key.number, simname)}" target="_blank">${simname}</a>
+                        </li>
+                    </j:forEach>
+            	</j:forEach>
+            </ul>
+            <br/>
+
+			<g:graph id="meanResponseTime" title="${%MeanResponseTimeChartTitle}"
+			         seriesNames="${it.meanResponseTimeGraph.seriesNamesJSON}"
+			         data="${it.meanResponseTimeGraph.seriesJSON}" yAxisUnit="ms"
+			         height="400px" width="100%"/>
+			<g:graph id="responseTimePercentile" title="${%ResponseTimePercentileChartTitle}"
+			         seriesNames="${it.percentileResponseTimeGraph.seriesNamesJSON}"
+			         data="${it.percentileResponseTimeGraph.seriesJSON}" yAxisUnit="ms"
+			         height="400px" width="100%"/>
+			<g:graph id="requestKO" title="${%RequestKOChartTitle}"
+			         seriesNames="${it.requestKOPercentageGraph.seriesNamesJSON}"
+			         yAxisUnit="%"
+			         data="${it.requestKOPercentageGraph.seriesJSON}" height="400px" width="100%"/>
+
+            <script>
+                var meanResponseSeriesNames = ${it.meanResponseTimeGraph.seriesNamesJSON};
+                var meanResponseSeriesValues = ${it.meanResponseTimeGraph.seriesJSON};
+
+                jQueryGatling('#meanResponseTime').bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        var xAxisArray = meanResponseSeriesValues[seriesIndex].reverse();
+                        var url = "../" + xAxisArray[pointIndex][0] + "/gatling/report/" + meanResponseSeriesNames[seriesIndex].label + "/";
+                        var win = window.open(url, '_blank');
+                        win.focus();
+                    }
+                );
+
+                var responseTimeSeriesNames = ${it.percentileResponseTimeGraph.seriesNamesJSON};
+                var responseTimeSeriesValues = ${it.percentileResponseTimeGraph.seriesJSON};
+
+                jQueryGatling('#responseTimePercentile').bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        var xAxisArray = responseTimeSeriesValues[seriesIndex].reverse();
+                        var url = "../" + xAxisArray[pointIndex][0] + "/gatling/report/" + responseTimeSeriesNames[seriesIndex].label + "/";
+                        var win = window.open(url, '_blank');
+                        win.focus();
+                    }
+                );
+
+                var requestKOSeriesNames = ${it.requestKOPercentageGraph.seriesNamesJSON};
+                var requestKOSeriesValues = ${it.requestKOPercentageGraph.seriesJSON};
+
+                jQueryGatling('#requestKO').bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        var xAxisArray = responseTimeSeriesValues[seriesIndex].reverse();
+                        var url = "../" + xAxisArray[pointIndex][0] + "/gatling/report/" + requestKOSeriesNames[seriesIndex].label + "/";
+                        var win = window.open(url, '_blank');
+                        win.focus();
+                    }
+                );
+            </script>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>
