@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.gatling.jenkins;
+package io.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
-public interface PluginConstants {
-	String ICON_URL = "/plugin/gatling/img/logo.png";
-    //String DISPLAY_NAME = "Gatling";
-    String TARGET_ENV_GRAPHS_ICON = "/plugin/gatling/img/graph_icon.png";
 
-    String DISPLAY_NAME_REPORTS = "Gatling - Reports";
+/**
+ * Created by jagte on 11/21/16.
+ */
+public class GrafanaUrl{
+    public GrafanaUrl(String rawUrl, String urlDisplayName)
+    {
+        this.rawUrl=rawUrl;
+        this.urlDisplayName=urlDisplayName;
+    }
 
-    String URL_NAME = "gatling";
+    public String rawUrl;
+    public String urlDisplayName;
 
-	String DISPLAY_NAME_SOURCE = "Gatling - Test Source";
-    String TARGET_ENV_GRAPHS_DISPLAY_STRING = "Statistics - Pool Information";
-
-	int MAX_BUILDS_TO_DISPLAY = 30;
-	int MAX_BUILDS_TO_DISPLAY_DASHBOARD = 15;
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof GrafanaUrl)){
+            return false;
+        }
+        return this.rawUrl.equals(((GrafanaUrl)other).rawUrl)
+                && this.urlDisplayName.equals(((GrafanaUrl)other).urlDisplayName);
+    }
 }

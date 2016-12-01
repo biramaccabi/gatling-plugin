@@ -18,7 +18,10 @@ package io.gatling.jenkins;
 import io.gatling.jenkins.targetenvgraphs.TargetGraphGenerator;
 import hudson.model.Run;
 import hudson.model.Action;
+import io.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GrafanaUrl;
+
 import java.util.List;
+import java.util.ArrayList;
 
 public class TargetEnvGraphAction implements Action {
 
@@ -51,7 +54,7 @@ public class TargetEnvGraphAction implements Action {
         return url;
     }
 
-    public List<String> getGraphiteUrls() {
+    public ArrayList<GrafanaUrl> getGraphiteUrls() {
         TargetGraphGenerator myUtil = new TargetGraphGenerator();
         return myUtil.getGraphUrls(run);
     }

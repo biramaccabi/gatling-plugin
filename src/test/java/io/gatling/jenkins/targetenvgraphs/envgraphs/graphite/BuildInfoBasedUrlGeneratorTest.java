@@ -33,10 +33,10 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
+/*
 @RunWith(MockitoJUnitRunner.class)
 public class BuildInfoBasedUrlGeneratorTest {
-
+/*
     public static final String TARGET_HOST_NAME = "http://graphite-web.internal.shutterfly.com:443/";
     public static final String URL_DATE_FORMAT = "HH:mm_yyyyMMdd";
     @Mock
@@ -53,6 +53,7 @@ public class BuildInfoBasedUrlGeneratorTest {
         mockedSettingsBuilder = mock(GraphiteGraphSettingsBuilder.class);
     }
 
+    /*
     @Test
     public void testGetUrlsForCriteriaWithoutYMinYMax() {
         List<String> generatedUrls = getUrlsForGraphiteGraphSetting(getSettingWithoutYMinYMax());
@@ -86,9 +87,9 @@ public class BuildInfoBasedUrlGeneratorTest {
 
         Assert.assertEquals(1, generatedUrls.size());
         Assert.assertEquals(expectedURL, generatedUrls.get(0));
-    }
+    }*/
 
-    private List<String> getUrlsForGraphiteGraphSetting(GraphiteGraphSettings settings) {
+   /* private List<String> getUrlsForGraphiteGraphSetting(GraphiteGraphSettings settings) {
         BuildInfoForTargetEnvGraph testBuildInfoForTargetEnvGraph = new BuildInfoForTargetEnvGraph();
         testBuildInfoForTargetEnvGraph.setBuildDuration(getDuration());
         testBuildInfoForTargetEnvGraph.setBuildStartTime(getBuildStartTime());
@@ -104,8 +105,9 @@ public class BuildInfoBasedUrlGeneratorTest {
         testBuildInfoBasedUrlGenerator.graphiteGraphSettingsBuilder = mockedSettingsBuilder;
         return testBuildInfoBasedUrlGenerator.getUrlsForCriteria(testBuildInfoForTargetEnvGraph);
     }
+    */
 
-
+/*
     private Calendar getBuildStartTime() {
         return (Calendar) testStartTime.clone();
     }
@@ -158,4 +160,4 @@ public class BuildInfoBasedUrlGeneratorTest {
         return appCpu;
     }
 
-}
+}*/

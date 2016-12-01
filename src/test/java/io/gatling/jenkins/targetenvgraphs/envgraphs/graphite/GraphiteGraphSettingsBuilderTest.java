@@ -41,7 +41,7 @@ public class GraphiteGraphSettingsBuilderTest {
     private static final int NORMAL_EXPECTED_NUM_GRAPHS = 17;
     private static final int NUMBER_DUPLICATE_GRAPHS = 8;
     private static final int SUPPLEMENTED_EXPECTED_NUM_GRAPHS = (2 * NORMAL_EXPECTED_NUM_GRAPHS) - NUMBER_DUPLICATE_GRAPHS;
-
+/*
     @Test
     public void testGetDefinedSettingsNoSupplementalGraphsSflyAllEnvironments() {
         GraphiteGraphSettingsBuilder testBuilder = new GraphiteGraphSettingsBuilder();
@@ -609,5 +609,5 @@ public class GraphiteGraphSettingsBuilderTest {
     private long getDuration() {
         return getEndTime().getTimeInMillis() - getStartTime().getTimeInMillis();
     }
-
+*/
 }

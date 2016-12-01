@@ -19,36 +19,8 @@ package io.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 import io.gatling.jenkins.targetenvgraphs.ServerPool;
 
 public enum GraphiteTargetEnum {
-    POOL_CPU_USER_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}." +
-            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}." +
-            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_CPU_IOWAIT_USAGE("{$brand}.{$env}.host.{$pool}.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}." +
-            "host.{$pool}.*.aggregation-cpu-average.cpu-idle"),
-    POOL_RAM_USAGE("{$brand}.{$env}.host.{$pool}.*.memory.memory-{used%2C}.value%2Ccolor%28{$brand}.{$env}.host.{$pool}.*." +
-            "memory.memory-buffered"),
-    POOL_SWAP_USAGE("{$brand}.{$env}.host.{$pool}.*.swap.swap-{used%2C}.value%2Ccolor%28{$brand}.{$env}.host.{$pool}.*." +
-            "swap.swap-used"),
-
-    GC_MARK_SWEEP_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ConcurrentMarkSweep." +
-            "heapUsagePercentage"),
-    GC_MARK_SWEEP_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ConcurrentMarkSweep." +
-            "collectionTime"),
-
-    GC_PAR_NEW_COLLECTION_TIME("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ParNew.collectionTime"),
-    GC_PAR_NEW_HEAP_USAGE("{$brand}.{$env}.host.{$pool}.*.app.GarbageCollectorSentinel.ParNew.heapUsagePercentage"),
-
-    MSP_CPU_USER_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
-    MSP_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
-    MSP_CPU_WAIT_USAGE("{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.oracle.*.aggregation-cpu-average.cpu-idle"),
-
-    MSP_LOAD_AVG("{$brand}.{$env}.host.oracle.*.load.load.*term"),
-
-    MONGODB_CPU_USER_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{user%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
-    MONGODB_CPU_SYSTEM_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{system%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
-    MONGODB_CPU_WAIT_USAGE("{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-{wait%2C}.value%2Ccolor%28{$brand}.{$env}.host.mongodb.*.aggregation-cpu-average.cpu-idle"),
-
-    MONGODB_LOAD_AVG("{$brand}.{$env}.host.mongodb.*.load.load.*term");
+    SERVERS_CHART_ENV_POOL("var-env={$env}&var-pool={$pool}"),
+    SERVERS_CHART_ENV("var-env={$env}");
 
     private final String target;
 

@@ -20,6 +20,7 @@ import hudson.FilePath;
 
 import hudson.model.Action;
 import hudson.model.Run;
+import io.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GrafanaUrl;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.util.ArrayList;
@@ -148,14 +149,20 @@ public class GatlingBuildAction implements Action, SimpleBuildStep.LastBuildActi
     /*
      This will be here until a dedicated reporter can be made for TargetEnvGraphs
      */
-    public List<String> getTargetEnvGraphUrls() {
+    public ArrayList<GrafanaUrl> getTargetEnvGraphUrls() {
         TargetGraphGenerator myGenerator = new TargetGraphGenerator();
 		return myGenerator.getGraphUrls(run);
     }
 
+	public GrafanaUrl getAppDynamicsUrl()
+	{
+		TargetGraphGenerator myGenerator = new TargetGraphGenerator();
+		return myGenerator.getAppDUrl(run);
+	}
+
     public String getTargetEnvGraphMessage() {
         if(getTargetEnvGraphUrls().size() < 1) {
-            return "No Graphs available for this simulation.";
+            return "No stats available for this simulation.";
         } else {
             return "";
         }

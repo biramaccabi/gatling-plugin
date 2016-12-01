@@ -20,6 +20,7 @@ import hudson.model.DirectoryBrowserSupport;
 import io.gatling.jenkins.BuildSimulation;
 import io.gatling.jenkins.GatlingBuildAction;
 import io.gatling.jenkins.GatlingProjectAction;
+import io.gatling.jenkins.targetenvgraphs.envgraphs.graphite.GrafanaUrl;
 import org.kohsuke.stapler.ForwardToView;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -28,6 +29,7 @@ import javax.servlet.ServletException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import hudson.FilePath;
 
@@ -152,7 +154,7 @@ public class ReportRenderer {
      * @throws ServletException
      */
     public void doTargetenvgraph(StaplerRequest request, StaplerResponse response) throws IOException, ServletException {
-        List<String> graphUrls = action.getTargetEnvGraphUrls();
+        ArrayList<GrafanaUrl> graphUrls = action.getTargetEnvGraphUrls();
         ForwardToView forward = new ForwardToView(action, "targetenvgraph.jelly").with("simName", simulation.getSimulationName()).with("graphUrls", graphUrls);
         forward.generateResponse(request, response, action);
     }

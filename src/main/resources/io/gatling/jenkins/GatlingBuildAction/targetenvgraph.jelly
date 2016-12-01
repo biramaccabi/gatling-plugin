@@ -8,16 +8,20 @@
 			<st:include it="${it.run}" page="sidepanel.jelly"/>
 		</l:side-panel>
 		<l:main-panel>
-			<h1>System Information Graphs</h1>
+			<h1>Grafana Pool Stats</h1>
             <h2>
-                <a href="https://ignite.shutterfly.com/docs/DOC-6185">Learn more about the System Information Graphs</a>
+                <a href="https://ignite.shutterfly.com/docs/DOC-6185">Learn more about the Grafana Pool Stats</a>
             </h2>
 			<h2>${it.getTargetEnvGraphMessage()}</h2>
-            <div class="test-trend-caption">
                  <j:forEach items="${it.getTargetEnvGraphUrls()}" var="graphUrls">
-                     <img src="${graphUrls}"/>
+                     <li>
+                        <a href="${graphUrls.rawUrl}">${graphUrls.urlDisplayName}</a>
+                     </li>
                  </j:forEach>
-            </div>
+            <br></br>
+            <h2>AppDynamics</h2>
+            <j:set var="appDUrl" value="${it.getAppDynamicsUrl()}"/>
+            <a href="${appDUrl.rawUrl}">${appDUrl.urlDisplayName}</a>
 		</l:main-panel>
 	</l:layout>
 </j:jelly>

@@ -30,7 +30,7 @@ public class GraphiteTargetEnumTest {
 
     public static final String BRAND_SFLY = "sfly";
     public static final String BRAND_TP = "tp";
-
+/*
     @Test
     public void testGetTargetWithLongPoolFullNameSFLY() {
         String getTarget = GraphiteTargetEnum.GC_MARK_SWEEP_HEAP_USAGE.getTarget(BRAND_SFLY, SFLYENV, LONG_POOL_FULLNAME);
@@ -90,5 +90,6 @@ public class GraphiteTargetEnumTest {
         String expectedTarget = BRAND_TP + "." + TPENV +".host."+ SHORT_POOL_SHORTNAME +".*.app.GarbageCollectorSentinel.ConcurrentMarkSweep.heapUsagePercentage";
         Assert.assertEquals(expectedTarget, getTarget);
     }
+    */
 
 }

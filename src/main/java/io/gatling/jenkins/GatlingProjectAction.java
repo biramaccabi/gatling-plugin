@@ -17,11 +17,7 @@ package io.gatling.jenkins;
 
 import static io.gatling.jenkins.PluginConstants.*;
 import hudson.model.*;
-import java.util.LinkedHashMap;
 import java.util.*;
-//import java.util.Map;
-//import java.util.List;
-//import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

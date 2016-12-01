@@ -46,7 +46,8 @@ public enum ServerPool {
     SSPROMOSERVER("sspromo","sspromo"),
     UNIFIEDUPLOADSERVER("uniup","uniup"),
     WEBSERVER("web","web"),
-    WSLABSERVER("wslab","ws-lab");
+    WSLABSERVER("wslab","ws-lab"),
+    VERTEXSERVER("vertexsfly","vertex");
 
 
     public final String longName;

@@ -16,7 +16,12 @@
 package io.gatling.jenkins.targetenvgraphs.envgraphs.graphite;
 
 
+import io.gatling.jenkins.targetenvgraphs.Brand;
 import io.gatling.jenkins.targetenvgraphs.BuildInfoForTargetEnvGraph;
+import io.gatling.jenkins.targetenvgraphs.Environment;
+import io.gatling.jenkins.targetenvgraphs.ServerPool;
+
+import java.util.TimeZone;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,48 +30,102 @@ import java.util.ArrayList;
 public class BuildInfoBasedUrlGenerator {
 
     public BuildInfoBasedUrlGenerator() {}
+    private final String SFLY_GRAFANA_SERVERS = "https://grafana.internal.shutterfly.com/dashboard/db/sfly-servers";
+    private final String SFLY_GRAFANA_SQUID = "https://grafana.internal.shutterfly.com/dashboard/db/sfly-squid-statistics";
+    private final String SFLY_GRAFANA_VERTEX = "https://grafana.internal.shutterfly.com/dashboard/db/sfly-vertex-tax-service-dashboard";
 
-    GraphiteGraphSettingsBuilder graphiteGraphSettingsBuilder = new GraphiteGraphSettingsBuilder();
+    private final String GRAFANA_DASHBOARD_FOR = "Grafana Dashboard for ";
+    private final String VERTEX_DASHBOARD = "Vertex Tax Service Dashboard";
+    private final String SQUID_DASHBOARD = "Squid Statistics Dashboard";
 
-    public ArrayList<String> getUrlsForCriteria(BuildInfoForTargetEnvGraph buildInfo) {
+    public ArrayList<GrafanaUrl> getUrlsForCriteria(BuildInfoForTargetEnvGraph buildInfo) {
 
-        ArrayList<String> urlList = new ArrayList<String>();
+        ArrayList<GrafanaUrl> urlList = new ArrayList<GrafanaUrl>();
+        ServerPool pool = ServerPool.getEnumForPoolName(buildInfo.getPoolName());
+        Brand brand = Brand.getBrandFromName(buildInfo.getBrandName());
+        String envName = buildInfo.getEnvironmentName();
 
-        for(GraphiteGraphSettings setting: graphiteGraphSettingsBuilder.getGraphiteGraphSettings(buildInfo) ) {
-            urlList.add(getGraphiteGraphForCriteriaGraphSettings(buildInfo, setting));
+        if (brandHasEnv(brand, envName) && (pool != null)) {
+            String grafanaLinkName = GRAFANA_DASHBOARD_FOR + envName + " " + pool.shortName + " pool";
+            GrafanaUrl urlAndLinkName= new GrafanaUrl(getGrafanaEnvPoolURLForCriteria(buildInfo), grafanaLinkName);
+            urlList.add(urlAndLinkName);
+            if(brand.equals(Brand.SHUTTERFLY) && pool.equals(ServerPool.APISERVER))
+            {
+                //add the ws server for api server information
+                BuildInfoForTargetEnvGraph wsBuildInfo = buildInfo;
+                wsBuildInfo.setPoolName("wsserver");
+                grafanaLinkName = GRAFANA_DASHBOARD_FOR + envName + " " + "ws" + " pool";
+                GrafanaUrl urlAndLinkNameAPI= new GrafanaUrl(getGrafanaEnvPoolURLForCriteria(wsBuildInfo), grafanaLinkName);
+                urlList.add(urlAndLinkNameAPI);
+            }
+
+            if(brand.equals(Brand.SHUTTERFLY) && pool.equals(ServerPool.WSSERVER))
+            {
+                //add the squid information for ws pool
+                GrafanaUrl urlAndLinkNameWS = new GrafanaUrl(
+                        getGrafanaEnvOnlyURLForCriteria(buildInfo, SFLY_GRAFANA_SQUID), SQUID_DASHBOARD);
+                urlList.add(urlAndLinkNameWS);
+            }
+
+            if (brand.equals(Brand.SHUTTERFLY) && pool.equals(ServerPool.VERTEXSERVER))
+            {
+                //add the squid information for ws pool
+                GrafanaUrl urlAndLinkNameVertex = new GrafanaUrl(
+                        getGrafanaEnvOnlyURLForCriteria(buildInfo, SFLY_GRAFANA_VERTEX), VERTEX_DASHBOARD);
+                urlList.add(urlAndLinkNameVertex);
+            }
         }
 
         return urlList;
     }
 
 
-    private String getGraphiteGraphForCriteriaGraphSettings(BuildInfoForTargetEnvGraph criteria, GraphiteGraphSettings graphSettings) {
-        StringBuilder result = new StringBuilder();
 
-        SimpleDateFormat graphiteFormat = new SimpleDateFormat("HH:mm_yyyyMMdd");
+    //This only includes the supported brand/env combinations for load testing
+    private boolean brandHasEnv(Brand brand, String env) {
+        if (brand.equals(Brand.SHUTTERFLY)) {
+            return env.equals(Environment.KAPPA.name)
+                    || env.equals(Environment.STAGE.name)
+                    || env.equals(Environment.PROD.name);
+        } else {
+            //Tinyprints will be supported again when they get a load test env
+            //return brand.equals(Brand.TINYPRINTS) && env.equals(Environment.TPLNP);
+            return false;
+        }
+    }
+
+    private String getStartAndEndTimes(BuildInfoForTargetEnvGraph criteria)
+    {
+        StringBuilder result = new StringBuilder();
+        //20160915T050001
+        SimpleDateFormat graphiteFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+        //graphiteFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String startTimeString = graphiteFormat.format(criteria.getGraphStartTime().getTime());
         String endTimeString = graphiteFormat.format(criteria.getGraphEndTime().getTime());
-
-        result.append(graphSettings.getHost());
-        result.append("/render?");
-        result.append("width=").append(graphSettings.getParameter("width", "600"));
         result.append("&from=").append(startTimeString);
-        result.append("&until=").append(endTimeString);
-        result.append("&height=").append(graphSettings.getParameter("height", "400"));
-        result.append("&lineMode=").append(graphSettings.getParameter("lineMode", "connected"));
-        result.append("&target=").append(graphSettings.getTarget());
-        result.append("&vtitle=").append(graphSettings.getVerticalTitle());
-        result.append("&fgcolor=").append(graphSettings.getParameter("fgcolor", "000000"));
-        result.append("&bgcolor=").append(graphSettings.getParameter("bgcolor", "FFFFFF"));
+        result.append("&to=").append(endTimeString);
+        return result.toString();
+    }
 
-        if(null == graphSettings.getYMin() || !(graphSettings.getYMin().equals(""))) {
-            result.append("&yMin=").append(graphSettings.getYMin());
-        }
-        if(null == graphSettings.getYMax() || !(graphSettings.getYMax().equals(""))) {
-            result.append("&yMax=").append(graphSettings.getYMax());
-        }
-        result.append("&_uniq=0.06565146492917762");
-        result.append("&title=").append(graphSettings.getTitle());
+
+    private String getGrafanaEnvPoolURLForCriteria(BuildInfoForTargetEnvGraph criteria) {
+        StringBuilder result = new StringBuilder();
+
+        result.append(SFLY_GRAFANA_SERVERS);
+        result.append("?");
+        result.append(GraphiteTargetEnum.SERVERS_CHART_ENV_POOL.getTarget(criteria.getBrandName(), criteria.getEnvironmentName(), criteria.getPoolName()));
+        result.append(getStartAndEndTimes(criteria));
+
+        return result.toString();
+    }
+
+    private String getGrafanaEnvOnlyURLForCriteria(BuildInfoForTargetEnvGraph criteria, String baseURL) {
+        StringBuilder result = new StringBuilder();
+
+        result.append(baseURL);
+        result.append("?");
+        result.append(GraphiteTargetEnum.SERVERS_CHART_ENV.getTarget(criteria.getBrandName(), criteria.getEnvironmentName(), criteria.getPoolName()));
+        result.append(getStartAndEndTimes(criteria));
 
         return result.toString();
     }
